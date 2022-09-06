@@ -49,9 +49,9 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Home",bg="#F7BF50", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button1 = tk.Button(self, text="Play Music", bg='#F7BF50',
+        button1 = tk.Button(self, text="Play Music", bg='#F7BF50',font="Arial",
                             command=lambda: controller.show_frame("PageOne"))
-        button1.place(x=100,y=50)
+        
         button2 = tk.Button(self, text="Library",bg="#F7BF50",
                             command=lambda: controller.show_frame("PageTwo"))
         button3 = tk.Button(self, text="Statistics",bg="#F7BF50",
@@ -116,4 +116,5 @@ class PageFour(tk.Frame):
 
 if __name__ == "__main__":
     app = SampleApp()
+    app.geometry("1207x703")
     app.mainloop()
