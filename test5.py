@@ -61,7 +61,7 @@ class StartPage(tk.Frame):
     
 
     
-        button1.pack()
+        button1.place(x=175)
         button2.pack()
         button3.pack()
         button4.pack()
