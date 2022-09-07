@@ -46,16 +46,27 @@ class StartPage(tk.Frame):
         self.controller.title("ChopIn")
         self.controller.state("zoomed")
 
-        image = Image.open("/Users/jerome/Documents/program/Thesis/codes/account.png")
+        image = Image.open("Pictures/picpic.jpeg")
         image = image.resize((50,50), Image.ANTIALIAS)
 
         img = ImageTk.PhotoImage(image)
+   
+        #label.pack(side="top", fill="x", pady=10)
 
-        label = tk.Label(self, text="Home",bg="#F7BF50", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((250,55), Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
 
-        button1 = tk.Button(self, text="PLAY MUSIC", bg='#F7BF50',font="Arial",image=img,compound=TOP,
-                            command=lambda: controller.show_frame("PageOne"))
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0)
+        logo_label.image = logo_img
+
+        play_label = tk.Label(self,image=img, cursor="hand2")
+        play_label.bind("<Button-1>", lambda e: controller.show_frame("PageOne"))
+        play_label.image = img
+
+
+        #button1 = tk.Button(self, text="PLAY MUSIC", bg='#F7BF50',font="Arial",image=img,compound=TOP,
+                            #command=lambda: controller.show_frame("PageOne"))
         
         button2 = tk.Button(self, text="LIBRARY",bg="#F7BF50",
                             command=lambda: controller.show_frame("PageTwo"))
@@ -64,8 +75,9 @@ class StartPage(tk.Frame):
         button4 = tk.Button(self, text="HISTORY",
                             command=lambda: controller.show_frame("PageFour"))
     
-        label.place(x=1,y=1)
-        button1.place(x=400, y=5)
+        logo_label.place(x=14,y=15)
+        play_label.place(x=400, y=5)
+        #button1.place(x=400, y=5)
         button2.place(x=500, y=5)
         button3.place(x=600, y=5)
         button4.place(x=720, y=5)
