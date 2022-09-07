@@ -2,13 +2,14 @@
 import tkinter as tk                
 from tkinter import font as tkfont  
 from tkinter import *
+from PIL import ImageTk, Image
 
 class SampleApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
+        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -45,26 +46,29 @@ class StartPage(tk.Frame):
         self.controller.title("ChopIn")
         self.controller.state("zoomed")
 
+        image = Image.open("/Users/jerome/Documents/program/Thesis/codes/account.png")
+        image = image.resize((50,50), Image.ANTIALIAS)
+
+        img = ImageTk.PhotoImage(image)
 
         label = tk.Label(self, text="Home",bg="#F7BF50", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button1 = tk.Button(self, text="Play Music", bg='#F7BF50',font="Arial",
+        button1 = tk.Button(self, text="PLAY MUSIC", bg='#F7BF50',font="Arial",image=img,compound=TOP,
                             command=lambda: controller.show_frame("PageOne"))
         
-        button2 = tk.Button(self, text="Library",bg="#F7BF50",
+        button2 = tk.Button(self, text="LIBRARY",bg="#F7BF50",
                             command=lambda: controller.show_frame("PageTwo"))
-        button3 = tk.Button(self, text="Statistics",bg="#F7BF50",
+        button3 = tk.Button(self, text="STATISTICS",bg="#F7BF50",
                             command=lambda: controller.show_frame("PageThree"))
-        button4 = tk.Button(self, text="History",
+        button4 = tk.Button(self, text="HISTORY",
                             command=lambda: controller.show_frame("PageFour"))
     
-
-    
-        button1.place(x=175)
-        button2.pack()
-        button3.pack()
-        button4.pack()
+        label.place(x=1,y=1)
+        button1.place(x=400, y=5)
+        button2.place(x=500, y=5)
+        button3.place(x=600, y=5)
+        button4.place(x=720, y=5)
 
 
 class PageOne(tk.Frame):
