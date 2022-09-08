@@ -46,41 +46,71 @@ class StartPage(tk.Frame):
         self.controller.title("ChopIn")
         self.controller.state("zoomed")
 
-        image = Image.open("Pictures/picpic.jpeg")
-        image = image.resize((50,50), Image.ANTIALIAS)
-
-        img = ImageTk.PhotoImage(image)
-   
-        #label.pack(side="top", fill="x", pady=10)
-
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
+        image = Image.open("Pictures/menu1.png")
+        image = image.resize((80,75), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(image)
+
+        image = Image.open("Pictures/menu2.png")
+        image = image.resize((80,75), Image.ANTIALIAS)
+        img2 = ImageTk.PhotoImage(image)
+
+        image = Image.open("Pictures/menu3.png")
+        image = image.resize((80,75), Image.ANTIALIAS)
+        img3 = ImageTk.PhotoImage(image)
+
+        image = Image.open("Pictures/menu4.png")
+        image = image.resize((80,75), Image.ANTIALIAS)
+        img4 = ImageTk.PhotoImage(image)
+
+        
+   
+        #label.pack(side="top", fill="x", pady=10)
+
+
         logo_label = tk.Label(self, image=logo_img,borderwidth=0)
         logo_label.image = logo_img
 
-        play_label = tk.Label(self,image=img, cursor="hand2")
+        play_label = tk.Label(self,image=img, cursor="hand2", borderwidth=0)
         play_label.bind("<Button-1>", lambda e: controller.show_frame("PageOne"))
         play_label.image = img
+
+        play_label2 = tk.Label(self, image=img2, cursor ="hand2", borderwidth=0)
+        play_label2.bind("<Button-1>", lambda e: controller.show_frame("PageTwo"))
+        play_label2.image = img2
+
+        play_label3 = tk.Label(self, image=img3, cursor ="hand2", borderwidth=0)
+        play_label3.bind("<Button-1>", lambda e: controller.show_frame("PageThree"))
+        play_label3.image = img3
+
+        play_label4 = tk.Label(self, image=img4, cursor ="hand2", borderwidth=0)
+        play_label4.bind("<Button-1>", lambda e: controller.show_frame("PageFour"))
+        play_label4.image = img4
 
 
         #button1 = tk.Button(self, text="PLAY MUSIC", bg='#F7BF50',font="Arial",image=img,compound=TOP,
                             #command=lambda: controller.show_frame("PageOne"))
         
-        button2 = tk.Button(self, text="LIBRARY",bg="#F7BF50",
-                            command=lambda: controller.show_frame("PageTwo"))
-        button3 = tk.Button(self, text="STATISTICS",bg="#F7BF50",
-                            command=lambda: controller.show_frame("PageThree"))
-        button4 = tk.Button(self, text="HISTORY",
-                            command=lambda: controller.show_frame("PageFour"))
+        #button2 = tk.Button(self, text="LIBRARY",bg="#F7BF50",
+                            #command=lambda: controller.show_frame("PageTwo"))
+
+        #button3 = tk.Button(self, text="STATISTICS",bg="#F7BF50",
+                            #command=lambda: controller.show_frame("PageThree"))
+        #button4 = tk.Button(self, text="HISTORY",
+                            #command=lambda: controller.show_frame("PageFour"))
     
         logo_label.place(x=14,y=15)
         play_label.place(x=400, y=5)
+        play_label2.place(x=500, y=5)
+        play_label3.place(x=600, y=5)
+        play_label4.place(x=700, y=5)
         #button1.place(x=400, y=5)
-        button2.place(x=500, y=5)
-        button3.place(x=600, y=5)
-        button4.place(x=720, y=5)
+        #button2.place(x=500, y=5)
+        #button3.place(x=600, y=5)
+        #button4.place(x=720, y=5)
 
 
 class PageOne(tk.Frame):
