@@ -1,8 +1,13 @@
 
+from ast import Load
+from logging import root
 import tkinter as tk                
 from tkinter import font as tkfont  
 from tkinter import *
+from tkinter.ttk import Progressbar
+from turtle import bgcolor, color, width
 from PIL import ImageTk, Image
+import time
 
 class SampleApp(tk.Tk):
 
@@ -20,7 +25,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage, PageOne, PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, StartPage, PageOne, PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -29,13 +34,51 @@ class SampleApp(tk.Tk):
             # the one on the top of the stacking order
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
-
-        self.show_frame("StartPage")
+        
+        self.show_frame("LoadingPage")
+        #self.show_frame("StartPage")
+        
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
+
+class LoadingPage(tk.Frame):
+    def __init__(self, parent, controller):
+
+        tk.Frame.__init__(self, parent,bg="#F7BF50")
+        self.controller = controller
+        #self.update_idletasks()
+
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((386,82))
+        logo_img = ImageTk.PhotoImage(logo_pic)
+
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0)
+        logo_label.image = logo_img
+        logo_label.place(x=410,y=324)
+
+        loading = tk.Frame(self, bg="#281801")
+        loading.pack_propagate(False)
+        loading.configure(width=10,height=3)
+        loading.place(x=420,y=428)
+        
+
+        def comm():
+            
+            current = loading['width']
+            
+            if current == 365:
+                self.destroy()
+                controller.show_frame("StartPage")
+            
+            if current < 365:
+                loading.config(width=current+71)
+                self.after(500,comm)
+        self.after(1000,comm)
+
+        
 
 
 class StartPage(tk.Frame):
@@ -43,33 +86,28 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
-        self.controller.title("ChopIn")
+        self.controller.title("Chop-In")
         self.controller.state("zoomed")
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic= logo_pic.resize((250,55), Image.ANTIALIAS)
+        #logo_pic= logo_pic.resize((250,55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         image = Image.open("Pictures/menu1.png")
-        image = image.resize((80,75), Image.ANTIALIAS)
+        #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu2.png")
-        image = image.resize((80,75), Image.ANTIALIAS)
+        #image = image.resize((67,53), Image.ANTIALIAS)
         img2 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu3.png")
-        image = image.resize((80,75), Image.ANTIALIAS)
+        #image = image.resize((88,53), Image.ANTIALIAS)
         img3 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu4.png")
-        image = image.resize((80,75), Image.ANTIALIAS)
+        #image = image.resize((69,53), Image.ANTIALIAS)
         img4 = ImageTk.PhotoImage(image)
-
-        
-   
-        #label.pack(side="top", fill="x", pady=10)
-
 
         logo_label = tk.Label(self, image=logo_img,borderwidth=0)
         logo_label.image = logo_img
@@ -89,28 +127,12 @@ class StartPage(tk.Frame):
         play_label4 = tk.Label(self, image=img4, cursor ="hand2", borderwidth=0)
         play_label4.bind("<Button-1>", lambda e: controller.show_frame("PageFour"))
         play_label4.image = img4
-
-
-        #button1 = tk.Button(self, text="PLAY MUSIC", bg='#F7BF50',font="Arial",image=img,compound=TOP,
-                            #command=lambda: controller.show_frame("PageOne"))
-        
-        #button2 = tk.Button(self, text="LIBRARY",bg="#F7BF50",
-                            #command=lambda: controller.show_frame("PageTwo"))
-
-        #button3 = tk.Button(self, text="STATISTICS",bg="#F7BF50",
-                            #command=lambda: controller.show_frame("PageThree"))
-        #button4 = tk.Button(self, text="HISTORY",
-                            #command=lambda: controller.show_frame("PageFour"))
     
-        logo_label.place(x=14,y=15)
-        play_label.place(x=400, y=5)
-        play_label2.place(x=500, y=5)
-        play_label3.place(x=600, y=5)
-        play_label4.place(x=700, y=5)
-        #button1.place(x=400, y=5)
-        #button2.place(x=500, y=5)
-        #button3.place(x=600, y=5)
-        #button4.place(x=720, y=5)
+        logo_label.place(x=478,y=200)
+        play_label.place(x=364, y=375)
+        play_label2.place(x=494, y=375)
+        play_label3.place(x=640, y=374)
+        play_label4.place(x=792, y=375)
 
 
 class PageOne(tk.Frame):
@@ -163,4 +185,5 @@ class PageFour(tk.Frame):
 if __name__ == "__main__":
     app = SampleApp()
     app.geometry("1207x703")
+    app.resizable(False,False)
     app.mainloop()
