@@ -57,12 +57,12 @@ class LoadingPage(tk.Frame):
 
         logo_label = tk.Label(self, image=logo_img,borderwidth=0)
         logo_label.image = logo_img
-        logo_label.place(x=410,y=324)
+        logo_label.place(x=410,y=285)
 
         loading = tk.Frame(self, bg="#281801")
         loading.pack_propagate(False)
         loading.configure(width=10,height=3)
-        loading.place(x=420,y=428)
+        loading.place(x=420,y=389)
         
 
         def comm():
@@ -184,6 +184,17 @@ class PageFour(tk.Frame):
 
 if __name__ == "__main__":
     app = SampleApp()
-    app.geometry("1207x703")
+
+    window_width = 1207
+    window_height = 703
+    
+    screen_width = app.winfo_screenwidth()
+    screen_height = app.winfo_screenheight()
+
+    x_cordinate = int((screen_width/2) - (window_width/2))
+    y_cordinate = int((screen_height/2) - (window_height/2))
+
+    app.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+    app.attributes('-fullscreen',False)
     app.resizable(False,False)
     app.mainloop()
