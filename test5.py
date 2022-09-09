@@ -25,7 +25,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoadingPage, StartPage, PageOne, PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, StartPage, PlayPage, PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -57,12 +57,12 @@ class LoadingPage(tk.Frame):
 
         logo_label = tk.Label(self, image=logo_img,borderwidth=0)
         logo_label.image = logo_img
-        logo_label.place(x=410,y=285)
+        logo_label.place(x=400,y=285)
 
         loading = tk.Frame(self, bg="#281801")
         loading.pack_propagate(False)
         loading.configure(width=10,height=3)
-        loading.place(x=420,y=389)
+        loading.place(x=410,y=389)
         
 
         def comm():
@@ -90,7 +90,7 @@ class StartPage(tk.Frame):
         self.controller.state("zoomed")
 
         logo_pic = Image.open("Pictures/Logo.png")
-        #logo_pic= logo_pic.resize((250,55), Image.ANTIALIAS)
+        logo_pic= logo_pic.resize((386,82),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         image = Image.open("Pictures/menu1.png")
@@ -113,7 +113,7 @@ class StartPage(tk.Frame):
         logo_label.image = logo_img
 
         play_label = tk.Label(self,image=img, cursor="hand2", borderwidth=0)
-        play_label.bind("<Button-1>", lambda e: controller.show_frame("PageOne"))
+        play_label.bind("<Button-1>", lambda e: controller.show_frame("PlayPage"))
         play_label.image = img
 
         play_label2 = tk.Label(self, image=img2, cursor ="hand2", borderwidth=0)
@@ -128,14 +128,14 @@ class StartPage(tk.Frame):
         play_label4.bind("<Button-1>", lambda e: controller.show_frame("PageFour"))
         play_label4.image = img4
     
-        logo_label.place(x=478,y=200)
+        logo_label.place(x=400,y=200)
         play_label.place(x=364, y=375)
-        play_label2.place(x=494, y=375)
-        play_label3.place(x=640, y=374)
+        play_label2.place(x=490, y=375)
+        play_label3.place(x=644, y=374)
         play_label4.place(x=792, y=375)
 
 
-class PageOne(tk.Frame):
+class PlayPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
