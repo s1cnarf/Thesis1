@@ -78,7 +78,6 @@ class LoadingPage(tk.Frame):
                 self.after(500,comm)
         self.after(1000,comm)
 
-        
 
 
 class StartPage(tk.Frame):
@@ -97,15 +96,15 @@ class StartPage(tk.Frame):
         #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
-        image = Image.open("Pictures/library icon.png")
+        image = Image.open("Pictures/menu2.png")
         #image = image.resize((67,53), Image.ANTIALIAS)
         img2 = ImageTk.PhotoImage(image)
 
-        image = Image.open("Pictures/menu2.png")
+        image = Image.open("Pictures/menu3.png")
         #image = image.resize((88,53), Image.ANTIALIAS)
         img3 = ImageTk.PhotoImage(image)
 
-        image = Image.open("Pictures/menu3.png")
+        image = Image.open("Pictures/menu4.png")
         #image = image.resize((69,53), Image.ANTIALIAS)
         img4 = ImageTk.PhotoImage(image)
 
