@@ -17,6 +17,8 @@ class SampleApp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title_font = tkfont.Font(family='Helvetica', size=36, weight="bold")
+        self.button_font = tkfont.Font(family='Helvetica', size=20, weight="bold")
+        self.button2_font = tkfont.Font(family='Helvetica', size=16, weight="bold", slant="italic")
         self.body_font = tkfont.Font(family='Lemon Milk', size=18)
 
         # the container is where we'll stack a bunch of frames
@@ -137,6 +139,9 @@ class LogIn(tk.Frame):
 
         info_label = tk.Label(self, image=info_img,borderwidth=0)
         info_label.image = info_img
+
+        log_in = tk.Label(self, text="LOG IN",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=10,font=controller.button_font)
+        sign = tk.Label(self, text="SIGN UP",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
         
         frame1.place(x=380,y=190)
         #label.place(x=435, y=235)
@@ -146,6 +151,8 @@ class LogIn(tk.Frame):
         label2_entry.place(x=438,y=370)
         logo_label.place(x=20,y=20)
         info_label.place(x=770, y=20)
+        log_in.place(x=535,y=450)
+        sign.place(x=560, y=490)
 
 
 
