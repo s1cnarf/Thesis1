@@ -16,7 +16,7 @@ class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold")
+        self.title_font = tkfont.Font(family='Helvetica', size=36, weight="bold")
         self.body_font = tkfont.Font(family='Lemon Milk', size=18)
 
         # the container is where we'll stack a bunch of frames
@@ -89,10 +89,38 @@ class LogIn(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
         frame1 = tk.Frame(self,width=450,height=390,bg="#2A2B2C")
-        label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
-        label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        #label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        #label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        sign_in = tk.Label(self, text="Sign In",fg="#F7BF50", bg="#2A2B2C", font=controller.title_font)
+
+
+        def on_enter(e):
+            label_entry.delete(0,'end')
+
+        def on_leave(e):
+            name=label_entry.get()
+            if name == '':
+                label_entry.insert(0,'Username')
+        
         label_entry = tk.Entry(width=35)
+        label_entry.insert(0,"Username")
+        label_entry.bind('<FocusIn>', on_enter)
+        label_entry.bind('<FocusOut>', on_leave)
+
+
+
+        def on_enter(e):
+            label2_entry.delete(0,'end')
+
+        def on_leave(e):
+            name=label2_entry.get()
+            if name == '':
+                label2_entry.insert(0,'Password')
+
         label2_entry = tk.Entry(width=35)
+        label2_entry.insert(0,"Password")
+        label2_entry.bind('<FocusIn>', on_enter)
+        label2_entry.bind('<FocusOut>', on_leave)
         
         
 
@@ -111,10 +139,11 @@ class LogIn(tk.Frame):
         info_label.image = info_img
         
         frame1.place(x=380,y=190)
-        label.place(x=435, y=235)
-        label2.place(x=435, y=350)
-        label_entry.place(x=438,y=265)
-        label2_entry.place(x=438,y=380)
+        #label.place(x=435, y=235)
+        #label2.place(x=435, y=350)
+        sign_in.place(x=540,y=220)
+        label_entry.place(x=438,y=300)
+        label2_entry.place(x=438,y=370)
         logo_label.place(x=20,y=20)
         info_label.place(x=770, y=20)
 
