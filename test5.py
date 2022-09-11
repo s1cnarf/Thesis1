@@ -116,7 +116,7 @@ class LogIn(tk.Frame):
         label_entry.place(x=438,y=265)
         label2_entry.place(x=438,y=380)
         logo_label.place(x=20,y=20)
-        info_label.place(x=780, y=20)
+        info_label.place(x=770, y=20)
 
 
 
