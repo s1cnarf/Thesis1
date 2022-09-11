@@ -55,6 +55,7 @@ class LoadingPage(tk.Frame):
 
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
+        #self.controller.state("zoomed")
         #self.update_idletasks()
 
         logo_pic = Image.open("Pictures/Logo.png")
@@ -70,6 +71,7 @@ class LoadingPage(tk.Frame):
         loading.configure(width=10,height=3)
         loading.place(x=410,y=389)
         
+        self.after(200)
 
         def comm():
             
@@ -90,6 +92,7 @@ class LogIn(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
+        #self.controller.state("zoomed")
         frame1 = tk.Frame(self,width=450,height=390,bg="#2A2B2C")
         #label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         #label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
@@ -104,7 +107,7 @@ class LogIn(tk.Frame):
             if name == '':
                 label_entry.insert(0,'Username')
         
-        label_entry = tk.Entry(width=35)
+        label_entry = tk.Entry(self,width=35)
         label_entry.insert(0,"Username")
         label_entry.bind('<FocusIn>', on_enter)
         label_entry.bind('<FocusOut>', on_leave)
@@ -119,7 +122,7 @@ class LogIn(tk.Frame):
             if name == '':
                 label2_entry.insert(0,'Password')
 
-        label2_entry = tk.Entry(width=35)
+        label2_entry = tk.Entry(self,width=35)
         label2_entry.insert(0,"Password")
         label2_entry.bind('<FocusIn>', on_enter)
         label2_entry.bind('<FocusOut>', on_leave)
@@ -162,12 +165,13 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
         self.controller.title("Chop-In")
-        self.controller.state("zoomed")
+        #self.controller.state("zoomed")
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((386,82),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
+       
         image = Image.open("Pictures/menu1.png")
         #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
