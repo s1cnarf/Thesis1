@@ -9,12 +9,15 @@ from turtle import bgcolor, color, width
 from PIL import ImageTk, Image
 import time
 
+
+
 class SampleApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold")
+        self.body_font = tkfont.Font(family='Lemon Milk', size=18)
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -25,7 +28,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoadingPage, StartPage, PlayPage, PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, LogIn, StartPage, PlayPage, PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -43,6 +46,7 @@ class SampleApp(tk.Tk):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
+
 
 class LoadingPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -71,12 +75,48 @@ class LoadingPage(tk.Frame):
             
             if current == 365:
                 self.destroy()
-                controller.show_frame("StartPage")
+                controller.show_frame("LogIn")
             
             if current < 365:
                 loading.config(width=current+71)
                 self.after(500,comm)
         self.after(1000,comm)
+
+
+class LogIn(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent,bg="#F7BF50")
+        self.controller = controller
+        frame1 = tk.Frame(self,width=450,height=390,bg="#2A2B2C")
+        label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label_entry = tk.Entry(width=35)
+        label2_entry = tk.Entry(width=35)
+        
+        
+
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((300,52),Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
+
+        logo_pic = Image.open("Pictures/info.png")
+        logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
+        info_img = ImageTk.PhotoImage(logo_pic)
+
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0)
+        logo_label.image = logo_img
+
+        info_label = tk.Label(self, image=info_img,borderwidth=0)
+        info_label.image = info_img
+        
+        frame1.place(x=380,y=190)
+        label.place(x=435, y=235)
+        label2.place(x=435, y=350)
+        label_entry.place(x=438,y=265)
+        label2_entry.place(x=438,y=380)
+        logo_label.place(x=20,y=20)
+        info_label.place(x=780, y=20)
 
 
 
