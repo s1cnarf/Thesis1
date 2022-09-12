@@ -16,10 +16,10 @@ class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        self.title_font = tkfont.Font(family='Helvetica', size=36, weight="bold")
-        self.button_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
-        self.button2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold", slant="italic")
-        self.body_font = tkfont.Font(family='Lemon Milk', size=18)
+        self.title_font = tkfont.Font(family='Fredoka One', size=16,slant="italic")
+        self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
+        self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
+        self.body_font = tkfont.Font(family='Lemon Milk', size=16)
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -93,9 +93,11 @@ class LogIn(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
         #self.controller.state("zoomed")
-        frame1 = tk.Frame(self,width=450,height=390,bg="#2A2B2C")
-        #label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
-        #label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+
+        
+        frame1 = tk.Frame(self,width=463,height=461,bg="#2A2B2C",border=0)
+        label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         sign_in = tk.Label(self, text="Sign In",fg="#F7BF50", bg="#2A2B2C", font=controller.title_font)
 
 
@@ -107,8 +109,8 @@ class LogIn(tk.Frame):
             if name == '':
                 label_entry.insert(0,'Username')
         
-        label_entry = tk.Entry(self,width=35)
-        label_entry.insert(0,"Username")
+        label_entry = tk.Entry(self,width=29,font=controller.title_font)
+        label_entry.insert(0,"Enter your username")
         label_entry.bind('<FocusIn>', on_enter)
         label_entry.bind('<FocusOut>', on_leave)
 
@@ -122,20 +124,23 @@ class LogIn(tk.Frame):
             if name == '':
                 label2_entry.insert(0,'Password')
 
-        label2_entry = tk.Entry(self,width=35)
-        label2_entry.insert(0,"Password")
+        label2_entry = tk.Entry(self,width=29,font=controller.title_font,show="*")
+        label2_entry.insert(0,"Enter your password")
         label2_entry.bind('<FocusIn>', on_enter)
         label2_entry.bind('<FocusOut>', on_leave)
         
         
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic= logo_pic.resize((300,52),Image.ANTIALIAS)
+        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         logo_pic = Image.open("Pictures/info.png")
-        logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
+        #logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
         info_img = ImageTk.PhotoImage(logo_pic)
+
+        names_pic = Image.open("Pictures/names.png")
+        names_img = ImageTk.PhotoImage(names_pic)
 
         logo_label = tk.Label(self, image=logo_img,borderwidth=0)
         logo_label.image = logo_img
@@ -143,19 +148,26 @@ class LogIn(tk.Frame):
         info_label = tk.Label(self, image=info_img,borderwidth=0)
         info_label.image = info_img
 
-        log_in = tk.Label(self, text="LOG IN",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=10,font=controller.button_font)
-        sign = tk.Label(self, text="SIGN UP",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
+        names_label= tk.Label(self, image=names_img,borderwidth=0)
+        names_label.image = names_img
+
+        log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=23,font=controller.button_font)
+        register= tk.Label(self, text="Register",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
         
-        frame1.place(x=380,y=190)
-        #label.place(x=435, y=235)
-        #label2.place(x=435, y=350)
-        sign_in.place(x=540,y=220)
-        label_entry.place(x=438,y=300)
-        label2_entry.place(x=438,y=370)
-        logo_label.place(x=20,y=20)
-        info_label.place(x=770, y=20)
-        log_in.place(x=535,y=450)
-        sign.place(x=570, y=490)
+        frame1.place(x=371,y=134)
+        label.place(x=446, y=205)
+        label2.place(x=446, y=313)
+        #sign_in.place(x=540,y=220)
+
+        label_entry.place(x=446,y=239)
+        label2_entry.place(x=446,y=348)
+
+        logo_label.place(x=35,y=34)
+        info_label.place(x=738, y=57)
+        names_label.place(x=362, y=677)
+
+        log_in.place(x=450,y=460)
+        register.place(x=562, y=511)
 
 
 
@@ -264,8 +276,8 @@ class PageFour(tk.Frame):
 if __name__ == "__main__":
     app = SampleApp()
 
-    window_width = 1207
-    window_height = 703
+    window_width = 1206
+    window_height = 730
     
     screen_width = app.winfo_screenwidth()
     screen_height = app.winfo_screenheight()
