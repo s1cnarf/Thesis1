@@ -152,7 +152,7 @@ class LogIn(tk.Frame):
         names_label= tk.Label(self, image=names_img,borderwidth=0)
         names_label.image = names_img
 
-        log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=23,font=controller.button_font)
+        log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=10, height=2, font=controller.button_font)
         register= tk.Label(self, text="Register",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
         register.bind("<Button-1>", lambda e: controller.show_frame("Register"))
         
@@ -168,7 +168,7 @@ class LogIn(tk.Frame):
         info_label.place(x=738, y=57)
         names_label.place(x=362, y=677)
 
-        log_in.place(x=450,y=460)
+        log_in.place(x=540,y=460)
         register.place(x=562, y=511)
 
 class Register(tk.Frame):
