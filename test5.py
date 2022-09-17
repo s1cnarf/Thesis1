@@ -20,6 +20,7 @@ class SampleApp(tk.Tk):
         self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
         self.body_font = tkfont.Font(family='Lemon Milk', size=16)
+        self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -30,7 +31,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoadingPage, LogIn, StartPage, PlayPage, PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -98,7 +99,7 @@ class LogIn(tk.Frame):
         frame1 = tk.Frame(self,width=463,height=461,bg="#2A2B2C",border=0)
         label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
-        sign_in = tk.Label(self, text="Sign In",fg="#F7BF50", bg="#2A2B2C", font=controller.title_font)
+        #sign_in = tk.Label(self, text="Sign In",fg="#F7BF50", bg="#2A2B2C", font=controller.title_font)
 
 
         def on_enter(e):
@@ -153,6 +154,7 @@ class LogIn(tk.Frame):
 
         log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=23,font=controller.button_font)
         register= tk.Label(self, text="Register",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
+        register.bind("<Button-1>", lambda e: controller.show_frame("Register"))
         
         frame1.place(x=371,y=134)
         label.place(x=446, y=205)
@@ -169,7 +171,65 @@ class LogIn(tk.Frame):
         log_in.place(x=450,y=460)
         register.place(x=562, y=511)
 
+class Register(tk.Frame):
 
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#F7BF50")
+        self.controller = controller
+    
+        frame_reg = tk.Frame(self,width=850,height=461,bg="#2A2B2C",border=0)
+        label_reg = tk.Label(self, text="CREATE ACCOUNT",fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
+
+        
+        labelReg = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        labelReg_entry = tk.Entry(self,width=29,font=controller.title_font)
+
+        label2Reg = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label2Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
+
+        label3Reg = tk.Label(self, text="CONTACT NO.",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label3Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
+        
+        label4Reg = tk.Label(self, text="EMAIL",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label4Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
+
+        label5Reg = tk.Label(self, text="CONFIRM PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label5Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
+
+        reg_button = tk.Label(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
+
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
+
+        logo_pic = Image.open("Pictures/info.png")
+        #logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
+        info_img = ImageTk.PhotoImage(logo_pic)
+
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0)
+        logo_label.image = logo_img
+
+        info_label = tk.Label(self, image=info_img,borderwidth=0)
+        info_label.image = info_img
+
+
+        frame_reg.place(x=170,y=134)
+        label_reg.place(x=505,y=170)
+        labelReg.place(x=220,y=220)
+        labelReg_entry.place(x=223, y=245)
+        label2Reg.place(x=220, y=320)
+        label2Reg_entry.place(x=223, y=345)
+        label3Reg.place(x=220, y=420)
+        label3Reg_entry.place(x=223, y=445)
+        label4Reg.place(x=650, y=220)
+        label4Reg_entry.place(x=653, y=245)
+        label5Reg.place(x=650, y=320)
+        label5Reg_entry.place(x=653, y=345)
+        reg_button.place(x=700, y=500)
+
+        logo_label.place(x=35,y=34)
+        info_label.place(x=738, y=57)
+        
 
 class StartPage(tk.Frame):
 
