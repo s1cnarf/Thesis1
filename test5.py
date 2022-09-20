@@ -1,9 +1,11 @@
-
+import ast
 from ast import Load
+#from ast import *
 from logging import root
 import tkinter as tk                
 from tkinter import font as tkfont  
 from tkinter import *
+from tkinter import messagebox
 from tkinter.ttk import Progressbar
 from turtle import bgcolor, color, width
 from PIL import ImageTk, Image
@@ -21,6 +23,7 @@ class SampleApp(tk.Tk):
         self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
         self.body_font = tkfont.Font(family='Lemon Milk', size=16)
         self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
+        self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -176,6 +179,38 @@ class Register(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
+
+        def register():
+            username = labelReg_entry.get()
+            password = label2Reg_entry.get()
+            contactNo = label3Reg_entry.get()
+            email = label4Reg_entry.get()
+            confirmPass = label5Reg_entry.get()
+
+            if password == confirmPass:
+                try:
+                    file = open('registersheet.txt','r+')
+                    d = file.read()
+                    r = ast.literal_eval(d)
+
+                    dict2 = {username:password,contactNo:email}
+                    r.update(dict2)
+                    file.truncate(0)
+                    file.close()
+
+                    file = open('registersheet.txt','w')
+                    w = file.write(str(r))
+
+                    messagebox.showinfo('Signup','Sucessfully Sign Up')
+
+                except:
+                    file = open('registersheet.txt','w')
+                    displayDict = str({'Username':'Password','Contact No.':'Email'})
+                    file.write(displayDict)
+                    file.close()
+
+            else:
+                messagebox.showerror('Invalid',"Both Password should match")
     
         frame_reg = tk.Frame(self,width=850,height=461,bg="#2A2B2C",border=0)
         label_reg = tk.Label(self, text="CREATE ACCOUNT",fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
@@ -196,7 +231,15 @@ class Register(tk.Frame):
         label5Reg = tk.Label(self, text="CONFIRM PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         label5Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
 
-        reg_button = tk.Label(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
+        label6Reg = tk.Label(self, text="I already have an account",fg="grey", bg="#2A2B2C", font=controller.body3_font)
+        label7Reg = tk.Label(self, text="Sign In", cursor ="hand2", fg="#F7BF50", bg="#2A2B2C", borderwidth=0)
+        label7Reg.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
+
+        #reg_button = tk.Label(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
+        #reg_button.bind("<Button-1>", lambda e: controller.register)
+
+        reg_button = Button(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font, command=register)
+
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
@@ -225,7 +268,9 @@ class Register(tk.Frame):
         label4Reg_entry.place(x=653, y=245)
         label5Reg.place(x=650, y=320)
         label5Reg_entry.place(x=653, y=345)
-        reg_button.place(x=700, y=500)
+        reg_button.place(x=700, y=450)
+        label6Reg.place(x=675, y=510)
+        label7Reg.place(x=830, y=510)
 
         logo_label.place(x=35,y=34)
         info_label.place(x=738, y=57)
