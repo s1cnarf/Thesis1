@@ -98,7 +98,7 @@ class LogIn(tk.Frame):
         self.controller = controller
         #self.controller.state("zoomed")
 
-        def login(event):
+        def login(e):
             uname = label_entry.get()
             passw = label2_entry.get()
 
@@ -111,7 +111,6 @@ class LogIn(tk.Frame):
             print(r.values())
 
             if uname in r.keys() and passw==r[uname]:
-                self.destroy()
                 controller.show_frame("StartPage")
 
         
@@ -340,7 +339,7 @@ class StartPage(tk.Frame):
         play_label3.image = img3
 
         play_label4 = tk.Label(self, image=img4, cursor ="hand2", borderwidth=0)
-        play_label4.bind("<Button-1>", lambda e: controller.show_frame("PageFour"))
+        play_label4.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
         play_label4.image = img4
     
         logo_label.place(x=400,y=200)
