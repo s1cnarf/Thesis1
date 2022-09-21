@@ -98,6 +98,14 @@ class LogIn(tk.Frame):
         self.controller = controller
         #self.controller.state("zoomed")
 
+        file = open ('registersheet.txt' ,'r')
+        d = file.read()
+        r = ast.literal_eval(d)
+        file.close()
+
+        print(r.keys())
+        print(r.values())
+
         
         frame1 = tk.Frame(self,width=463,height=461,bg="#2A2B2C",border=0)
         label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
@@ -180,7 +188,7 @@ class Register(tk.Frame):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
 
-        def register():
+        def register(event):
             username = labelReg_entry.get()
             password = label2Reg_entry.get()
             contactNo = label3Reg_entry.get()
@@ -210,9 +218,9 @@ class Register(tk.Frame):
                     file.close()
 
             else:
-                messagebox.showerror('Invalid',"Both Password should match")
+                messagebox.showerror('Invalid',"Both Password Should Match")
     
-        frame_reg = tk.Frame(self,width=850,height=461,bg="#2A2B2C",border=0)
+        frame_reg = tk.Frame(self,width=860,height=480,bg="#2A2B2C",border=0)
         label_reg = tk.Label(self, text="CREATE ACCOUNT",fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
 
         
@@ -220,16 +228,18 @@ class Register(tk.Frame):
         labelReg_entry = tk.Entry(self,width=29,font=controller.title_font)
 
         label2Reg = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
-        label2Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
+        label2Reg_entry = tk.Entry(self,width=29,font=controller.title_font,show="*")
 
         label3Reg = tk.Label(self, text="CONTACT NO.",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         label3Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
+        label3Reg_entry.bind("<Return>",register)
         
         label4Reg = tk.Label(self, text="EMAIL",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         label4Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
 
         label5Reg = tk.Label(self, text="CONFIRM PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
-        label5Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
+        label5Reg_entry = tk.Entry(self,width=29,font=controller.title_font,show="*")
+        label5Reg_entry.bind("<Return>",register)
 
         label6Reg = tk.Label(self, text="I already have an account",fg="grey", bg="#2A2B2C", font=controller.body3_font)
         label7Reg = tk.Label(self, text="Sign In", cursor ="hand2", fg="#F7BF50", bg="#2A2B2C", borderwidth=0)
@@ -238,8 +248,8 @@ class Register(tk.Frame):
         #reg_button = tk.Label(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
         #reg_button.bind("<Button-1>", lambda e: controller.register)
 
-        reg_button = Button(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font, command=register)
-
+        reg_button = Button(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
+        reg_button.bind("<Button-1>",register)
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
@@ -256,8 +266,8 @@ class Register(tk.Frame):
         info_label.image = info_img
 
 
-        frame_reg.place(x=170,y=134)
-        label_reg.place(x=505,y=170)
+        frame_reg.place(x=180,y=134)
+        label_reg.place(x=510,y=170)
         labelReg.place(x=220,y=220)
         labelReg_entry.place(x=223, y=245)
         label2Reg.place(x=220, y=320)
