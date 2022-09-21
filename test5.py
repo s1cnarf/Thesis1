@@ -98,13 +98,20 @@ class LogIn(tk.Frame):
         self.controller = controller
         #self.controller.state("zoomed")
 
-        file = open ('registersheet.txt' ,'r')
-        d = file.read()
-        r = ast.literal_eval(d)
-        file.close()
+        def login():
+            uname = label_entry.get()
+            passw = label2_entry.get()
 
-        print(r.keys())
-        print(r.values())
+            file = open ('registersheet.txt' ,'r')
+            d = file.read()
+            r = ast.literal_eval(d)
+            file.close()
+
+            print(r.keys())
+            print(r.values())
+
+            if uname in r.keys() and passw==r[uname]:
+                controller.show_frame("StartPage")
 
         
         frame1 = tk.Frame(self,width=463,height=461,bg="#2A2B2C",border=0)
@@ -164,6 +171,7 @@ class LogIn(tk.Frame):
         names_label.image = names_img
 
         log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=10, height=2, font=controller.button_font)
+        log_in.bind("<Button-1>",login)
         register= tk.Label(self, text="Register",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
         register.bind("<Button-1>", lambda e: controller.show_frame("Register"))
         
@@ -201,7 +209,7 @@ class Register(tk.Frame):
                     d = file.read()
                     r = ast.literal_eval(d)
 
-                    dict2 = {username:password,contactNo:email}
+                    dict2 = {username:password}
                     r.update(dict2)
                     file.truncate(0)
                     file.close()
@@ -213,7 +221,7 @@ class Register(tk.Frame):
 
                 except:
                     file = open('registersheet.txt','w')
-                    displayDict = str({'Username':'Password','Contact No.':'Email'})
+                    displayDict = str({'Username':'Password'})
                     file.write(displayDict)
                     file.close()
 
@@ -245,11 +253,11 @@ class Register(tk.Frame):
         label7Reg = tk.Label(self, text="Sign In", cursor ="hand2", fg="#F7BF50", bg="#2A2B2C", borderwidth=0)
         label7Reg.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
 
-        #reg_button = tk.Label(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
-        #reg_button.bind("<Button-1>", lambda e: controller.register)
-
-        reg_button = Button(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
+        reg_button = tk.Label(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
         reg_button.bind("<Button-1>",register)
+
+        #reg_button = Button(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
+        #reg_button.bind("<Button-1>",register)
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
