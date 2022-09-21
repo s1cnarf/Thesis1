@@ -98,7 +98,7 @@ class LogIn(tk.Frame):
         self.controller = controller
         #self.controller.state("zoomed")
 
-        def login():
+        def login(event):
             uname = label_entry.get()
             passw = label2_entry.get()
 
@@ -111,6 +111,7 @@ class LogIn(tk.Frame):
             print(r.values())
 
             if uname in r.keys() and passw==r[uname]:
+                self.destroy()
                 controller.show_frame("StartPage")
 
         
