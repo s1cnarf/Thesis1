@@ -113,6 +113,8 @@ class LogIn(tk.Frame):
             if uname in r.keys() and passw==r[uname]:
                 controller.show_frame("StartPage")
 
+            else:
+                messagebox.showerror('Invalid', 'Invalid username and password')
         
         frame1 = tk.Frame(self,width=463,height=461,bg="#2A2B2C",border=0)
         label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
@@ -147,6 +149,7 @@ class LogIn(tk.Frame):
         label2_entry.insert(0,"Enter your password")
         label2_entry.bind('<FocusIn>', on_enter)
         label2_entry.bind('<FocusOut>', on_leave)
+        label2_entry.bind('<Return>',login)
         
         
 
@@ -209,7 +212,7 @@ class Register(tk.Frame):
                     d = file.read()
                     r = ast.literal_eval(d)
 
-                    dict2 = {username:password}
+                    dict2 = {username:password ,contactNo:email}
                     r.update(dict2)
                     file.truncate(0)
                     file.close()
@@ -221,7 +224,7 @@ class Register(tk.Frame):
 
                 except:
                     file = open('registersheet.txt','w')
-                    displayDict = str({'Username':'Password'})
+                    displayDict = str({'Username':'Password','Contact No.':'Email'})
                     file.write(displayDict)
                     file.close()
 
