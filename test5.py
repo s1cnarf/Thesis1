@@ -20,9 +20,11 @@ class SampleApp(tk.Tk):
 
         self.title_font = tkfont.Font(family='Fredoka One', size=16,slant="italic")
         self.title2_font = tkfont.Font(family='Lemon Milk', size=24, weight="bold")
+        self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
         self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
         self.body_font = tkfont.Font(family='Lemon Milk', size=16)
+        self.font_song = tkfont.Font(family='Fredoka One',size=16)
         self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
 
@@ -122,6 +124,9 @@ class LogIn(tk.Frame):
         label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         #sign_in = tk.Label(self, text="Sign In",fg="#F7BF50", bg="#2A2B2C", font=controller.title_font)
 
+        line = tk.Frame(self, bg="#281801")
+        line.configure(width=1,height=595)
+        line.place(x=600,y=66)
 
         def on_enter(e):
             label_entry.delete(0,'end')
@@ -155,7 +160,7 @@ class LogIn(tk.Frame):
         
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
+        logo_pic= logo_pic.resize((386,82),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         logo_pic = Image.open("Pictures/info.png")
@@ -174,25 +179,29 @@ class LogIn(tk.Frame):
         names_label= tk.Label(self, image=names_img,borderwidth=0)
         names_label.image = names_img
 
-        log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=10, height=2, font=controller.button_font)
+        log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=15, height=1, font=controller.button_font)
         log_in.bind("<Button-1>",login)
         register= tk.Label(self, text="Register",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
         register.bind("<Button-1>", lambda e: controller.show_frame("Register"))
         
-        frame1.place(x=371,y=134)
-        label.place(x=446, y=205)
-        label2.place(x=446, y=313)
+        frame1.place(x=671,y=143)
+        label.place(x=746, y=214)
+        label2.place(x=746, y=322)
         #sign_in.place(x=540,y=220)
 
-        label_entry.place(x=446,y=239)
-        label2_entry.place(x=446,y=348)
+        label_entry.place(x=746,y=243)
+        label2_entry.place(x=746,y=352)
 
-        logo_label.place(x=35,y=34)
-        info_label.place(x=738, y=57)
-        names_label.place(x=362, y=677)
+        #logo_label.place(x=35,y=34)
+        #info_label.place(x=738, y=57)
+        #names_label.place(x=362, y=677)
 
-        log_in.place(x=540,y=460)
-        register.place(x=562, y=511)
+        logo_label.place(x=123,y=270)
+        info_label.place(x=98, y=416)
+        names_label.place(x=660, y=660)
+
+        log_in.place(x=810,y=465)
+        register.place(x=862, y=510)
 
 class Register(tk.Frame):
 
@@ -358,21 +367,36 @@ class PlayPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
-        label = tk.Label(self, text="Play",bg="#F7BF50", font=controller.title_font)
+        label = tk.Label(self, text="Song Title",bg="#F7BF50", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Home",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        
 
-        frame_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
-        sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        label_play = tk.Label(self, text="RECENTS",bg="#F7BF50", font=controller.title2_font)
+        image = Image.open("Pictures/recents.png")
+        #image = image.resize((40,49), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(image)
 
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
+        logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
+        logo_label.image = logo_img
 
-        listbox = tk.Listbox(self,width=20,height=10,fg="#F7BF50",bg="#2A2B2C",borderwidth=0)
-        listbox.pack(side="top", fill="both", expand=True)
+        frame_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
+        #sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
+        label_play = tk.Label(self, image=img,border=0)
+        label_play.image = img
 
-        listbox.insert("end", "all too well", "sparks fly", "white horse", "ama namin remix", "chocolate", "its not living if its not with you", "girls", "eh paano kung", "hindi", "ka nakilala", "bugoy drillon", "2 joints", "pakyu ka ced")
+        
+
+        listbox = tk.Listbox(self,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        scrollbar = tk.Scrollbar(self,bg="yellow",orient=VERTICAL)
+        listbox.config(yscrollcommand=scrollbar.set)
+        #listbox.pack(side="top", fill="both", expand=True)
+        scrollbar.config(command=listbox.yview)
+        #scrollbar.pack(side=RIGHT,fill=Y)
+        scrollbar.place(x=365,y=259)
+        listbox.insert("end","", "all too well", "","sparks fly","", "white horse", "ama namin remix", "chocolate", "its not living if its not with you", "girls", "eh paano kung", "hindi", "ka nakilala", "bugoy drillon", "2 joints", "pakyu ka ced","song 1","song 2","song 3")
 
         def callback(event):
             selection = event.widget.curselection()
@@ -390,16 +414,17 @@ class PlayPage(tk.Frame):
         #label_play = tk.Label(self, text="RECENTS",bg="#F7BF50", font=controller.title2_font)
         frame2_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
         sframe2_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        label2_play = tk.Label(self, text="POPULAR",bg="#F7BF50", font=controller.title2_font)
+        label2_play = tk.Label(self, text="POPULAR",bg="#F8BA43",fg="#2A2B2C",font=controller.title3_font)
         frame3_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
         sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        label3_play = tk.Label(self, text="MOST PLAYED",bg="#F7BF50", font=controller.title2_font)
+        label3_play = tk.Label(self, text="MOST PLAYED",bg="#F8BA43",fg="#2A2B2C", font=controller.title3_font)
 
 
-        frame_play.place(x=160,y=134)
-        sframe_play.place(x=175, y=150)
-        label_play.place(x=230, y=180)
-        listbox.place(x=210,y=250)
+        logo_label.place(x=35,y=34)
+        frame_play.place(x=120,y=146)
+        #sframe_play.place(x=175, y=150)
+        label_play.place(x=130, y=158)
+        listbox.place(x=137,y=253)
         frame2_play.place(x=480,y=134)
         sframe2_play.place(x=495, y=150)
         label2_play.place(x=550, y=180)
