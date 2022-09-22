@@ -5,7 +5,7 @@ from logging import root
 import tkinter as tk                
 from tkinter import font as tkfont  
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
 from turtle import bgcolor, color, width
 from PIL import ImageTk, Image
@@ -387,15 +387,19 @@ class PlayPage(tk.Frame):
         label_play = tk.Label(self, image=img,border=0)
         label_play.image = img
 
+       
         
-
-        listbox = tk.Listbox(self,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
-        scrollbar = tk.Scrollbar(self,bg="yellow",orient=VERTICAL)
+        
+        frame1 = tk.Frame(self,width=259,height=385,border=0,bg="#2A2B2C")
+        frame1.place(x=137,y=253)
+        listbox = tk.Listbox(frame1,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        scrollbar = tk.Scrollbar(frame1,orient=VERTICAL)
         listbox.config(yscrollcommand=scrollbar.set)
         #listbox.pack(side="top", fill="both", expand=True)
         scrollbar.config(command=listbox.yview)
-        #scrollbar.pack(side=RIGHT,fill=Y)
-        scrollbar.place(x=365,y=259)
+        scrollbar.pack(side=RIGHT,fill=Y)
+        #scrollbar.place(x=365,y=259)
+        listbox.pack(pady=1)
         listbox.insert("end","", "all too well", "","sparks fly","", "white horse", "ama namin remix", "chocolate", "its not living if its not with you", "girls", "eh paano kung", "hindi", "ka nakilala", "bugoy drillon", "2 joints", "pakyu ka ced","song 1","song 2","song 3")
 
         def callback(event):
@@ -424,7 +428,7 @@ class PlayPage(tk.Frame):
         frame_play.place(x=120,y=146)
         #sframe_play.place(x=175, y=150)
         label_play.place(x=130, y=158)
-        listbox.place(x=137,y=253)
+        #listbox.place(x=137,y=253)
         frame2_play.place(x=480,y=134)
         sframe2_play.place(x=495, y=150)
         label2_play.place(x=550, y=180)
