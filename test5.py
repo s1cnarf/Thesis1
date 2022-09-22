@@ -19,6 +19,7 @@ class SampleApp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title_font = tkfont.Font(family='Fredoka One', size=16,slant="italic")
+        self.title2_font = tkfont.Font(family='Lemon Milk', size=24, weight="bold")
         self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
         self.body_font = tkfont.Font(family='Lemon Milk', size=16)
@@ -362,6 +363,50 @@ class PlayPage(tk.Frame):
         button = tk.Button(self, text="Home",
                            command=lambda: controller.show_frame("StartPage"))
         button.pack()
+
+        frame_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
+        sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
+        label_play = tk.Label(self, text="RECENTS",bg="#F7BF50", font=controller.title2_font)
+
+
+        listbox = tk.Listbox(self,width=20,height=10,fg="#F7BF50",bg="#2A2B2C",borderwidth=0)
+        listbox.pack(side="top", fill="both", expand=True)
+
+        listbox.insert("end", "all too well", "sparks fly", "white horse", "ama namin remix", "chocolate", "its not living if its not with you", "girls", "eh paano kung", "hindi", "ka nakilala", "bugoy drillon", "2 joints", "pakyu ka ced")
+
+        def callback(event):
+            selection = event.widget.curselection()
+            if selection:
+                index = selection[0]
+                data = event.widget.get(index)
+                label.configure(text=data)
+            else:
+                label.configure(text="")
+
+        listbox.bind("<<ListboxSelect>>", callback)
+
+        #frame_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
+        #sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
+        #label_play = tk.Label(self, text="RECENTS",bg="#F7BF50", font=controller.title2_font)
+        frame2_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
+        sframe2_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
+        label2_play = tk.Label(self, text="POPULAR",bg="#F7BF50", font=controller.title2_font)
+        frame3_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
+        sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
+        label3_play = tk.Label(self, text="MOST PLAYED",bg="#F7BF50", font=controller.title2_font)
+
+
+        frame_play.place(x=160,y=134)
+        sframe_play.place(x=175, y=150)
+        label_play.place(x=230, y=180)
+        listbox.place(x=210,y=250)
+        frame2_play.place(x=480,y=134)
+        sframe2_play.place(x=495, y=150)
+        label2_play.place(x=550, y=180)
+        frame3_play.place(x=800,y=134)
+        sframe3_play.place(x=815, y=150)
+        label3_play.place(x=840, y=180)
+        
 
 
 class PageTwo(tk.Frame):
