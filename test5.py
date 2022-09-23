@@ -379,7 +379,7 @@ class PlayPage(tk.Frame):
                 data = event.widget.get(index)
                 label.configure(text=data)
             else:
-                label.configure(text="")
+                label.configure(text="Select a song.")
 
 
         image = Image.open("Pictures/recents.png")
