@@ -20,7 +20,7 @@ class SampleApp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title_font = tkfont.Font(family='Fredoka One', size=16,slant="italic")
-        self.title2_font = tkfont.Font(family='Lemon Milk', size=24, weight="bold")
+        self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
         self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
@@ -369,6 +369,7 @@ class PlayPage(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
         label = tk.Label(self, text="Song Title",bg="#F7BF50", font=controller.title_font)
+        label2 = tk.Label(self, text="PLAY",bg="#F7BF50", font=controller.title2_font)
         label.pack(side="top", fill="x", pady=10)
         
 
@@ -493,6 +494,7 @@ class PlayPage(tk.Frame):
 
 
         logo_label.place(x=35,y=34)
+        label2.place(x=999,y=34)
         frame_play.place(x=120,y=146)
         label_play.place(x=130, y=158)
         #sframe_play.place(x=175, y=150)
