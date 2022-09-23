@@ -1,5 +1,6 @@
 import ast
 from ast import Load
+from cgitb import text
 #from ast import *
 from logging import root
 import tkinter as tk                
@@ -371,9 +372,27 @@ class PlayPage(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
         
 
+        def callback(event):
+            selection = event.widget.curselection()
+            if selection:
+                index = selection[0]
+                data = event.widget.get(index)
+                label.configure(text=data)
+            else:
+                label.configure(text="")
+
+
         image = Image.open("Pictures/recents.png")
         #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
+
+        image = Image.open("Pictures/popular.png")
+        #image = image.resize((40,49), Image.ANTIALIAS)
+        img2 = ImageTk.PhotoImage(image)
+
+        image = Image.open("Pictures/mostP.png")
+        #image = image.resize((40,49), Image.ANTIALIAS)
+        img3 = ImageTk.PhotoImage(image)
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
@@ -387,10 +406,16 @@ class PlayPage(tk.Frame):
         label_play = tk.Label(self, image=img,border=0)
         label_play.image = img
 
-       
+        frame2_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
+        label_recent = tk.Label(self, image=img2,border=0)
+        label_recent.image = img2
+
+        frame3_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
+        label_most = tk.Label(self, image=img3,border=0)
+        label_most.image = img3
         
         
-        frame1 = tk.Frame(self,width=259,height=385,border=0,bg="#2A2B2C")
+        frame1 = tk.Frame(self,width=259,height=480,border=0,bg="#2A2B2C")
         frame1.place(x=137,y=253)
         listbox = tk.Listbox(frame1,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
         scrollbar = tk.Scrollbar(frame1,orient=VERTICAL)
@@ -400,41 +425,85 @@ class PlayPage(tk.Frame):
         scrollbar.pack(side=RIGHT,fill=Y)
         #scrollbar.place(x=365,y=259)
         listbox.pack(pady=1)
-        listbox.insert("end","", "all too well", "","sparks fly","", "white horse", "ama namin remix", "chocolate", "its not living if its not with you", "girls", "eh paano kung", "hindi", "ka nakilala", "bugoy drillon", "2 joints", "pakyu ka ced","song 1","song 2","song 3")
+        
+        f = open("songs.txt","r")
+        for x in f:
+            listbox.insert("end",x)
+            print(x)
+        f.close()
 
-        def callback(event):
-            selection = event.widget.curselection()
-            if selection:
-                index = selection[0]
-                data = event.widget.get(index)
-                label.configure(text=data)
-            else:
-                label.configure(text="")
 
         listbox.bind("<<ListboxSelect>>", callback)
+        
 
         #frame_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
         #sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
         #label_play = tk.Label(self, text="RECENTS",bg="#F7BF50", font=controller.title2_font)
-        frame2_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
-        sframe2_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        label2_play = tk.Label(self, text="POPULAR",bg="#F8BA43",fg="#2A2B2C",font=controller.title3_font)
-        frame3_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
-        sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        label3_play = tk.Label(self, text="MOST PLAYED",bg="#F8BA43",fg="#2A2B2C", font=controller.title3_font)
+         #frame2_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
+        #sframe2_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
+         #label_recent = tk.Label(self, image=img2,border=0)
+         #label_recent.image = img2
+        #label2_play = tk.Label(self, text="POPULAR",bg="#F8BA43",fg="#2A2B2C",font=controller.title3_font)
+
+        frame2 = tk.Frame(self,width=259,height=480,border=0,bg="#2A2B2C")
+        frame2.place(x=496,y=253)
+        listbox2 = tk.Listbox(frame2,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        scrollbar2 = tk.Scrollbar(frame2,orient=VERTICAL)
+        listbox2.config(yscrollcommand=scrollbar2.set)
+        #listbox.pack(side="top", fill="both", expand=True)
+        scrollbar2.config(command=listbox2.yview)
+        scrollbar2.pack(side=RIGHT,fill=Y)
+        #scrollbar.place(x=365,y=259)
+        listbox2.pack(pady=1)
+
+        f2 = open("songs.txt","r")
+        for y in f2:
+            listbox2.insert("end",y)
+            print(y)
+        f2.close()
+
+        listbox2.bind("<<ListboxSelect>>", callback)
+
+
+
+
+
+        #frame3_play = tk.Frame(self,width=259,height=480,bg="#2A2B2C",border=0)
+        #sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
+        #label3_play = tk.Label(self, text="MOST PLAYED",bg="#F8BA43",fg="#2A2B2C", font=controller.title3_font)
+
+        frame3 = tk.Frame(self,width=259,height=480,border=0,bg="#2A2B2C")
+        frame3.place(x=855,y=253)
+        listbox3 = tk.Listbox(frame3,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        scrollbar3 = tk.Scrollbar(frame3,orient=VERTICAL)
+        listbox3.config(yscrollcommand=scrollbar3.set)
+        #listbox.pack(side="top", fill="both", expand=True)
+        scrollbar3.config(command=listbox3.yview)
+        scrollbar3.pack(side=RIGHT,fill=Y)
+        #scrollbar.place(x=365,y=259)
+        listbox3.pack(pady=1)
+
+        f3 = open("songs.txt","r")
+        for z in f3:
+            listbox3.insert("end",z)
+            print(z)
+        f3.close()
+
+        listbox3.bind("<<ListboxSelect>>", callback)
 
 
         logo_label.place(x=35,y=34)
         frame_play.place(x=120,y=146)
-        #sframe_play.place(x=175, y=150)
         label_play.place(x=130, y=158)
+        #sframe_play.place(x=175, y=150)
         #listbox.place(x=137,y=253)
-        frame2_play.place(x=480,y=134)
-        sframe2_play.place(x=495, y=150)
-        label2_play.place(x=550, y=180)
-        frame3_play.place(x=800,y=134)
-        sframe3_play.place(x=815, y=150)
-        label3_play.place(x=840, y=180)
+        frame2_play.place(x=479,y=146)
+        label_recent.place(x=483, y=158)
+        #label2_play.place(x=550, y=180)
+        frame3_play.place(x=838,y=146)
+        label_most.place(x=842, y=158)
+        #sframe3_play.place(x=815, y=196)
+        #label3_play.place(x=840, y=210)
         
 
 
