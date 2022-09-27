@@ -10,7 +10,6 @@ from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
 from turtle import bgcolor, color, width
 from PIL import ImageTk, Image
-from collections import deque
 import time
 
 
@@ -20,13 +19,13 @@ class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        self.title_font = tkfont.Font(family='Montserrat', size=16,slant="italic")
+        self.title_font = tkfont.Font(family='Fredoka One', size=16,slant="italic")
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
         self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
         self.body_font = tkfont.Font(family='Lemon Milk', size=16)
-        self.font_song = tkfont.Font(family='Montserrat',size=16)
+        self.font_song = tkfont.Font(family='Fredoka One',size=16)
         self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
 
@@ -114,7 +113,6 @@ class LogIn(tk.Frame):
 
             print(r.keys())
             print(r.values())
-            print(r)
 
             if uname in r.keys() and passw==r[uname]:
                 controller.show_frame("StartPage")
@@ -374,13 +372,6 @@ class PlayPage(tk.Frame):
         label2 = tk.Label(self, text="PLAY",bg="#F7BF50", font=controller.title2_font)
         label.pack(side="top", fill="x", pady=10)
         
-        # Create Stack For Recents
-        stack = deque()
-        stack2 = deque()
-        index_stack=0
-
-        # Create Dictionary for Most Played
-        PlayCount_Dictionary = {}
 
         def callback(event):
             selection = event.widget.curselection()
@@ -391,37 +382,7 @@ class PlayPage(tk.Frame):
             else:
                 label.configure(text="Select a song.")
 
-        def PushSongInStack(event):
-            selection = event.widget.curselection()
-            index = selection[0]
-            data = event.widget.get(index)
-            label.configure(text=data)
 
-            stack.append(data)
-            stack2.append(data)
-
-            listbox.insert(index_stack,stack2.pop())
-            index_stack+1
-
-        def IncrementPlayCount(event):
-            selection = event.widget.curselection()
-            index = selection[0]
-            data = event.widget.get(index)
-            listbox3.delete(0,END)
-
-            if data in PlayCount_Dictionary:
-                PlayCount_Dictionary[data] = PlayCount_Dictionary.get(data)+1
-                
-            for w in sorted(PlayCount_Dictionary, key = PlayCount_Dictionary.get):
-                if(PlayCount_Dictionary[w]>0):
-                    listbox3.insert(0,w)
-                   
-
-        def Combine2Functions(event):
-            PushSongInStack(event)
-            IncrementPlayCount(event)
-
-        
         image = Image.open("Pictures/recents.png")
         #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
@@ -465,10 +426,15 @@ class PlayPage(tk.Frame):
         scrollbar.pack(side=RIGHT,fill=Y)
         #scrollbar.place(x=365,y=259)
         listbox.pack(pady=1)
+        
+        f = open("songs.txt","r")
+        for x in f:
+            listbox.insert("end",x)
+            print(x)
+        f.close()
 
-    
 
-        #listbox.bind("<<ListboxSelect>>", PushSongInStack)
+        listbox.bind("<<ListboxSelect>>", callback)
         
 
         #frame_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
@@ -490,18 +456,14 @@ class PlayPage(tk.Frame):
         scrollbar2.pack(side=RIGHT,fill=Y)
         #scrollbar.place(x=365,y=259)
         listbox2.pack(pady=1)
-        
-        #POPULAR 
 
         f2 = open("songs.txt","r")
         for y in f2:
             listbox2.insert("end",y)
-            PlayCount_Dictionary[y]=0
             print(y)
         f2.close()
 
-        listbox2.bind("<<ListboxSelect>>", Combine2Functions)
-        #listbox2.bind("<<ListboxSelect>>",IncrementPlayCount)
+        listbox2.bind("<<ListboxSelect>>", callback)
 
 
 
@@ -522,12 +484,13 @@ class PlayPage(tk.Frame):
         #scrollbar.place(x=365,y=259)
         listbox3.pack(pady=1)
 
-        #MOST PLAYED
-        
+        f3 = open("songs.txt","r")
+        for z in f3:
+            listbox3.insert("end",z)
+            print(z)
+        f3.close()
 
-        
-
-        #listbox3.bind("<<ListboxSelect>>", callback)
+        listbox3.bind("<<ListboxSelect>>", callback)
 
 
         logo_label.place(x=35,y=34)
