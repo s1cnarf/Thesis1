@@ -460,6 +460,7 @@ class PlayPage(tk.Frame):
         def Combine2Functions(event):
             PushSongInStack(event)
             IncrementPlayCount(event)
+            fillout(event)
 
         
                         
@@ -558,12 +559,13 @@ class PlayPage(tk.Frame):
 
         update(songs)
 
-        listbox2.bind("<<ListboxSelect>>", Combine2Functions)
         #listbox2.bind("<<ListboxSelect>>",IncrementPlayCount)
 
-        listbox2.bind("<<ListboxSelect>>", fillout)
+        #listbox2.bind("<<ListboxSelect>>", fillout)
         
         search_entry.bind("<KeyRelease>",search)
+
+        listbox2.bind("<<ListboxSelect>>", Combine2Functions)
 
         #frame3_play = tk.Frame(self,width=259,height=480,bg="#2A2B2C",border=0)
         #sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
