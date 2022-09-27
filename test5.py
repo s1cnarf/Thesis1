@@ -587,7 +587,7 @@ class PlayPage(tk.Frame):
         #MOST PLAYED
         
 
-        
+        listbox3.bind("<<ListboxSelect>>", Combine2Functions)
 
         #listbox3.bind("<<ListboxSelect>>", callback)
 
