@@ -379,6 +379,7 @@ class PlayPage(tk.Frame):
             listbox2.delete(0,END)
 
             for item in task:
+                PlayCount_Dictionary[item]=0
                 listbox2.insert(END, item)
 
         def fillout(e):
@@ -556,6 +557,7 @@ class PlayPage(tk.Frame):
 
         with open('songs.txt', 'r') as f:
             songs = [line.strip() for line in f]
+            
 
         update(songs)
 
