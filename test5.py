@@ -374,6 +374,46 @@ class PlayPage(tk.Frame):
         label2 = tk.Label(self, text="PLAY",bg="#F7BF50", font=controller.title2_font)
         label.pack(side="top", fill="x", pady=10)
         
+
+        def update(task):
+            listbox2.delete(0,END)
+
+            for item in task:
+                listbox2.insert(END, item)
+
+        def fillout(e):
+            search_entry.delete(0, END)
+
+            search_entry.insert(0,listbox2.get(ANCHOR))
+
+        def search(e):
+            typed = search_entry.get()
+            length_of_typed = len(typed)
+
+            if typed == '':
+                task = songs
+            else:
+                task = []
+                for item in songs:
+                    if typed.lower() in item.lower()[0:length_of_typed]:
+                        task.append(item)
+
+            update(task)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         # Create Stack For Recents
         stack = deque()
         stack2 = deque()
@@ -422,17 +462,24 @@ class PlayPage(tk.Frame):
             IncrementPlayCount(event)
 
         
+                        
+
+        
         image = Image.open("Pictures/recents.png")
         #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/popular.png")
-        #image = image.resize((40,49), Image.ANTIALIAS)
+        #image = image.resize((10,30), Image.ANTIALIAS)
         img2 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/mostP.png")
         #image = image.resize((40,49), Image.ANTIALIAS)
         img3 = ImageTk.PhotoImage(image)
+
+        image = Image.open("Pictures/searchIcon.png")
+        image = image.resize((25,28), Image.ANTIALIAS)
+        img4 = ImageTk.PhotoImage(image)
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
@@ -440,6 +487,12 @@ class PlayPage(tk.Frame):
         logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
         logo_label.image = logo_img
+
+        #search_frame = tk.Frame(self,width=259,height=30,bg="#2A2B2C",border=0)
+        search_entry = tk.Entry(self,width=25,border=0,font=controller.title_font)
+        label_search = tk.Label(self, image=img4,border=0)
+        label_search.image = img4
+
 
         frame_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
         #sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
@@ -500,12 +553,17 @@ class PlayPage(tk.Frame):
             print(y)
         f2.close()
 
+        with open('songs.txt', 'r') as f:
+            songs = [line.strip() for line in f]
+
+        update(songs)
+
         listbox2.bind("<<ListboxSelect>>", Combine2Functions)
         #listbox2.bind("<<ListboxSelect>>",IncrementPlayCount)
 
-
-
-
+        listbox2.bind("<<ListboxSelect>>", fillout)
+        
+        search_entry.bind("<KeyRelease>",search)
 
         #frame3_play = tk.Frame(self,width=259,height=480,bg="#2A2B2C",border=0)
         #sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
@@ -529,7 +587,9 @@ class PlayPage(tk.Frame):
 
         #listbox3.bind("<<ListboxSelect>>", callback)
 
-
+        #search_frame.place(x=479, y=50)
+        search_entry.place(x=490, y=70)
+        label_search.place(x=465,y=70)
         logo_label.place(x=35,y=34)
         label2.place(x=999,y=34)
         frame_play.place(x=120,y=146)
