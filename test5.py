@@ -429,8 +429,12 @@ class PlayPage(tk.Frame):
                 index = selection[0]
                 data = event.widget.get(index)
                 label.configure(text=data)
+                # search_entry.delete(0, END)
+                # listbox2.insert("end",x)
+                # print(x)
             else:
-                label.configure(text="Select a song.")
+                listbox.get(ANCHOR) or listbox3.get(ANCHOR)
+    
 
         def PushSongInStack(event):
             selection = event.widget.curselection()
@@ -521,7 +525,7 @@ class PlayPage(tk.Frame):
         #scrollbar.place(x=365,y=259)
         listbox.pack(pady=1)
 
-    
+        listbox.bind("<<ListboxSelect>>", callback)
 
         #listbox.bind("<<ListboxSelect>>", PushSongInStack)
         
@@ -557,7 +561,6 @@ class PlayPage(tk.Frame):
 
         with open('songs.txt', 'r') as f:
             songs = [line.strip() for line in f]
-            
 
         update(songs)
 
@@ -587,7 +590,7 @@ class PlayPage(tk.Frame):
         #MOST PLAYED
         
 
-        #listbox3.bind("<<ListboxSelect>>", callback)
+        listbox3.bind("<<ListboxSelect>>", callback)
 
         #search_frame.place(x=479, y=50)
         search_entry.place(x=490, y=70)
