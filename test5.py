@@ -380,6 +380,7 @@ class PlayPage(tk.Frame):
 
             for item in task:
                 PlayCount_Dictionary[item]=0
+                item = item[:-4]
                 listbox2.insert(END, item)
 
         def fillout(e):
