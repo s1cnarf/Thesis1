@@ -383,10 +383,10 @@ class PlayPage(tk.Frame):
                 item = item[:-4]
                 listbox2.insert(END, item)
 
-        def fillout(e):
-            search_entry.delete(0, END)
+        # def fillout(e):
+        #     search_entry.delete(0, END)
 
-            search_entry.insert(0,listbox2.get(ANCHOR))
+        #     search_entry.insert(0,listbox2.get(ANCHOR))
 
         def search(e):
             typed = search_entry.get()
@@ -430,7 +430,7 @@ class PlayPage(tk.Frame):
                 index = selection[0]
                 data = event.widget.get(index)
                 label.configure(text=data)
-                # search_entry.delete(0, END)
+                search_entry.delete(0, END)
                 # listbox2.insert("end",x)
                 # print(x)
             else:
@@ -466,7 +466,7 @@ class PlayPage(tk.Frame):
         def CombineFunctions(event):
             PushSongInStack(event)
             IncrementPlayCount(event)
-            fillout(event)
+            
 
         
                         
