@@ -374,6 +374,7 @@ class PlayPage(tk.Frame):
         label2 = tk.Label(self, text="PLAY",bg="#F7BF50", font=controller.title2_font)
         label.pack(side="top", fill="x", pady=10)
         
+        PlayCount_Dictionary = {}
 
         def update(task):
             listbox2.delete(0,END)
@@ -387,6 +388,11 @@ class PlayPage(tk.Frame):
         #     search_entry.delete(0, END)
 
         #     search_entry.insert(0,listbox2.get(ANCHOR))
+
+        def back(e):
+            task = songs
+
+            update(task)
 
         def search(e):
             typed = search_entry.get()
@@ -422,17 +428,15 @@ class PlayPage(tk.Frame):
         index_stack=0
 
         # Create Dictionary for Most Played
-        PlayCount_Dictionary = {}
+        #PlayCount_Dictionary = {}
 
         def callback(event):
             selection = event.widget.curselection()
+            search_entry.delete(0, END)
             if selection:
                 index = selection[0]
                 data = event.widget.get(index)
                 label.configure(text=data)
-                search_entry.delete(0, END)
-                # listbox2.insert("end",x)
-                # print(x)
             else:
                 listbox.get(ANCHOR) or listbox3.get(ANCHOR)
     
@@ -468,7 +472,9 @@ class PlayPage(tk.Frame):
             IncrementPlayCount(event)
             
 
-        
+        def combine2functions(event):
+            callback(event)
+            back(event)
                         
 
         
@@ -526,7 +532,7 @@ class PlayPage(tk.Frame):
         #scrollbar.place(x=365,y=259)
         listbox.pack(pady=1)
 
-        listbox.bind("<<ListboxSelect>>", callback)
+        listbox.bind("<<ListboxSelect>>", combine2functions)
 
         #listbox.bind("<<ListboxSelect>>", PushSongInStack)
         
@@ -591,7 +597,7 @@ class PlayPage(tk.Frame):
         #MOST PLAYED
         
 
-        listbox3.bind("<<ListboxSelect>>", callback)
+        listbox3.bind("<<ListboxSelect>>", combine2functions)
 
         #search_frame.place(x=479, y=50)
         search_entry.place(x=490, y=70)
