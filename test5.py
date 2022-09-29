@@ -374,7 +374,6 @@ class PlayPage(tk.Frame):
         label2 = tk.Label(self, text="PLAY",bg="#F7BF50", font=controller.title2_font)
         label.pack(side="top", fill="x", pady=10)
         
-        PlayCount_Dictionary = {}
 
         def update(task):
             listbox2.delete(0,END)
@@ -428,7 +427,7 @@ class PlayPage(tk.Frame):
         index_stack=0
 
         # Create Dictionary for Most Played
-        #PlayCount_Dictionary = {}
+        PlayCount_Dictionary = {}
 
         def callback(event):
             selection = event.widget.curselection()
