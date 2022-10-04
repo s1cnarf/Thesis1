@@ -371,27 +371,25 @@ class PlayPage(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
         label = tk.Label(self, text="Song Title",bg="#F7BF50", font=controller.title_font)
-        label2 = tk.Label(self, text="PLAY",bg="#F7BF50", font=controller.title2_font)
-        label.pack(side="top", fill="x", pady=10)
         
+        label.pack(side="top", fill="x", pady=10)
+        flag=True
 
-        def update(task):
+        def update(task,flag):
             listbox2.delete(0,END)
-
+            
             for item in task:
-                PlayCount_Dictionary[item]=0
+                
                 item = item[:-4]
+                if flag:
+                    PlayCount_Dictionary[item]=0 # the 0 is the play count
                 listbox2.insert(END, item)
+            flag=False
 
-        # def fillout(e):
-        #     search_entry.delete(0, END)
+        def fillout(e):
+            search_entry.delete(0, END)
 
-        #     search_entry.insert(0,listbox2.get(ANCHOR))
-
-        def back(e):
-            task = songs
-
-            update(task)
+            search_entry.insert(0,listbox2.get(ANCHOR))
 
         def search(e):
             typed = search_entry.get()
@@ -405,20 +403,7 @@ class PlayPage(tk.Frame):
                     if typed.lower() in item.lower()[0:length_of_typed]:
                         task.append(item)
 
-            update(task)
-
-
-
-
-
-
-
-
-
-
-
-
-
+            update(task,flag)
 
 
         # Create Stack For Recents
@@ -431,11 +416,13 @@ class PlayPage(tk.Frame):
 
         def callback(event):
             selection = event.widget.curselection()
-            search_entry.delete(0, END)
             if selection:
                 index = selection[0]
                 data = event.widget.get(index)
                 label.configure(text=data)
+                # search_entry.delete(0, END)
+                # listbox2.insert("end",x)
+                # print(x)
             else:
                 listbox.get(ANCHOR) or listbox3.get(ANCHOR)
     
@@ -454,26 +441,33 @@ class PlayPage(tk.Frame):
 
         def IncrementPlayCount(event):
             selection = event.widget.curselection()
+            
             index = selection[0]
             data = event.widget.get(index)
             listbox3.delete(0,END)
+            print("data",data)
+            
+            
+
+
 
             if data in PlayCount_Dictionary:
                 PlayCount_Dictionary[data] = PlayCount_Dictionary.get(data)+1
+                print (PlayCount_Dictionary)
                 
             for w in sorted(PlayCount_Dictionary, key = PlayCount_Dictionary.get):
                 if(PlayCount_Dictionary[w]>0):
+                    print("w = "+ w)
                     listbox3.insert(0,w)
+                    
                    
 
         def CombineFunctions(event):
             PushSongInStack(event)
-            IncrementPlayCount(event)
-            
+            #IncrementPlayCount(event)
+            fillout(event)
 
-        def combine2functions(event):
-            callback(event)
-            back(event)
+        
                         
 
         
@@ -481,17 +475,17 @@ class PlayPage(tk.Frame):
         #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
-        image = Image.open("Pictures/popular.png")
+        image = Image.open("Pictures/songs.png")
         #image = image.resize((10,30), Image.ANTIALIAS)
         img2 = ImageTk.PhotoImage(image)
 
-        image = Image.open("Pictures/mostP.png")
-        #image = image.resize((40,49), Image.ANTIALIAS)
-        img3 = ImageTk.PhotoImage(image)
-
         image = Image.open("Pictures/searchIcon.png")
-        image = image.resize((25,28), Image.ANTIALIAS)
+        #image = image.resize((25,28), Image.ANTIALIAS)
         img4 = ImageTk.PhotoImage(image)
+
+        image = Image.open("Pictures/playButton.png")
+        #image = image.resize((25,28), Image.ANTIALIAS)
+        img5= ImageTk.PhotoImage(image)
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
@@ -501,28 +495,33 @@ class PlayPage(tk.Frame):
         logo_label.image = logo_img
 
         #search_frame = tk.Frame(self,width=259,height=30,bg="#2A2B2C",border=0)
-        search_entry = tk.Entry(self,width=25,border=0,font=controller.title_font)
-        label_search = tk.Label(self, image=img4,border=0)
+        
+
+        frame3 = tk.Frame(self,width=262,height=51,border=0,bg="#F8BA43")
+        frame3.place(x=616,y=85)
+
+        search_entry = tk.Entry(frame3,width=25,border=0,font=controller.title_font)
+        label_search = tk.Label(frame3, image=img4,border=0)
         label_search.image = img4
 
+        label_search.pack(side=LEFT,padx=2)
+        search_entry.pack(side=LEFT)
 
         frame_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
         #sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
         label_play = tk.Label(self, image=img,border=0)
         label_play.image = img
 
-        frame2_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
+        play_Button = tk.Label(self, image=img5,border=0)
+        play_Button.image = img5
+
+        frame2_play = tk.Frame(self,width=678,height=439,bg="#2A2B2C",border=0)
         label_recent = tk.Label(self, image=img2,border=0)
         label_recent.image = img2
-
-        frame3_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
-        label_most = tk.Label(self, image=img3,border=0)
-        label_most.image = img3
-        
-        
+               
         frame1 = tk.Frame(self,width=259,height=480,border=0,bg="#2A2B2C")
-        frame1.place(x=137,y=253)
-        listbox = tk.Listbox(frame1,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        frame1.place(x=107,y=261)
+        listbox = tk.Listbox(frame1,width=22,height=20,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
         scrollbar = tk.Scrollbar(frame1,orient=VERTICAL)
         listbox.config(yscrollcommand=scrollbar.set)
         #listbox.pack(side="top", fill="both", expand=True)
@@ -531,23 +530,14 @@ class PlayPage(tk.Frame):
         #scrollbar.place(x=365,y=259)
         listbox.pack(pady=1)
 
-        listbox.bind("<<ListboxSelect>>", combine2functions)
+        listbox.bind("<<ListboxSelect>>", callback)
 
         #listbox.bind("<<ListboxSelect>>", PushSongInStack)
-        
 
-        #frame_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
-        #sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        #label_play = tk.Label(self, text="RECENTS",bg="#F7BF50", font=controller.title2_font)
-         #frame2_play = tk.Frame(self,width=250,height=480,bg="#2A2B2C",border=0)
-        #sframe2_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-         #label_recent = tk.Label(self, image=img2,border=0)
-         #label_recent.image = img2
-        #label2_play = tk.Label(self, text="POPULAR",bg="#F8BA43",fg="#2A2B2C",font=controller.title3_font)
+        frame2 = tk.Frame(self,width=606,height=311,border=0,bg="#2A2B2C")
+        frame2.place(x=457,y=247)
 
-        frame2 = tk.Frame(self,width=259,height=480,border=0,bg="#2A2B2C")
-        frame2.place(x=496,y=253)
-        listbox2 = tk.Listbox(frame2,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        listbox2 = tk.Listbox(frame2,width=58,height=16,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
         scrollbar2 = tk.Scrollbar(frame2,orient=VERTICAL)
         listbox2.config(yscrollcommand=scrollbar2.set)
         #listbox.pack(side="top", fill="both", expand=True)
@@ -558,17 +548,12 @@ class PlayPage(tk.Frame):
         
         #POPULAR 
 
-        f2 = open("songs.txt","r")
-        for y in f2:
-            listbox2.insert("end",y)
-            PlayCount_Dictionary[y]=0
-            print(y)
-        f2.close()
+        
 
         with open('songs.txt', 'r') as f:
             songs = [line.strip() for line in f]
 
-        update(songs)
+        update(songs,flag)
 
         #listbox2.bind("<<ListboxSelect>>",IncrementPlayCount)
 
@@ -582,38 +567,25 @@ class PlayPage(tk.Frame):
         #sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
         #label3_play = tk.Label(self, text="MOST PLAYED",bg="#F8BA43",fg="#2A2B2C", font=controller.title3_font)
 
-        frame3 = tk.Frame(self,width=259,height=480,border=0,bg="#2A2B2C")
-        frame3.place(x=855,y=253)
-        listbox3 = tk.Listbox(frame3,width=22,height=18,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
-        scrollbar3 = tk.Scrollbar(frame3,orient=VERTICAL)
-        listbox3.config(yscrollcommand=scrollbar3.set)
-        #listbox.pack(side="top", fill="both", expand=True)
-        scrollbar3.config(command=listbox3.yview)
-        scrollbar3.pack(side=RIGHT,fill=Y)
-        #scrollbar.place(x=365,y=259)
-        listbox3.pack(pady=1)
-
-        #MOST PLAYED
+        
         
 
-        listbox3.bind("<<ListboxSelect>>", combine2functions)
-
         #search_frame.place(x=479, y=50)
-        search_entry.place(x=490, y=70)
-        label_search.place(x=465,y=70)
+        #search_entry.place(x=640, y=89)
+        #label_search.place(x=610,y=86)
+
+        play_Button.place(x=1013, y=635)
+
         logo_label.place(x=35,y=34)
-        label2.place(x=999,y=34)
-        frame_play.place(x=120,y=146)
-        label_play.place(x=130, y=158)
-        #sframe_play.place(x=175, y=150)
-        #listbox.place(x=137,y=253)
-        frame2_play.place(x=479,y=146)
-        label_recent.place(x=483, y=158)
+
+        frame_play.place(x=98,y=148)
+        label_play.place(x=107, y=160)
+        
+        frame2_play.place(x=415,y=148)
+        label_recent.place(x=450, y=160)
         #label2_play.place(x=550, y=180)
-        frame3_play.place(x=838,y=146)
-        label_most.place(x=842, y=158)
-        #sframe3_play.place(x=815, y=196)
-        #label3_play.place(x=840, y=210)
+        
+      
         
 
 
