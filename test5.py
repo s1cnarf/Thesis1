@@ -499,6 +499,11 @@ class PlayPage(tk.Frame):
         logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
         logo_label.image = logo_img
 
+        img6= Image.open("Pictures/info.png")
+        info_img = ImageTk.PhotoImage(img6)
+        info_label = tk.Label(self, image=info_img,borderwidth=0)
+        info_label.image = info_img
+
         #search_frame = tk.Frame(self,width=259,height=30,bg="#2A2B2C",border=0)
         
         # black rectangle
@@ -584,6 +589,7 @@ class PlayPage(tk.Frame):
         play_Button.place(x=1013, y=635)
 
         logo_label.place(x=35,y=34)
+        info_label.place(x=738,y=57)
         label_recent.place(x=831,y=179)
 
         
@@ -606,9 +612,18 @@ class AfterPerformance(tk.Frame):
         logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
         logo_label.image = logo_img
 
+        img= Image.open("Pictures/info.png")
+        info_img = ImageTk.PhotoImage(img)
+        info_label = tk.Label(self, image=info_img,borderwidth=0)
+        info_label.image = info_img
+
+
         main_frame = tk.Frame(self,width=990,height=552,bg="#2A2B2C",border=0)
+
+
         
         logo_label.place(x=35,y=34)
+        info_label.place(x=738,y=57)
         main_frame.place(x=103,y=117)
 
         
