@@ -39,7 +39,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance,PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -370,26 +370,33 @@ class PlayPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
-        label = tk.Label(self, text="Song Title",bg="#F7BF50", font=controller.title_font)
         
-        label.pack(side="top", fill="x", pady=10)
         flag=True
 
         def update(task,flag):
-            listbox2.delete(0,END)
+            listbox_songs.delete(0,END)
             
             for item in task:
                 
                 item = item[:-4]
                 if flag:
                     PlayCount_Dictionary[item]=0 # the 0 is the play count
-                listbox2.insert(END, item)
+                listbox_songs.insert(END, item)
             flag=False
 
-        def fillout(e):
+        def GetSongList(e):
+            song = listbox_songs.get(ANCHOR)
             search_entry.delete(0, END)
 
-            search_entry.insert(0,listbox2.get(ANCHOR))
+            search_entry.insert(0,song)
+
+        def GetSongList2(e):
+            song2 = listbox.get(ANCHOR)
+            
+            search_entry.delete(0,END)
+            search_entry.insert(0,"")
+            search_entry.insert(0,song2)
+            return None
 
         def search(e):
             typed = search_entry.get()
@@ -415,29 +422,26 @@ class PlayPage(tk.Frame):
         PlayCount_Dictionary = {}
 
         def callback(event):
-            selection = event.widget.curselection()
+            selection = search_entry.get()
             if selection:
-                index = selection[0]
-                data = event.widget.get(index)
-                label.configure(text=data)
+               print("goods")
                 # search_entry.delete(0, END)
                 # listbox2.insert("end",x)
                 # print(x)
             else:
-                listbox.get(ANCHOR) or listbox3.get(ANCHOR)
+                listbox.get(ANCHOR)
     
 
         def PushSongInStack(event):
-            selection = event.widget.curselection()
-            index = selection[0]
-            data = event.widget.get(index)
-            label.configure(text=data)
-
+            
+            #data = label.cget("text")
+            data = search_entry.get()
             stack.append(data)
             stack2.append(data)
 
             listbox.insert(index_stack,stack2.pop())
             index_stack+1
+            controller.show_frame("AfterPerformance")
 
         def IncrementPlayCount(event):
             selection = event.widget.curselection()
@@ -463,9 +467,10 @@ class PlayPage(tk.Frame):
                    
 
         def CombineFunctions(event):
-            PushSongInStack(event)
+            #PushSongInStack(event)
             #IncrementPlayCount(event)
             fillout(event)
+            #callback(event)
 
         
                         
@@ -496,32 +501,37 @@ class PlayPage(tk.Frame):
 
         #search_frame = tk.Frame(self,width=259,height=30,bg="#2A2B2C",border=0)
         
+        # black rectangle
+        frame2_play = tk.Frame(self,width=1028,height=447,bg="#2A2B2C",border=0)
+        
+        # song label
+        label_play = tk.Label(self, image=img2,border=0)
+        label_play.image = img2
 
-        frame3 = tk.Frame(self,width=262,height=51,border=0,bg="#F8BA43")
-        frame3.place(x=616,y=85)
+        frame3 = tk.Frame(self,width=262,height=51,border=0,bg="#2A2B2C")
+        frame3.place(x=450,y=190)
 
-        search_entry = tk.Entry(frame3,width=25,border=0,font=controller.title_font)
+        search_entry = tk.Entry(frame3,width=16,border=0,font=controller.title_font,bg="#ffffff",fg="#000000")
         label_search = tk.Label(frame3, image=img4,border=0)
         label_search.image = img4
 
         label_search.pack(side=LEFT,padx=2)
         search_entry.pack(side=LEFT)
 
-        frame_play = tk.Frame(self,width=259,height=509,bg="#2A2B2C",border=0)
-        #sframe_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        label_play = tk.Label(self, image=img,border=0)
-        label_play.image = img
+        line = tk.Frame(self,width=1,height=386,border=0,bg="#F8BA43")
+        line.place(x=750,y=175)
 
-        play_Button = tk.Label(self, image=img5,border=0)
+        play_Button = tk.Label(self, image=img5,border=0,cursor="hand2")
         play_Button.image = img5
 
-        frame2_play = tk.Frame(self,width=678,height=439,bg="#2A2B2C",border=0)
-        label_recent = tk.Label(self, image=img2,border=0)
-        label_recent.image = img2
+
+        label_recent = tk.Label(self, image=img,border=0)
+        label_recent.image = img
                
-        frame1 = tk.Frame(self,width=259,height=480,border=0,bg="#2A2B2C")
-        frame1.place(x=107,y=261)
-        listbox = tk.Listbox(frame1,width=22,height=20,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        frame1 = tk.Frame(self,width=226,height=306,border=0,bg="#2A2B2C")
+        frame1.place(x=831,y=256)
+
+        listbox = tk.Listbox(frame1,width=22,height=15,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
         scrollbar = tk.Scrollbar(frame1,orient=VERTICAL)
         listbox.config(yscrollcommand=scrollbar.set)
         #listbox.pack(side="top", fill="both", expand=True)
@@ -530,21 +540,21 @@ class PlayPage(tk.Frame):
         #scrollbar.place(x=365,y=259)
         listbox.pack(pady=1)
 
-        listbox.bind("<<ListboxSelect>>", callback)
+        listbox.bind("<<ListboxSelect>>", GetSongList2)
 
         #listbox.bind("<<ListboxSelect>>", PushSongInStack)
 
-        frame2 = tk.Frame(self,width=606,height=311,border=0,bg="#2A2B2C")
-        frame2.place(x=457,y=247)
+        frame2 = tk.Frame(self,width=549,height=294,border=0,bg="#2A2B2C")
+        frame2.place(x=136,y=256)
 
-        listbox2 = tk.Listbox(frame2,width=58,height=16,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        listbox_songs = tk.Listbox(frame2,width=50,height=15,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
         scrollbar2 = tk.Scrollbar(frame2,orient=VERTICAL)
-        listbox2.config(yscrollcommand=scrollbar2.set)
+        listbox_songs.config(yscrollcommand=scrollbar2.set)
         #listbox.pack(side="top", fill="both", expand=True)
-        scrollbar2.config(command=listbox2.yview)
+        scrollbar2.config(command=listbox_songs.yview)
         scrollbar2.pack(side=RIGHT,fill=Y)
         #scrollbar.place(x=365,y=259)
-        listbox2.pack(pady=1)
+        listbox_songs.pack(pady=1)
         
         #POPULAR 
 
@@ -561,31 +571,46 @@ class PlayPage(tk.Frame):
         
         search_entry.bind("<KeyRelease>",search)
 
-        listbox2.bind("<<ListboxSelect>>", CombineFunctions)
+        listbox_songs.bind("<<ListboxSelect>>", GetSongList)
+
+        play_Button.bind("<Button-1>", PushSongInStack)
+        #play_Button.bind("<<ListboxSelect>>", CombineFunctions)
 
         #frame3_play = tk.Frame(self,width=259,height=480,bg="#2A2B2C",border=0)
         #sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
         #label3_play = tk.Label(self, text="MOST PLAYED",bg="#F8BA43",fg="#2A2B2C", font=controller.title3_font)
 
         
-        
-
-        #search_frame.place(x=479, y=50)
-        #search_entry.place(x=640, y=89)
-        #label_search.place(x=610,y=86)
-
         play_Button.place(x=1013, y=635)
 
         logo_label.place(x=35,y=34)
+        label_recent.place(x=831,y=179)
 
-        frame_play.place(x=98,y=148)
-        label_play.place(x=107, y=160)
         
-        frame2_play.place(x=415,y=148)
-        label_recent.place(x=450, y=160)
+        frame2_play.place(x=90,y=148)
+        label_play.place(x=138, y=179)
         #label2_play.place(x=550, y=180)
         
-      
+
+class AfterPerformance(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent,bg="#F7BF50")
+        self.controller = controller
+        self.controller.title("Chop-In")
+
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
+        logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
+        logo_label.image = logo_img
+
+        main_frame = tk.Frame(self,width=990,height=552,bg="#2A2B2C",border=0)
+        
+        logo_label.place(x=35,y=34)
+        main_frame.place(x=103,y=117)
+
         
 
 
