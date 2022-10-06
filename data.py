@@ -80,9 +80,17 @@ def MelodyLR(pattern, text):
     print(mismatch)
 
 
-def Dynamics(pattern,text):
-    condition = (pattern['track'] == 1) & (pattern['note'] > 0)
-    pattern_Right = pattern[condition].note.tolist()
+# dict parameter
+def Rhythm(pattern_dict ,text_dict):
+    Success, Failed = 0, 0
+    
+    pattern_dym = pattern_dict['start']
+    text_dym = text_dict['start']
+
+    
+
+
+
 
 
 
@@ -120,16 +128,18 @@ if __name__ == '__main__':
     Pattern = pd.read_csv("csv/silentnight.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
-    pattern_object = Pattern.to_dict('list')
+    pattern_dict = Pattern.to_dict('list')
 
     Truth = pd.read_csv("csv/silentnight1.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
-    truth_object = Truth.to_dict('list')
+    truth_dict = Truth.to_dict('list')
 
-    Notes(pattern_object, truth_object)
+    Notes(pattern_dict, truth_dict)
     #DATA FRAME
     MelodyLR(Pattern, Truth)
+
+    Rhythm(pattern_dict, truth_dict)
 
 
 
