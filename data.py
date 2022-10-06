@@ -1,3 +1,4 @@
+from multiprocessing.synchronize import Condition
 import pandas as pd
 import csv
 
@@ -64,8 +65,13 @@ def Dynamics(pattern,text):
         if i == text['velocity']:
             dynamics += 1
 
+def MelodyLR(pattern, text):
+    condition = (pattern['track'] == 1) & (pattern['note'] > 0)
+    pattern_Right = pattern[condition].note.tolist()
 
-        
+    condition = (text['track'] == 1) & (text['note'] > 0)
+    text_Right = text[condition].note.tolist()
+    print(pattern_Right == text_Right)
 
 
 
@@ -122,6 +128,8 @@ if __name__ == '__main__':
     truth_object = Truth.to_dict('list')
 
     Notes(pattern_object, truth_object)
+    #DATA FRAME
+    MelodyLR(Pattern, Truth)
 
 
 
