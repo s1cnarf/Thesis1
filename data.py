@@ -104,12 +104,12 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("silentnight.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("midi\silentnight.mid.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_object = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("silentnight1.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("midi\silentnight.mid",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_object = Truth.to_dict('list')
