@@ -610,7 +610,8 @@ class AfterPerformance(tk.Frame):
         self.controller = controller
         self.controller.title("Chop-In")
 
-        #var = PlayPage()
+        
+        
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
