@@ -1,3 +1,4 @@
+import mimetypes
 from multiprocessing.synchronize import Condition
 import pandas as pd
 import csv
@@ -65,6 +66,7 @@ def Dynamics(pattern,text):
         if i == text['velocity']:
             dynamics += 1
 
+
 def MelodyLR(pattern, text):
     condition = (pattern['track'] == 1) & (pattern['note'] > 0)
     pattern_Right = pattern[condition].note.tolist()
@@ -72,18 +74,15 @@ def MelodyLR(pattern, text):
     condition = (text['track'] == 1) & (text['note'] > 0)
     text_Right = text[condition].note.tolist()
 
-    mismatch = res = [idx for idx, item in enumerate(text_Right)if item != pattern_Right[idx]]
+    #track the index of the the mismatch elements
+
+    mismatch = [i for i, (a, b) in enumerate(zip(pattern_Right, text_Right)) if a != b]
     print(mismatch)
 
 
-
-
-
-
-
-
-
-    
+def Dynamics(pattern,text):
+    condition = (pattern['track'] == 1) & (pattern['note'] > 0)
+    pattern_Right = pattern[condition].note.tolist()
 
 
 
@@ -117,14 +116,13 @@ def ModifyEvents(dictobj):
 
 
 
-
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\silentnight.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv/silentnight.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_object = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("csv\silentnight.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv/silentnight1.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_object = Truth.to_dict('list')
