@@ -1,3 +1,4 @@
+import mimetypes
 from multiprocessing.synchronize import Condition
 import pandas as pd
 import csv
@@ -72,8 +73,10 @@ def MelodyLR(pattern, text):
     condition = (text['track'] == 1) & (text['note'] > 0)
     text_Right = text[condition].note.tolist()
 
-    diff = set(pattern_Right) ^ set(text_Right)
-    print(diff)
+    #track the index of the the mismatch elements
+
+    mismatch = [i for i, (a, b) in enumerate(zip(pattern_Right, text_Right)) if a != b]
+    print(mismatch)
 
 
 
@@ -119,12 +122,12 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\silentnight.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv/silentnight.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_object = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("csv\silentnight.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv/silentnight1.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_object = Truth.to_dict('list')
