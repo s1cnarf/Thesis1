@@ -78,15 +78,9 @@ def MelodyLR(pattern, text):
     mismatch = [i for i, (a, b) in enumerate(zip(pattern_Right, text_Right)) if a != b]
     print(mismatch)
 
-
-
-
-
-
-
-
-
-    
+def Dynamics(pattern,text):
+    condition = (pattern['track'] == 1) & (pattern['note'] > 0)
+    pattern_Right = pattern[condition].note.tolist()
 
 
 
@@ -110,7 +104,6 @@ def ModifyEvents(dictobj):
                     break
 
     return acc
-
 
 
 
