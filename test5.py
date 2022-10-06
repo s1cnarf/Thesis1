@@ -8,7 +8,7 @@ from tkinter import font as tkfont
 from tkinter import *
 from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
-from turtle import bgcolor, color, width
+from turtle import bgcolor, circle, color, width
 from PIL import ImageTk, Image
 from collections import deque
 import time
@@ -21,6 +21,10 @@ class SampleApp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.title_font = tkfont.Font(family='Montserrat', size=16,slant="italic")
+        self.score_font = tkfont.Font(family='Montserrat', size=96,weight="bold")
+        self.song_font_after = tkfont.Font(family='Montserrat', size=18,weight="bold")
+        self.grade_font = tkfont.Font(family='Montserrat', size=24,weight="bold")
+
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
         self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
@@ -439,10 +443,11 @@ class PlayPage(tk.Frame):
             stack.append(data)
             stack2.append(data)
 
-            listbox.insert(index_stack,stack2.pop())
+            song=stack2.pop()
+            listbox.insert(index_stack,song)
             index_stack+1
             controller.show_frame("AfterPerformance")
-
+            
         def IncrementPlayCount(event):
             selection = event.widget.curselection()
             
@@ -605,6 +610,8 @@ class AfterPerformance(tk.Frame):
         self.controller = controller
         self.controller.title("Chop-In")
 
+        #var = PlayPage()
+
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
@@ -617,14 +624,48 @@ class AfterPerformance(tk.Frame):
         info_label = tk.Label(self, image=info_img,borderwidth=0)
         info_label.image = info_img
 
-
-        main_frame = tk.Frame(self,width=990,height=552,bg="#2A2B2C",border=0)
-
-
         
+        main_frame = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
+
+        img= Image.open("Pictures/ScoreSum.png")
+        scoreSum_img = ImageTk.PhotoImage(img)
+        ScoreSummary_label =  tk.Label(self, image=scoreSum_img,cursor="hand2",borderwidth=0)
+        ScoreSummary_label.image = scoreSum_img
+
+        img= Image.open("Pictures/Perf_Report.png")
+        PerfReport_img = ImageTk.PhotoImage(img)
+        PerfReport_label =  tk.Label(self, image=PerfReport_img,cursor="hand2",borderwidth=0)
+        PerfReport_label.image = PerfReport_img
+
+        img= Image.open("Pictures/ErrAnal.png")
+        ErrorAnal_img = ImageTk.PhotoImage(img)
+        ErrorAnal_label =  tk.Label(self, image=ErrorAnal_img,cursor="hand2",borderwidth=0)
+        ErrorAnal_label.image = ErrorAnal_img
+
+        img= Image.open("Pictures/circle.png")
+        circle_img = ImageTk.PhotoImage(img)
+        circle_label =  tk.Label(self, image=circle_img,cursor="hand2",borderwidth=0)
+        circle_label.image = circle_img
+
+        score_label =  tk.Label(self, text="80%",borderwidth=0,bg="#2A2B2C",font=controller.score_font)
+        song_label = tk.Label(self, text="Call Me Maybe",borderwidth=0,bg="#2A2B2C",font=controller.song_font_after)
+        
+        grade_frame = tk.Frame(self,width=308,height=30,bg="#2A2B2C",border=0)
+        grade_label = tk.Label(grade_frame, text="GOOD PERFORMANCE!",borderwidth=0,bg="#2A2B2C",fg="#F8BA43",font=controller.grade_font)
+        grade_label.pack(anchor=CENTER)
+
         logo_label.place(x=35,y=34)
         info_label.place(x=738,y=57)
-        main_frame.place(x=103,y=117)
+        main_frame.place(x=105,y=124)
+
+        ScoreSummary_label.place(x=613,y=209)
+        PerfReport_label.place(x=679,y=354)
+        ErrorAnal_label.place(x=613,y=499)
+
+        circle_label.place(x=182,y=192)
+        score_label.place(x=229,y=275)
+        song_label.place(x=276,y=523)
+        grade_frame.place(x=215,y=570)
 
         
 
