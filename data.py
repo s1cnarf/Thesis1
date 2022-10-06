@@ -35,7 +35,7 @@ def Notes(pattern, text):
         if pattern['event'][i] == 'Note_on':
             if pattern['start'][i] == text['start'][i]: # 0 0
                 correct += 1
-
+                
             elif pattern['start'][i] < text['start'][i]: # early
                 partial += 1
             elif pattern['start'][i] > text['start'][i]: # late
@@ -56,6 +56,13 @@ def Notes(pattern, text):
 
     print (correct, partial, extra, missed)
 
+
+
+def Dynamics(pattern,text):
+    dynamics = 0
+    for i in pattern['velocity']:
+        if i == text['velocity']:
+            dynamics += 1
 
 
         
