@@ -71,7 +71,9 @@ def MelodyLR(pattern, text):
 
     condition = (text['track'] == 1) & (text['note'] > 0)
     text_Right = text[condition].note.tolist()
-    print(pattern_Right == text_Right)
+
+    diff = set(pattern_Right) ^ set(text_Right)
+    print(diff)
 
 
 
