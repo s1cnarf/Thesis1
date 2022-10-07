@@ -103,6 +103,23 @@ def Rhythm(pattern_dict ,text_dict):
     print(f"Success : {Success} Failed : {Failed}")
     
 
+def Articulation(pattern_dict, text_dict):
+    Timed, Late, Early = 0,0,0
+
+    pattern_articulation = pattern_dict['start']
+    text_articulation = text_dict['start']
+
+    index = 0
+    for i in pattern_articulation:
+        if i == text_articulation[index]:
+            Timed += 1
+        elif i < text_articulation[index]:
+            Early += 1
+        elif i > text_articulation[index]:
+            Late += 1 
+        index += 1
+
+    print(f"Timed : {Timed} Late : {Late} Early : {Early}")
 
 
 
@@ -154,8 +171,10 @@ if __name__ == '__main__':
     #DATA FRAME
     MelodyLR(Pattern, Truth)
 
+    #Dictionary
     Rhythm(pattern_dict, truth_dict)
 
+    Articulation(pattern_dict, truth_dict)
 
 
 
