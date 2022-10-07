@@ -82,11 +82,25 @@ def MelodyLR(pattern, text):
 
 # dict parameter
 def Rhythm(pattern_dict ,text_dict):
+    '''
+        Rhythm by Switches
+        Switches is based on note on time
+
+        Similarity between the note on time is processed
+    '''
     Success, Failed = 0, 0
     
     pattern_dym = pattern_dict['start']
     text_dym = text_dict['start']
+    index = 0
+    for i in pattern_dym:
+        if i == text_dym[index]:
+            Success += 1
+        else:
+            Failed += 1
+        index += 1
 
+    print(f"Success : {Success} Failed : {Failed}")
     
 
 
@@ -125,17 +139,18 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv/silentnight.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv\silentnight1.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_dict = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("csv/silentnight1.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv\silentnight1.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
     Notes(pattern_dict, truth_dict)
+
     #DATA FRAME
     MelodyLR(Pattern, Truth)
 
