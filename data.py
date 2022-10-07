@@ -121,6 +121,35 @@ def Articulation(pattern_dict, text_dict):
 
     print(f"Timed : {Timed} Late : {Late} Early : {Early}")
 
+# DATA FRAME
+def FingerPattern(pattern, text):
+    rhits, rwrong = 0,0
+
+    #Filter data for right hand pattern
+    condition = (pattern['track'] == 1) & (pattern['note'] > 0)
+    pattern_Right = pattern[condition]
+
+    condition = (text['track'] == 1) & (text['note'] > 0)
+    text_Right = text[condition]
+
+    # Count match and mismatch value in right hand
+    matched, un_matched = pattern_Right[pattern_Right['note']==text_Right['note']].shape[0], pattern_Right[pattern_Right['note']!=text_Right['note']].shape[0]
+    print(f"Right Hand: Matched = {matched} Unmatched = {un_matched}")
+
+    # Filter data for left hand pattern
+    condition = (pattern['track'] == 2) & (pattern['note'] > 0)
+    pattern_Left= pattern[condition]
+
+    condition = (text['track'] == 2) & (text['note'] > 0)
+    text_Left = text[condition]
+
+    # Count match and mismatch in left hand 
+    matched, un_matched = pattern_Left[pattern_Left['note']==text_Left['note']].shape[0], pattern_Left[pattern_Left['note']!=text_Left['note']].shape[0]
+    print(f"Left Hand: Matched = {matched} Unmatched = {un_matched}")
+
+
+   
+
 
 
 
@@ -171,10 +200,14 @@ if __name__ == '__main__':
     #DATA FRAME
     MelodyLR(Pattern, Truth)
 
+    FingerPattern(Pattern, Truth)
+
     #Dictionary
     Rhythm(pattern_dict, truth_dict)
 
     Articulation(pattern_dict, truth_dict)
+
+    
 
 
 
