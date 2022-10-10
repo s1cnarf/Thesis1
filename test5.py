@@ -646,23 +646,14 @@ class PageThree(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
-        label = tk.Label(self, text="Statistics",bg="#F7BF50", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Home",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
-
-
-class PageFour(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent,bg="#F7BF50")
-        self.controller = controller
-        # label = tk.Label(self, text="History",bg="#F7BF50", font=controller.title_font)
+        # label = tk.Label(self, text="Statistics",bg="#F7BF50", font=controller.title_font)
         # label.pack(side="top", fill="x", pady=10)
         # button = tk.Button(self, text="Home",
         #                    command=lambda: controller.show_frame("StartPage"))
         # button.pack()
+
+
+
 
         frame_histo = tk.Frame(self,width=1028,height=447,bg="#2A2B2C",border=0)
 
@@ -670,8 +661,19 @@ class PageFour(tk.Frame):
 
 
 
-        frame_histo.place(x=90,y=148)
+        frame_histo.place(x=90,y=248)
+        l
 
+class PageFour(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent,bg="#F7BF50")
+        self.controller = controller
+        label = tk.Label(self, text="History",bg="#F7BF50", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+        button = tk.Button(self, text="Home",
+                           command=lambda: controller.show_frame("StartPage"))
+        button.pack()
 
 
 
