@@ -694,17 +694,35 @@ class PageThree(tk.Frame):
         #                    command=lambda: controller.show_frame("StartPage"))
         # button.pack()
 
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
+        logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
+        logo_label.image = logo_img
+
+        img6= Image.open("Pictures/info.png")
+        info_img = ImageTk.PhotoImage(img6)
+        info_label = tk.Label(self, image=info_img,borderwidth=0)
+        info_label.image = info_img
+
+        frame_histo = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
+
+        image = Image.open("Pictures/menuHisto.png")
+        image = image.resize((950,100), Image.ANTIALIAS)
+        imgMenu = ImageTk.PhotoImage(image)
+
+        labelhisto_menu = tk.Label(self, image=imgMenu,border=0)
+        labelhisto_menu.image = imgMenu
 
 
+        frame_histo.place(x=105,y=124)
+        logo_label.place(x=35,y=34)
+        info_label.place(x=738,y=57)
+        labelhisto_menu.place(x=120,y=128)
+        
 
-        frame_histo = tk.Frame(self,width=1028,height=447,bg="#2A2B2C",border=0)
-
-
-
-
-
-        frame_histo.place(x=90,y=248)
-        l
+    
 
 class PageFour(tk.Frame):
 
