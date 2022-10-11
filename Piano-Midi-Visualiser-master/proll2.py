@@ -106,7 +106,7 @@ class pRoll:
         surface_height = round(self.transcribed_song[-1][2]*100) + 500
         
         #Define the surface of pygame - 
-        surface = pg.Surface((1248, surface_height)) # x and y 
+        surface = pg.Surface((1540, surface_height)) # x and y 
 
         surface.set_colorkey((255,255,255)) 
         surface.fill((42,42,42))
@@ -131,11 +131,11 @@ class pRoll:
                 if note == 'a0#':
 
                     pg.draw.rect(surface, (255, 255, 255), 
-                    (16, nstart, 14, length),
+                    (16, nstart, 45, length),
                     border_radius=5)
 
                     pg.draw.rect(surface, (0, 0, 0, 0),
-                    (16, nstart, 14, length),
+                    (16, nstart, 45, length),
                     width=2, border_radius=5)
 
             # Else if normal note 
@@ -145,31 +145,31 @@ class pRoll:
                 if note == 'a0':
 
                     pg.draw.rect(surface, (255, 255, 255),
-                    (0, nstart, 24, length), 
+                    (0, nstart, 45, length), 
                     border_radius=5)
 
                     pg.draw.rect(surface, (0, 0, 0, 0),
-                    (0, nstart, 24, length), 
+                    (0, nstart, 5, length), 
                     width=2, border_radius=5)
 
                 elif note == 'b0':
 
                     pg.draw.rect(surface, (255, 255, 255),
-                                 (24, nstart, 24, length), 
+                                 (24, nstart, 45, length), 
                                  border_radius=5)
 
                     pg.draw.rect(surface, (0, 0, 0, 0),
-                                 (24, nstart, 24, length), 
+                                 (24, nstart, 45, length), 
                                  width=2, border_radius=5)
                 else:
 
                     pg.draw.rect(surface, (255, 255, 255), 
                     (24 * white_dict[note[0]] + 
-                    ( int(note[1]) - 1) * 24 * 7, nstart, 24, length),
+                    ( int(note[1]) - 1) * 24 * 7, nstart, 45, length),
                      border_radius=5)
 
                     pg.draw.rect(surface, (0, 0, 0, 0), (24 * white_dict[note[0]] + 
-                    (int(note[1]) - 1) * 24 * 7, nstart, 24, length),
+                    (int(note[1]) - 1) * 24 * 7, nstart, 45, length),
                      width=2, border_radius=5)
         
         return surface # return the surface design 
@@ -247,7 +247,7 @@ while pr.running:
     #update keys 
     pr.display.blit(pr.background, (0, 0))
     pr.draw(pr.display, offset)
-    #pr.piano.draw_keys(display)
+    pr.piano.draw_keys(display)
     pg.display.flip()
     
     

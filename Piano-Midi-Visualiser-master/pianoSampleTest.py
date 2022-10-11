@@ -59,19 +59,14 @@ class Piano:
         surface.blit(self.black_pressed_surface, (0, 400)) # Draw the PRESSED black key
        #self.button()
         pg.display.update()
-        self.buttonClick()
+        #self.buttonClick()
 
         
         
         print(f'left={self.rectList[0].left}')
 
 
-        while True:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    exit()
-
+       
     
           
 
@@ -304,7 +299,7 @@ class Piano:
 
 
 
-
+'''
 pn = Piano()
 
 
@@ -319,5 +314,5 @@ pn.draw_keys(display)
 
 # Makes sure thread has stopped before ending program
 
-
+'''
 
