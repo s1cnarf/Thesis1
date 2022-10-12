@@ -722,8 +722,6 @@ class PageThree(tk.Frame):
         labelhisto_menu.place(x=120,y=128)
         
 
-    
-
 class PageFour(tk.Frame):
 
     def __init__(self, parent, controller):
