@@ -34,6 +34,7 @@ class SampleApp(tk.Tk):
         self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
 
+
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
         # will be raised above the others
@@ -521,9 +522,13 @@ class PlayPage(tk.Frame):
         frame3 = tk.Frame(self,width=262,height=51,border=0,bg="#2A2B2C")
         frame3.place(x=450,y=190)
 
+        
+
         search_entry = tk.Entry(frame3,width=16,border=0,font=controller.title_font,bg="#ffffff",fg="#000000")
+        
         label_search = tk.Label(frame3, image=img4,border=0)
         label_search.image = img4
+
 
         label_search.pack(side=LEFT,padx=2)
         search_entry.pack(side=LEFT)
@@ -682,6 +687,7 @@ class PageTwo(tk.Frame):
                            command=lambda: controller.show_frame("StartPage"))
         button.pack()
 
+#History
 
 class PageThree(tk.Frame):
 
@@ -694,12 +700,16 @@ class PageThree(tk.Frame):
         #                    command=lambda: controller.show_frame("StartPage"))
         # button.pack()
 
+
+        
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
         logo_label.image = logo_img
+
+        PlayPage
 
         img6= Image.open("Pictures/info.png")
         info_img = ImageTk.PhotoImage(img6)
@@ -711,15 +721,28 @@ class PageThree(tk.Frame):
         image = Image.open("Pictures/menuHisto.png")
         image = image.resize((950,100), Image.ANTIALIAS)
         imgMenu = ImageTk.PhotoImage(image)
+        
+        
 
         labelhisto_menu = tk.Label(self, image=imgMenu,border=0)
         labelhisto_menu.image = imgMenu
 
 
+        listbox_songs = tk.Listbox(frame_histo,width=100,height=100,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        scrollbar2 = tk.Scrollbar(frame_histo,orient=VERTICAL)
+        listbox_songs.config(yscrollcommand=scrollbar2.set)
+        #listbox.pack(side="top", fill="both", expand=True)
+        scrollbar2.config(command=listbox_songs.yview)
+        scrollbar2.pack(side=RIGHT,fill=Y)
+        #scrollbar.place(x=365,y=259)
+        listbox_songs.pack(pady=1)
+
+        
         frame_histo.place(x=105,y=124)
         logo_label.place(x=35,y=34)
         info_label.place(x=738,y=57)
         labelhisto_menu.place(x=120,y=128)
+
         
 
 class PageFour(tk.Frame):
