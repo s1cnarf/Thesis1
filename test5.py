@@ -148,6 +148,7 @@ class LogIn(tk.Frame):
         label_entry.insert(0,"Enter your username")
         label_entry.bind('<FocusIn>', on_enter)
         label_entry.bind('<FocusOut>', on_leave)
+        label_entry.focus()
 
 
 
@@ -447,6 +448,7 @@ class PlayPage(tk.Frame):
             song=stack2.pop()
             listbox.insert(index_stack,song)
             index_stack+1
+            song_label.configure(text=data)
             controller.show_frame("AfterPerformance")
             
         def IncrementPlayCount(event):
@@ -615,9 +617,6 @@ class AfterPerformance(tk.Frame):
         self.controller = controller
         self.controller.title("Chop-In")
 
-        
-        
-
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
@@ -653,6 +652,8 @@ class AfterPerformance(tk.Frame):
         circle_label =  tk.Label(self, image=circle_img,cursor="hand2",borderwidth=0)
         circle_label.image = circle_img
 
+        print("afdter")
+        global song_label
         score_label =  tk.Label(self, text="80%",borderwidth=0,bg="#2A2B2C",font=controller.score_font)
         song_label = tk.Label(self, text="Call Me Maybe",borderwidth=0,bg="#2A2B2C",font=controller.song_font_after)
         
