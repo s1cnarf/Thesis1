@@ -390,7 +390,6 @@ class PlayPage(tk.Frame):
                 listbox_songs.insert(END, item)
             flag=False
 
-        global GetSongList
         def GetSongList(e):
             song = listbox_songs.get(ANCHOR)
             search_entry.delete(0, END)
@@ -404,6 +403,10 @@ class PlayPage(tk.Frame):
             search_entry.insert(0,"")
             search_entry.insert(0,song2)
             return None
+
+        global infos
+        def infos(e):
+            controller.show_frame("AfterPerformance")
 
         def search(e):
             typed = search_entry.get()
@@ -452,6 +455,11 @@ class PlayPage(tk.Frame):
             index_stack+1
             song_label.configure(text=data)
             #controller.show_frame("AfterPerformance")
+
+        global combinedFunc
+        def combinedFunc(e):
+            PushSongInStack(e)
+            infos(e)
 
             
         def IncrementPlayCount(event):
@@ -592,7 +600,7 @@ class PlayPage(tk.Frame):
 
         listbox_songs.bind("<<ListboxSelect>>", GetSongList)
 
-        play_Button.bind("<Button-1>", PushSongInStack)
+        play_Button.bind("<Button-1>", combinedFunc)
         #play_Button.bind("<<ListboxSelect>>", CombineFunctions)
 
         #frame3_play = tk.Frame(self,width=259,height=480,bg="#2A2B2C",border=0)
@@ -745,7 +753,7 @@ class PageThree(tk.Frame):
         #scrollbar.place(x=365,y=259)
         listbox_songs2.pack(pady=1)
         
-        listbox_songs2.bind("<<ListboxSelect>>", PushSongInStack)
+        listbox_songs2.bind("<<ListboxSelect>>", combinedFunc)
         
         frame_histo.place(x=105,y=124)
         labelhisto_menu.place(x=120,y=128)
