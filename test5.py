@@ -380,7 +380,7 @@ class PlayPage(tk.Frame):
         self.controller = controller
         
         flag=True
-        dt = datetime.now()
+        
 
         def update(task,flag):
             listbox_songs.delete(0,END)
@@ -450,6 +450,7 @@ class PlayPage(tk.Frame):
             
             #data = label.cget("text")
             data = search_entry.get()
+            dt = datetime.now()
             dt_string = dt.strftime(" %d/%m/%Y %H:%M:%S")
 
             stack.append(data)
