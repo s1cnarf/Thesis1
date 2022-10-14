@@ -95,11 +95,11 @@ class pRoll:
         # Create dictionary for black keys - 
 
         black_dict = {
-            'c': 2, 'd': 3, 'f': 5, 'g': 6, 'a': 7
+            'c': 0, 'd': 1, 'f': 3, 'g': 4, 'a': 5
         }
 
         white_dict = {
-            'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'a': 7, 'b': 8
+            'c': 0, 'd': 1, 'e': 2, 'f': 3, 'g': 4, 'a': 5, 'b': 6
         }
 
         #Define the surface height - 
@@ -117,8 +117,15 @@ class pRoll:
             pg.draw.line(surface, (60, 60, 60),
             (48 + 7 * i * 24, 0), (48 + 7 * i * 24, surface_height))
 
+        itr = 0
+
         # Create a loop to to traverse the data we gathered in transcription func
         for (note,start,end) in self.transcribed_song:
+
+            print("This is Note 0: ", note[0], "This is Note 1: ", note[1])
+            
+            if itr == 3:
+                pass
             
             s = round(start * 100) # defines the initial point 
             nend = round(end *100)  # defines the end 
@@ -137,6 +144,12 @@ class pRoll:
                     pg.draw.rect(surface, (0, 0, 0, 0),
                     (16, nstart, 45, length),
                     width=2, border_radius=5)
+                
+                else:
+                    pg.draw.rect(surface, (255, 255, 255), (26 + 43 * black_dict[note[0]] + 43 * 7 * (int(note[1]) - 1), nstart, 30, length),
+                                 border_radius=5)
+                    pg.draw.rect(surface, (0, 0, 0, 0), (26 + 43 * black_dict[note[0]] + 43 * 7 * (int(note[1]) - 1), nstart, 30, length),
+                                 width=2, border_radius=5)
 
             # Else if normal note 
 
@@ -164,13 +177,18 @@ class pRoll:
                 else:
 
                     pg.draw.rect(surface, (255, 255, 255), 
-                    (24 * white_dict[note[0]] + 
-                    ( int(note[1]) - 1) * 24 * 7, nstart, 45, length),
+                    (43 * white_dict[note[0]] +   # 43 * c -> 43 x 2 = 66
+                    ( int(note[1]) - 1) * 43 * 7, nstart, 45, length), # + (66-1) x 43 x  7 
                      border_radius=5)
+                     
+                    print(43 * white_dict[note[0]],"-> white dict value")
+                    print((int(note[1]) - 1) * 43 * 7, "-> block value")
 
-                    pg.draw.rect(surface, (0, 0, 0, 0), (24 * white_dict[note[0]] + 
-                    (int(note[1]) - 1) * 24 * 7, nstart, 45, length),
+                    pg.draw.rect(surface, (0, 0, 0, 0), (43 * white_dict[note[0]] + 
+                    (int(note[1]) - 1) * 43 * 7, nstart, 45, length),
                      width=2, border_radius=5)
+            
+            itr = itr + 1
         
         return surface # return the surface design 
 
@@ -190,7 +208,7 @@ class pRoll:
                  divider = round (10 + msg.time * 100)
 
                  for _ in range(divider):
-                     pg.time.delay(round((msg.time * 1000) / divider))
+                     pg.time.delay(round((msg.time * 4000) / divider))
                      self.time += msg.time / divider 
                     
                  if msg.type == "note_on":
@@ -199,7 +217,7 @@ class pRoll:
                  elif msg.type == "note_off":
                     self.piano.stop_key(midi_number_to_note(msg.note))
 
-        pg.time.delay(1000)
+        pg.time.delay(500)
         self.running = False
 
 

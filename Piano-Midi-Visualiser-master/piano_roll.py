@@ -68,9 +68,9 @@ class PianoRoll:
                     pg.draw.rect(surface, (0, 0, 0, 0), (16, nstart, 14, length),
                                  width=2, border_radius=5)
                 else:
-                    pg.draw.rect(surface, (255, 255, 255), (16 + 24 * black_dict[note[0]] + 24 * 7 * (int(note[1]) - 1), nstart, 14, length),
+                    pg.draw.rect(surface, (255, 255, 255), (16 + 24 * black_dict[note[0]] + 24 * 7 * (int(note[1]) - 1), nstart, 30, length),
                                  border_radius=5)
-                    pg.draw.rect(surface, (0, 0, 0, 0), (16 + 24 * black_dict[note[0]] + 24 * 7 * (int(note[1]) - 1), nstart, 14, length),
+                    pg.draw.rect(surface, (0, 0, 0, 0), (16 + 24 * black_dict[note[0]] + 24 * 7 * (int(note[1]) - 1), nstart, 30, length),
                                  width=2, border_radius=5)
             else:
                 if note == 'a0':

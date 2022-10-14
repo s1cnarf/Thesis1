@@ -63,8 +63,7 @@ class Piano:
 
         
         
-        print(f'left={self.rectList[0].left}')
-
+       # print(f'left={self.rectList[0].left}')
 
        
     
@@ -298,7 +297,6 @@ class Piano:
         }
 
 
-
 '''
 pn = Piano()
 
@@ -313,6 +311,5 @@ display = pg.display.set_mode((1540, 800))
 pn.draw_keys(display)
 
 # Makes sure thread has stopped before ending program
-
 '''
 
