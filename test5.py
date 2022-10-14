@@ -693,8 +693,6 @@ class AfterPerformance(tk.Frame):
         song_label.place(x=276,y=523)
         grade_frame.place(x=215,y=570)
 
-<<<<<<< HEAD
-=======
 class PerformanceReport(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
@@ -852,7 +850,6 @@ class PerformanceReport(tk.Frame):
         perfTitle_label.image = perfTitle_img
 
         main_frame = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
->>>>>>> 9bc24f19ae8e60caf0d701026f573aa4cfb5ff6e
         
 
 
