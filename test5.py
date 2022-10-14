@@ -55,17 +55,9 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
-<<<<<<< HEAD
         #self.show_frame("LoadingPage")
-=======
-        # LoadingPage dapat
-        # self.show_frame("LoadingPage")
-       
-        #try lang to
-        self.show_frame("PerformanceReport")
->>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
-        #self.show_frame("StartPage")
-        self.show_frame("PerformanceReport")
+        self.show_frame("StartPage")
+        #self.show_frame("PerformanceReport")
         
 
     def show_frame(self, page_name):
@@ -787,14 +779,10 @@ class PerformanceReport(tk.Frame):
             missedHits_bar2 = tk.LabelFrame(self,text=missed_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=missed_bar2,height=16,labelanchor=E,font=controller.title_font)
             missedHits_bar2.place(x=313,y=487)
 
-<<<<<<< HEAD
             try:
                 rhythmData_frame.place_forget()
             except NameError:
                 print("okay lang")
-=======
-            rhythmData_frame.place_forget()
->>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
 
 
 
@@ -829,27 +817,18 @@ class PerformanceReport(tk.Frame):
 
             failed_bar = tk.LabelFrame(rhythmData_frame,text=failed_switch,bg="#3a3a3c",fg="#F7BF50",border=0,width=655,height=16,labelanchor=E,font=controller.title_font)
             failed_bar.pack(pady=5,side=RIGHT) 
-<<<<<<< HEAD
             try:
                 notesData_frame.place_forget()
             except NameError:
                 print("okay lang")
-=======
-
-            notesData_frame.place_forget()
->>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
             correctHits_bar2.place_forget()
             partialHits_bar2.place_forget()
             extraHits_bar2.place_forget()
             missedHits_bar2.place_forget()
             
-<<<<<<< HEAD
         #notesData_frame = tk.Frame(self)
         #rhythmData_frame = tk.Frame(self)
         
-=======
-        rhythmData_frame = tk.Frame(self,width=655,height=89,bg="#2A2B2C")
->>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
