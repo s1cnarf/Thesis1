@@ -967,7 +967,7 @@ class PageThree(tk.Frame):
         #scrollbar.place(x=365,y=259)
         listbox_songs2.pack(pady=1)
         
-        listbox_songs2.bind("<<ListboxSelect>>", combinedFunc)
+        listbox_songs2.bind("<<ListboxSelect>>", infos)
         
         frame_histo.place(x=105,y=124)
         labelhisto_menu.place(x=120,y=128)
