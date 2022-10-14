@@ -395,6 +395,7 @@ class PlayPage(tk.Frame):
                 listbox_songs.insert(END, item)
             flag=False
 
+        global GetSongList
         def GetSongList(e):
             song = listbox_songs.get(ANCHOR)
             search_entry.delete(0, END)
@@ -442,7 +443,7 @@ class PlayPage(tk.Frame):
             else:
                 listbox.get(ANCHOR)
     
-
+        global PushSongInStack
         def PushSongInStack(event):
             
             #data = label.cget("text")
@@ -451,10 +452,12 @@ class PlayPage(tk.Frame):
             stack2.append(data)
 
             song=stack2.pop()
+            listbox_songs2.insert(index_stack,song)
             listbox.insert(index_stack,song)
             index_stack+1
             song_label.configure(text=data)
-            controller.show_frame("AfterPerformance")
+            #controller.show_frame("AfterPerformance")
+
             
         def IncrementPlayCount(event):
             selection = event.widget.curselection()
@@ -529,8 +532,7 @@ class PlayPage(tk.Frame):
         frame3 = tk.Frame(self,width=262,height=51,border=0,bg="#2A2B2C")
         frame3.place(x=450,y=190)
 
-        
-
+        global search_entry
         search_entry = tk.Entry(frame3,width=16,border=0,font=controller.title_font,bg="#ffffff",fg="#000000")
         
         label_search = tk.Label(frame3, image=img4,border=0)
@@ -911,7 +913,8 @@ class PageThree(tk.Frame):
         # button = tk.Button(self, text="Home",
         #                    command=lambda: controller.show_frame("StartPage"))
         # button.pack()
-
+        def call(e):
+            listbox_songs2.insert(song_label)
 
         
         logo_pic = Image.open("Pictures/Logo.png")
@@ -921,14 +924,18 @@ class PageThree(tk.Frame):
         logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
         logo_label.image = logo_img
 
-        PlayPage
+        
 
         img6= Image.open("Pictures/info.png")
         info_img = ImageTk.PhotoImage(img6)
         info_label = tk.Label(self, image=info_img,borderwidth=0)
         info_label.image = info_img
 
+
         frame_histo = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
+        frame_histoList = tk.Frame(self,width=500,height=200,bg="#2A2B2C",border=0)
+
+
 
         image = Image.open("Pictures/menuHisto.png")
         image = image.resize((950,100), Image.ANTIALIAS)
@@ -939,21 +946,24 @@ class PageThree(tk.Frame):
         labelhisto_menu = tk.Label(self, image=imgMenu,border=0)
         labelhisto_menu.image = imgMenu
 
-
-        listbox_songs = tk.Listbox(frame_histo,width=100,height=100,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
-        scrollbar2 = tk.Scrollbar(frame_histo,orient=VERTICAL)
-        listbox_songs.config(yscrollcommand=scrollbar2.set)
+        global listbox_songs2
+        listbox_songs2 = tk.Listbox(frame_histoList,width=80,height=20,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
+        listbox_songs2.config(yscrollcommand=scrollbar2.set)
         #listbox.pack(side="top", fill="both", expand=True)
-        scrollbar2.config(command=listbox_songs.yview)
+        scrollbar2.config(command=listbox_songs2.yview)
         scrollbar2.pack(side=RIGHT,fill=Y)
         #scrollbar.place(x=365,y=259)
-        listbox_songs.pack(pady=1)
-
+        listbox_songs2.pack(pady=1)
+        
+        listbox_songs2.bind("<<ListboxSelect>>", PushSongInStack)
         
         frame_histo.place(x=105,y=124)
+        labelhisto_menu.place(x=120,y=128)
+        frame_histoList.place(x=190,y=235)
         logo_label.place(x=35,y=34)
         info_label.place(x=738,y=57)
-        labelhisto_menu.place(x=120,y=128)
+        
 
         
 
