@@ -54,17 +54,14 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
-<<<<<<< HEAD
         self.show_frame("LoadingPage")
         #self.show_frame("StartPage")
-=======
         # LoadingPage dapat
         # self.show_frame("LoadingPage")
        
         #try lang to
         #self.show_frame("PerformanceReport")
         self.show_frame("StartPage")
->>>>>>> 9bc24f19ae8e60caf0d701026f573aa4cfb5ff6e
         
 
     def show_frame(self, page_name):
