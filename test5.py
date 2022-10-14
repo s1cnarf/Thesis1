@@ -44,7 +44,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance,PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance,PerformanceReport,PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -54,17 +54,9 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
-<<<<<<< HEAD
-        self.show_frame("LoadingPage")
+        #self.show_frame("LoadingPage")
         #self.show_frame("StartPage")
-=======
-        # LoadingPage dapat
-        # self.show_frame("LoadingPage")
-       
-        #try lang to
-        #self.show_frame("PerformanceReport")
-        self.show_frame("StartPage")
->>>>>>> 9bc24f19ae8e60caf0d701026f573aa4cfb5ff6e
+        self.show_frame("PerformanceReport")
         
 
     def show_frame(self, page_name):
@@ -102,7 +94,7 @@ class LoadingPage(tk.Frame):
             
             if current == 365:
                 self.destroy()
-                controller.show_frame("LogIn")
+                #controller.show_frame("LogIn")
             
             if current < 365:
                 loading.config(width=current+71)
