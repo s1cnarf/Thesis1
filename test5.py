@@ -8,7 +8,7 @@ from tkinter import font as tkfont
 from tkinter import *
 from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
-from turtle import bgcolor, circle, color, width
+from turtle import bgcolor, circle, color, title, width
 from PIL import ImageTk, Image
 from collections import deque
 import time
@@ -24,6 +24,7 @@ class SampleApp(tk.Tk):
         self.score_font = tkfont.Font(family='Montserrat', size=96,weight="bold")
         self.song_font_after = tkfont.Font(family='Montserrat', size=18,weight="bold")
         self.grade_font = tkfont.Font(family='Montserrat', size=24,weight="bold")
+        self.Mont_bold20 = tkfont.Font(family='Montserrat', size=20,weight="bold")
 
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
@@ -44,7 +45,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance,PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance,PerformanceReport,PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -54,14 +55,27 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
+<<<<<<< HEAD
         self.show_frame("LoadingPage")
         #self.show_frame("StartPage")
+=======
+<<<<<<< HEAD
+        #self.show_frame("LoadingPage")
+=======
+>>>>>>> 5c351dc399f52e25c858073ba0e4e2fb29fe980d
         # LoadingPage dapat
         # self.show_frame("LoadingPage")
        
         #try lang to
+<<<<<<< HEAD
         #self.show_frame("PerformanceReport")
         self.show_frame("StartPage")
+=======
+        self.show_frame("PerformanceReport")
+>>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
+        #self.show_frame("StartPage")
+        self.show_frame("PerformanceReport")
+>>>>>>> 5c351dc399f52e25c858073ba0e4e2fb29fe980d
         
 
     def show_frame(self, page_name):
@@ -99,7 +113,7 @@ class LoadingPage(tk.Frame):
             
             if current == 365:
                 self.destroy()
-                controller.show_frame("LogIn")
+                #controller.show_frame("LogIn")
             
             if current < 365:
                 loading.config(width=current+71)
@@ -783,10 +797,14 @@ class PerformanceReport(tk.Frame):
             missedHits_bar2 = tk.LabelFrame(self,text=missed_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=missed_bar2,height=16,labelanchor=E,font=controller.title_font)
             missedHits_bar2.place(x=313,y=487)
 
+<<<<<<< HEAD
             try:
                 rhythmData_frame.place_forget()
             except NameError:
                 print("okay lang")
+=======
+            rhythmData_frame.place_forget()
+>>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
 
 
 
@@ -821,18 +839,27 @@ class PerformanceReport(tk.Frame):
 
             failed_bar = tk.LabelFrame(rhythmData_frame,text=failed_switch,bg="#3a3a3c",fg="#F7BF50",border=0,width=655,height=16,labelanchor=E,font=controller.title_font)
             failed_bar.pack(pady=5,side=RIGHT) 
+<<<<<<< HEAD
             try:
                 notesData_frame.place_forget()
             except NameError:
                 print("okay lang")
+=======
+
+            notesData_frame.place_forget()
+>>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
             correctHits_bar2.place_forget()
             partialHits_bar2.place_forget()
             extraHits_bar2.place_forget()
             missedHits_bar2.place_forget()
             
+<<<<<<< HEAD
         #notesData_frame = tk.Frame(self)
         #rhythmData_frame = tk.Frame(self)
         
+=======
+        rhythmData_frame = tk.Frame(self,width=655,height=89,bg="#2A2B2C")
+>>>>>>> parent of 52d8259 (Revert "Merge branch 'GUI' of https://github.com/s1cnarf/Thesis1 into GUI")
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
@@ -848,6 +875,62 @@ class PerformanceReport(tk.Frame):
 
         main_frame = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
         
+        dash_frame = tk.Frame(self,width=139,height=545,bg="#3A3A3C",border=0)
+        dash_frame.pack_propagate(0)
+        
+        notes_frame = tk.Frame(dash_frame,width=139,height=70,bg="#3A3A3C",border=0)
+        notes_label = tk.Label(notes_frame,width=139,height=51,text="Notes",fg="#F7BF50",bg="#3A3A3C",cursor="hand2",font=controller.Mont_bold20)
+        notes_frame.pack_propagate(0)
+        notes_label.bind("<Button-1>",DisplayNote)
+        #notes_label.pack_propagate(0)
+
+        rhythm_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0,cursor="hand2")
+        rhythm_label = tk.Label(rhythm_frame,width=139,height=51,text="Rhythm",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
+        rhythm_frame.pack_propagate(0)
+        rhythm_label.bind("<Button-1>",DisplayRhythm)
+        
+
+        artic_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        artic_label = tk.Label(artic_frame,width=139,height=51,text="Articulation",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
+        artic_frame.pack_propagate(0)
+
+        dynamics_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        dynamics_label = tk.Label(dynamics_frame,width=139,height=51,text="Dynamics",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
+        dynamics_frame.pack_propagate(0)
+
+        finger_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        finger_label = tk.Label(finger_frame,width=139,height=51,text="Finger\nPattern",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
+        finger_frame.pack_propagate(0)
+
+        
+        #####################################
+
+        
+        
+        main_frame.place(x=105,y=124)
+        logo_label.place(x=35,y=34)
+        perfTitle_label.place(x=840,y=49)
+
+        dash_frame.place(x=105,y=124)
+        
+        notes_frame.pack(anchor=CENTER,pady=45)
+        notes_label.pack(anchor=CENTER)
+
+        rhythm_frame.pack(anchor=CENTER,pady=0)
+        rhythm_label.pack(anchor=CENTER)
+
+        artic_frame.pack(anchor=CENTER,pady=45)
+        artic_label.pack(anchor=CENTER)
+
+        dynamics_frame.pack(anchor=CENTER,pady=0)
+        dynamics_label.pack(anchor=CENTER)
+
+        finger_frame.pack(anchor=CENTER,pady=45)
+        finger_label.pack(anchor=CENTER)
+
+
+
+
 
 
 class PageTwo(tk.Frame):
