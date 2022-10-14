@@ -10,6 +10,7 @@ from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
 from turtle import bgcolor, circle, color, title, width
 from PIL import ImageTk, Image
+from datetime import datetime
 from collections import deque
 import time
 
@@ -379,6 +380,7 @@ class PlayPage(tk.Frame):
         self.controller = controller
         
         flag=True
+        dt = datetime.now()
 
         def update(task,flag):
             listbox_songs.delete(0,END)
@@ -423,6 +425,7 @@ class PlayPage(tk.Frame):
 
             update(task,flag)
 
+        
 
         # Create Stack For Recents
         stack = deque()
@@ -447,11 +450,13 @@ class PlayPage(tk.Frame):
             
             #data = label.cget("text")
             data = search_entry.get()
+            dt_string = dt.strftime(" %d/%m/%Y %H:%M:%S")
+
             stack.append(data)
             stack2.append(data)
 
             song=stack2.pop()
-            listbox_songs2.insert(index_stack,song)
+            listbox_songs2.insert(index_stack,dt_string,song)
             listbox.insert(index_stack,song)
             index_stack+1
             song_label.configure(text=data)
