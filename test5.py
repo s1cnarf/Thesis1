@@ -651,6 +651,7 @@ class AfterPerformance(tk.Frame):
         img= Image.open("Pictures/Perf_Report.png")
         PerfReport_img = ImageTk.PhotoImage(img)
         PerfReport_label =  tk.Label(self, image=PerfReport_img,cursor="hand2",borderwidth=0)
+        PerfReport_label.bind("<Button-1>", lambda e: controller.show_frame("PerformanceReport"))
         PerfReport_label.image = PerfReport_img
 
         img= Image.open("Pictures/ErrAnal.png")
@@ -665,10 +666,15 @@ class AfterPerformance(tk.Frame):
 
         print("afdter")
         global song_label
-        score_label =  tk.Label(self, text="80%",borderwidth=0,bg="#2A2B2C",font=controller.score_font)
-        song_label = tk.Label(self, text="Call Me Maybe",borderwidth=0,bg="#2A2B2C",font=controller.song_font_after)
+        score_label =  tk.Label(self, text="80%",borderwidth=0,bg="#2A2B2C",fg="white",font=controller.score_font)
         
+        song_frame = tk.Frame(self,width=308,height=30,border=0,bg="#2A2B2C")
+        song_frame.pack_propagate(False)
+        song_label = tk.Label(song_frame, text="",borderwidth=0,bg="#2A2B2C",fg="white",font=controller.song_font_after)
+        song_label.pack(anchor=CENTER,pady=5)
+
         grade_frame = tk.Frame(self,width=308,height=30,bg="#2A2B2C",border=0)
+        grade_frame.pack_propagate(False)
         grade_label = tk.Label(grade_frame, text="GOOD PERFORMANCE!",borderwidth=0,bg="#2A2B2C",fg="#F8BA43",font=controller.grade_font)
         grade_label.pack(anchor=CENTER)
 
@@ -682,8 +688,8 @@ class AfterPerformance(tk.Frame):
 
         circle_label.place(x=182,y=192)
         score_label.place(x=229,y=275)
-        song_label.place(x=276,y=523)
-        grade_frame.place(x=215,y=570)
+        song_frame.place(x=182,y=520)
+        grade_frame.place(x=182,y=570)
 
 class PerformanceReport(tk.Frame):
     def __init__(self, parent, controller):
@@ -829,12 +835,11 @@ class PerformanceReport(tk.Frame):
         #rhythmData_frame = tk.Frame(self)
         
 
-        logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
-        logo_img = ImageTk.PhotoImage(logo_pic)
-        logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
-        #logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
-        logo_label.image = logo_img
+        back_pic = Image.open("Pictures/back.png")
+        back_img = ImageTk.PhotoImage(back_pic)
+        back_label = tk.Label(self, image=back_img,borderwidth=0, cursor="hand2")
+        back_label.bind("<Button-1>", lambda e: controller.show_frame("AfterPerformance"))
+        back_label.image = back_img
 
         img= Image.open("Pictures/PerfReport.png")
         perfTitle_img = ImageTk.PhotoImage(img)
@@ -876,7 +881,7 @@ class PerformanceReport(tk.Frame):
         
         
         main_frame.place(x=105,y=124)
-        logo_label.place(x=35,y=34)
+        back_label.place(x=57,y=36)
         perfTitle_label.place(x=840,y=49)
 
         dash_frame.place(x=105,y=124)
