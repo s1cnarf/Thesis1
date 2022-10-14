@@ -54,8 +54,17 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
+<<<<<<< HEAD
         self.show_frame("LoadingPage")
         #self.show_frame("StartPage")
+=======
+        # LoadingPage dapat
+        # self.show_frame("LoadingPage")
+       
+        #try lang to
+        #self.show_frame("PerformanceReport")
+        self.show_frame("StartPage")
+>>>>>>> 9bc24f19ae8e60caf0d701026f573aa4cfb5ff6e
         
 
     def show_frame(self, page_name):
@@ -684,6 +693,166 @@ class AfterPerformance(tk.Frame):
         song_label.place(x=276,y=523)
         grade_frame.place(x=215,y=570)
 
+<<<<<<< HEAD
+=======
+class PerformanceReport(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent,bg="#F7BF50")
+        self.controller = controller
+
+        def DisplayNote(event):
+            
+            notes_label.config(height=70,bg="#2A2B2C",cursor="")
+            notes_frame.config(height=70,bg="#2A2B2C",cursor="")
+            rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+
+            total_expected_hits = 110
+            correct_hits = 85
+            partial_hits = 15
+            extra_hits = 5 
+            missed_hits = 10
+
+            global notesData_frame
+            notesData_frame = tk.Frame(self,width=734,height=414,bg="#2A2B2C")
+            notesData_frame.place(x=313,y=191)
+
+            #   CORRECT HITS
+            correctHits_frame = tk.Frame(notesData_frame,bg="#2A2B2C")
+            correctHits_frame.pack(side=TOP,anchor=NW,pady=15)
+
+            correctHits_label = tk.Label(correctHits_frame,text="Correct Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            correctHits_label.pack(side=TOP)
+
+            correct_bar = correct_hits/total_expected_hits
+            correctHits_bar = tk.LabelFrame(correctHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
+            correctHits_bar.pack(side=RIGHT,pady=5)
+            
+            correct_bar2 = correct_bar*654
+            
+            global correctHits_bar2
+            correctHits_bar2 = tk.LabelFrame(self,text=correct_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=correct_bar2,height=16,labelanchor=E,font=controller.title_font)
+            correctHits_bar2.place(x=313,y=237)
+            #######################################
+
+            #   PARTIAL HITS
+
+            partialHits_frame =  tk.Frame(notesData_frame,bg="#2A2B2C")
+            partialHits_frame.pack(side=TOP,pady=15)
+
+            partialHits_label = tk.Label(partialHits_frame,text="Partial Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            partialHits_label.pack(side=TOP)
+
+            partial_bar = partial_hits/total_expected_hits
+            partialHits_bar = tk.LabelFrame(partialHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
+            partialHits_bar.pack(side=TOP,pady=5)
+            
+            global partialHits_bar2
+            partial_bar2 = partial_bar*654
+            partialHits_bar2 = tk.LabelFrame(self,text=partial_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=partial_bar2,height=16,labelanchor=E,font=controller.title_font)
+            partialHits_bar2.place(x=313,y=320)
+            ####################################
+
+            #   EXTRA HITS
+            
+            extraHits_frame =  tk.Frame(notesData_frame,bg="#2A2B2C")
+            extraHits_frame.pack(side=TOP,pady=15)
+
+            extraHits_label = tk.Label(extraHits_frame,text="Extra Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            extraHits_label.pack(side=TOP)
+
+            extra_bar = extra_hits/total_expected_hits
+            extraHits_bar = tk.LabelFrame(extraHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
+            extraHits_bar.pack(side=TOP,pady=5)
+
+            global extraHits_bar2
+            extra_bar2 = extra_bar*654
+            extraHits_bar2 = tk.LabelFrame(self,text=extra_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=extra_bar2,height=16,labelanchor=E,font=controller.title_font)
+            extraHits_bar2.place(x=313,y=403)
+            #####################################
+
+            #   MISSED HITS
+
+            missedHits_frame =  tk.Frame(notesData_frame,bg="#2A2B2C")
+            missedHits_frame.pack(side=TOP,pady=15)
+
+            missedHits_label = tk.Label(missedHits_frame,text="Missed Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            missedHits_label.pack(side=TOP)
+
+            missed_bar = missed_hits/total_expected_hits
+            missedHits_bar = tk.LabelFrame(missedHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
+            missedHits_bar.pack(side=TOP,pady=5)
+
+            global missedHits_bar2
+            missed_bar2 = missed_bar*654
+            missedHits_bar2 = tk.LabelFrame(self,text=missed_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=missed_bar2,height=16,labelanchor=E,font=controller.title_font)
+            missedHits_bar2.place(x=313,y=487)
+
+            try:
+                rhythmData_frame.place_forget()
+            except NameError:
+                print("okay lang")
+
+
+
+        def DisplayRhythm(event):
+
+            success_switch = 75
+            failed_switch = 35
+
+            notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_label.config(height=70,bg="#2A2B2C",cursor="")
+            rhythm_frame.config(height=70,bg="#2A2B2C",cursor="")
+
+            global rhythmData_frame
+            rhythmData_frame = tk.Frame(self,width=655,height=89,bg="#2A2B2C")
+            rhythmData_frame.place(x=312,y=280)
+            rhythmData_frame.pack_propagate(False)
+
+            switches_frame = tk.Frame(rhythmData_frame,bg="#2A2B2C",width=655,height=26)
+            switches_frame.pack(side=TOP)
+            switches_frame.pack_propagate(0)
+
+            succesSwitch_label = tk.Label(switches_frame,text="Successful Switch",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            succesSwitch_label.pack(side=LEFT,anchor=NW)
+
+            failedSwitch_label = tk.Label(switches_frame,text="Failed",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            failedSwitch_label.pack(side=RIGHT,anchor=NE)
+
+            total = success_switch/(success_switch+failed_switch)*655
+            success_bar = tk.LabelFrame(rhythmData_frame,text=success_switch,bg="#F7BF50",fg="#2A2B2C",border=0,width=total,height=16,labelanchor=E,font=controller.title_font)
+            success_bar.pack(pady=5,side=LEFT)   
+
+            failed_bar = tk.LabelFrame(rhythmData_frame,text=failed_switch,bg="#3a3a3c",fg="#F7BF50",border=0,width=655,height=16,labelanchor=E,font=controller.title_font)
+            failed_bar.pack(pady=5,side=RIGHT) 
+            try:
+                notesData_frame.place_forget()
+            except NameError:
+                print("okay lang")
+            correctHits_bar2.place_forget()
+            partialHits_bar2.place_forget()
+            extraHits_bar2.place_forget()
+            missedHits_bar2.place_forget()
+            
+        #notesData_frame = tk.Frame(self)
+        #rhythmData_frame = tk.Frame(self)
+        
+
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
+        logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
+        #logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
+        logo_label.image = logo_img
+
+        img= Image.open("Pictures/PerfReport.png")
+        perfTitle_img = ImageTk.PhotoImage(img)
+        perfTitle_label = tk.Label(self, image=perfTitle_img,borderwidth=0)
+        perfTitle_label.image = perfTitle_img
+
+        main_frame = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
+>>>>>>> 9bc24f19ae8e60caf0d701026f573aa4cfb5ff6e
         
 
 
