@@ -8,7 +8,7 @@ from tkinter import font as tkfont
 from tkinter import *
 from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
-from turtle import bgcolor, circle, color, title, width
+from turtle import bgcolor, circle, color, width
 from PIL import ImageTk, Image
 from collections import deque
 import time
@@ -24,7 +24,6 @@ class SampleApp(tk.Tk):
         self.score_font = tkfont.Font(family='Montserrat', size=96,weight="bold")
         self.song_font_after = tkfont.Font(family='Montserrat', size=18,weight="bold")
         self.grade_font = tkfont.Font(family='Montserrat', size=24,weight="bold")
-        self.Mont_bold20 = tkfont.Font(family='Montserrat', size=20,weight="bold")
 
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
@@ -45,7 +44,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance,PerformanceReport,PageTwo, PageThree, PageFour):
+        for F in (LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance,PageTwo, PageThree, PageFour):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -55,11 +54,7 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
-        # LoadingPage dapat
-        # self.show_frame("LoadingPage")
-       
-        #try lang to
-        self.show_frame("PerformanceReport")
+        self.show_frame("LoadingPage")
         #self.show_frame("StartPage")
         
 
@@ -98,7 +93,7 @@ class LoadingPage(tk.Frame):
             
             if current == 365:
                 self.destroy()
-                #controller.show_frame("LogIn")
+                controller.show_frame("LogIn")
             
             if current < 365:
                 loading.config(width=current+71)
@@ -689,213 +684,7 @@ class AfterPerformance(tk.Frame):
         song_label.place(x=276,y=523)
         grade_frame.place(x=215,y=570)
 
-class PerformanceReport(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent,bg="#F7BF50")
-        self.controller = controller
-
-        def DisplayNote(event):
-            
-            notes_label.config(height=70,bg="#2A2B2C",cursor="")
-            notes_frame.config(height=70,bg="#2A2B2C",cursor="")
-            rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
-            rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
-
-            total_expected_hits = 110
-            correct_hits = 85
-            partial_hits = 15
-            extra_hits = 5 
-            missed_hits = 10
-
-            global notesData_frame
-            notesData_frame = tk.Frame(self,width=734,height=414,bg="#2A2B2C")
-            notesData_frame.place(x=313,y=191)
-
-            #   CORRECT HITS
-            correctHits_frame = tk.Frame(notesData_frame,bg="#2A2B2C")
-            correctHits_frame.pack(side=TOP,anchor=NW,pady=15)
-
-            correctHits_label = tk.Label(correctHits_frame,text="Correct Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
-            correctHits_label.pack(side=TOP)
-
-            correct_bar = correct_hits/total_expected_hits
-            correctHits_bar = tk.LabelFrame(correctHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
-            correctHits_bar.pack(side=RIGHT,pady=5)
-            
-            correct_bar2 = correct_bar*654
-            
-            global correctHits_bar2
-            correctHits_bar2 = tk.LabelFrame(self,text=correct_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=correct_bar2,height=16,labelanchor=E,font=controller.title_font)
-            correctHits_bar2.place(x=313,y=237)
-            #######################################
-
-            #   PARTIAL HITS
-
-            partialHits_frame =  tk.Frame(notesData_frame,bg="#2A2B2C")
-            partialHits_frame.pack(side=TOP,pady=15)
-
-            partialHits_label = tk.Label(partialHits_frame,text="Partial Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
-            partialHits_label.pack(side=TOP)
-
-            partial_bar = partial_hits/total_expected_hits
-            partialHits_bar = tk.LabelFrame(partialHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
-            partialHits_bar.pack(side=TOP,pady=5)
-            
-            global partialHits_bar2
-            partial_bar2 = partial_bar*654
-            partialHits_bar2 = tk.LabelFrame(self,text=partial_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=partial_bar2,height=16,labelanchor=E,font=controller.title_font)
-            partialHits_bar2.place(x=313,y=320)
-            ####################################
-
-            #   EXTRA HITS
-            
-            extraHits_frame =  tk.Frame(notesData_frame,bg="#2A2B2C")
-            extraHits_frame.pack(side=TOP,pady=15)
-
-            extraHits_label = tk.Label(extraHits_frame,text="Extra Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
-            extraHits_label.pack(side=TOP)
-
-            extra_bar = extra_hits/total_expected_hits
-            extraHits_bar = tk.LabelFrame(extraHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
-            extraHits_bar.pack(side=TOP,pady=5)
-
-            global extraHits_bar2
-            extra_bar2 = extra_bar*654
-            extraHits_bar2 = tk.LabelFrame(self,text=extra_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=extra_bar2,height=16,labelanchor=E,font=controller.title_font)
-            extraHits_bar2.place(x=313,y=403)
-            #####################################
-
-            #   MISSED HITS
-
-            missedHits_frame =  tk.Frame(notesData_frame,bg="#2A2B2C")
-            missedHits_frame.pack(side=TOP,pady=15)
-
-            missedHits_label = tk.Label(missedHits_frame,text="Missed Hits:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
-            missedHits_label.pack(side=TOP)
-
-            missed_bar = missed_hits/total_expected_hits
-            missedHits_bar = tk.LabelFrame(missedHits_frame,text=total_expected_hits,bg="#3a3a3c",fg="#F7BF50",border=0,width=654,height=16,labelanchor=E,font=controller.title_font)
-            missedHits_bar.pack(side=TOP,pady=5)
-
-            global missedHits_bar2
-            missed_bar2 = missed_bar*654
-            missedHits_bar2 = tk.LabelFrame(self,text=missed_hits,bg="#F7BF50",fg="#2A2B2C",border=0,width=missed_bar2,height=16,labelanchor=E,font=controller.title_font)
-            missedHits_bar2.place(x=313,y=487)
-
-            rhythmData_frame.place_forget()
-
-
-
-        def DisplayRhythm(event):
-
-            success_switch = 75
-            failed_switch = 35
-
-            notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
-            notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
-            rhythm_label.config(height=70,bg="#2A2B2C",cursor="")
-            rhythm_frame.config(height=70,bg="#2A2B2C",cursor="")
-
-            global rhythmData_frame
-            rhythmData_frame = tk.Frame(self,width=655,height=89,bg="#2A2B2C")
-            rhythmData_frame.place(x=312,y=280)
-            rhythmData_frame.pack_propagate(False)
-
-            switches_frame = tk.Frame(rhythmData_frame,bg="#2A2B2C",width=655,height=26)
-            switches_frame.pack(side=TOP)
-            switches_frame.pack_propagate(0)
-
-            succesSwitch_label = tk.Label(switches_frame,text="Successful Switch",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
-            succesSwitch_label.pack(side=LEFT,anchor=NW)
-
-            failedSwitch_label = tk.Label(switches_frame,text="Failed",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
-            failedSwitch_label.pack(side=RIGHT,anchor=NE)
-
-            total = success_switch/(success_switch+failed_switch)*655
-            success_bar = tk.LabelFrame(rhythmData_frame,text=success_switch,bg="#F7BF50",fg="#2A2B2C",border=0,width=total,height=16,labelanchor=E,font=controller.title_font)
-            success_bar.pack(pady=5,side=LEFT)   
-
-            failed_bar = tk.LabelFrame(rhythmData_frame,text=failed_switch,bg="#3a3a3c",fg="#F7BF50",border=0,width=655,height=16,labelanchor=E,font=controller.title_font)
-            failed_bar.pack(pady=5,side=RIGHT) 
-
-            notesData_frame.place_forget()
-            correctHits_bar2.place_forget()
-            partialHits_bar2.place_forget()
-            extraHits_bar2.place_forget()
-            missedHits_bar2.place_forget()
-            
-        rhythmData_frame = tk.Frame(self,width=655,height=89,bg="#2A2B2C")
-
-        logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic= logo_pic.resize((250,55),Image.ANTIALIAS)
-        logo_img = ImageTk.PhotoImage(logo_pic)
-        logo_label = tk.Label(self, image=logo_img,borderwidth=0, cursor="hand2")
-        #logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
-        logo_label.image = logo_img
-
-        img= Image.open("Pictures/PerfReport.png")
-        perfTitle_img = ImageTk.PhotoImage(img)
-        perfTitle_label = tk.Label(self, image=perfTitle_img,borderwidth=0)
-        perfTitle_label.image = perfTitle_img
-
-        main_frame = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
         
-        dash_frame = tk.Frame(self,width=139,height=545,bg="#3A3A3C",border=0)
-        dash_frame.pack_propagate(0)
-        
-        notes_frame = tk.Frame(dash_frame,width=139,height=70,bg="#3A3A3C",border=0)
-        notes_label = tk.Label(notes_frame,width=139,height=51,text="Notes",fg="#F7BF50",bg="#3A3A3C",cursor="hand2",font=controller.Mont_bold20)
-        notes_frame.pack_propagate(0)
-        notes_label.bind("<Button-1>",DisplayNote)
-        #notes_label.pack_propagate(0)
-
-        rhythm_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0,cursor="hand2")
-        rhythm_label = tk.Label(rhythm_frame,width=139,height=51,text="Rhythm",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
-        rhythm_frame.pack_propagate(0)
-        rhythm_label.bind("<Button-1>",DisplayRhythm)
-        
-
-        artic_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
-        artic_label = tk.Label(artic_frame,width=139,height=51,text="Articulation",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
-        artic_frame.pack_propagate(0)
-
-        dynamics_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
-        dynamics_label = tk.Label(dynamics_frame,width=139,height=51,text="Dynamics",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
-        dynamics_frame.pack_propagate(0)
-
-        finger_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
-        finger_label = tk.Label(finger_frame,width=139,height=51,text="Finger\nPattern",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
-        finger_frame.pack_propagate(0)
-
-        
-        #####################################
-
-        
-        
-        main_frame.place(x=105,y=124)
-        logo_label.place(x=35,y=34)
-        perfTitle_label.place(x=840,y=49)
-
-        dash_frame.place(x=105,y=124)
-        
-        notes_frame.pack(anchor=CENTER,pady=45)
-        notes_label.pack(anchor=CENTER)
-
-        rhythm_frame.pack(anchor=CENTER,pady=0)
-        rhythm_label.pack(anchor=CENTER)
-
-        artic_frame.pack(anchor=CENTER,pady=45)
-        artic_label.pack(anchor=CENTER)
-
-        dynamics_frame.pack(anchor=CENTER,pady=0)
-        dynamics_label.pack(anchor=CENTER)
-
-        finger_frame.pack(anchor=CENTER,pady=45)
-        finger_label.pack(anchor=CENTER)
-
-
-
-
 
 
 class PageTwo(tk.Frame):
