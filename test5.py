@@ -56,8 +56,8 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
-        #self.show_frame("StartPage")
-        self.show_frame("PerformanceReport")
+        self.show_frame("StartPage")
+        #self.show_frame("PerformanceReport")
 
 
     def show_frame(self, page_name):
@@ -458,7 +458,8 @@ class PlayPage(tk.Frame):
 
             song=stack2.pop()
             #listbox_songs2.insert(index_stack,dt_string,song)
-            tree_histo.insert('',index_stack,values=song)
+            #tree_histo.insert('',tk.END, values=("gc","OCT 26",'Alex'))
+            tree_histo.insert('',index_stack,values=(dt_string,song,80))
             listbox.insert(index_stack,song)
             index_stack+1
             song_label.configure(text=data)
@@ -964,8 +965,9 @@ class PageThree(tk.Frame):
 
 
         frame_histo = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
-        frame_histoList = tk.Frame(self,width=500,height=200,bg="#2A2B2C",border=0)
-
+        frame_histoList = tk.Frame(self,width=880,height=200,bg="white",border=0)
+        frame_histoList.pack_propagate(0)
+        
         image = Image.open("Pictures/menuHisto.png")
         image = image.resize((950,100), Image.ANTIALIAS)
         imgMenu = ImageTk.PhotoImage(image)
@@ -988,18 +990,25 @@ class PageThree(tk.Frame):
         # listbox_songs2.bind("<<ListboxSelect>>", infos)
 
         global tree_histo
-        tree_histo = ttk.Treeview(frame_histoList)
+        tree_histo = ttk.Treeview(frame_histoList,column=("c1","c2","c3"),show="headings")
+        tree_histo["columns"]=("date&time","title","score")
+        tree_histo.column("date&time",width=293,stretch=NO,anchor=CENTER)
+        tree_histo.column("title",width=293,stretch=NO,anchor=CENTER)
+        tree_histo.column("score",width=293,stretch=NO,anchor=CENTER)
         
-        scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
-        tree_histo.config(yscrollcommand=scrollbar2.set)
-        scrollbar2.config(command=tree_histo.yview)
-        scrollbar2.pack(side=RIGHT,fill=Y)
-        tree_histo.pack(pady=1)
+        
+       # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
+        #tree_histo.config(yscrollcommand=scrollbar2.set)
+        #scrollbar2.config(command=tree_histo.yview)
+        
+        
+        #scrollbar2.pack(side=RIGHT,fill=Y)
+        tree_histo.pack(side=LEFT)
 
         
         frame_histo.place(x=105,y=124)
         labelhisto_menu.place(x=120,y=128)
-        frame_histoList.place(x=190,y=235)
+        frame_histoList.place(x=150,y=235)
         logo_label.place(x=35,y=34)
         info_label.place(x=738,y=57)
         
