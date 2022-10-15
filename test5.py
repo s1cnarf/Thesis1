@@ -36,6 +36,7 @@ class SampleApp(tk.Tk):
         self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
 
+        ttk.Style().configure("Treeview", background="black",foreground="white", fieldbackground="black")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -995,6 +996,14 @@ class PageThree(tk.Frame):
         tree_histo.column("date&time",width=293,stretch=NO,anchor=CENTER)
         tree_histo.column("title",width=293,stretch=NO,anchor=CENTER)
         tree_histo.column("score",width=293,stretch=NO,anchor=CENTER)
+
+        scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
+        tree_histo.config(yscrollcommand=scrollbar2.set)
+        scrollbar2.config(command=tree_histo.yview)
+        scrollbar2.pack(side=RIGHT,fill=Y)
+
+        tree_histo.bind('<Motion>', 'break')
+        tree_histo.bind('<<TreeviewSelect>>' ,infos)
         
         
        # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
