@@ -946,8 +946,6 @@ class PageThree(tk.Frame):
         # button = tk.Button(self, text="Home",
         #                    command=lambda: controller.show_frame("StartPage"))
         # button.pack()
-        def call(e):
-            listbox_songs2.insert(song_label)
 
         
         logo_pic = Image.open("Pictures/Logo.png")
