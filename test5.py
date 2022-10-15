@@ -56,8 +56,8 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
-        self.show_frame("StartPage")
-        #self.show_frame("PerformanceReport")
+        #self.show_frame("StartPage")
+        self.show_frame("PerformanceReport")
 
 
     def show_frame(self, page_name):
@@ -847,6 +847,12 @@ class PerformanceReport(tk.Frame):
             articulationData_frame.pack_propagate(False)
 
             
+
+            
+
+
+
+            
         #notesData_frame = tk.Frame(self)
         #rhythmData_frame = tk.Frame(self)
         
@@ -882,6 +888,7 @@ class PerformanceReport(tk.Frame):
         artic_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         artic_label = tk.Label(artic_frame,width=139,height=51,text="Articulation",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         artic_frame.pack_propagate(0)
+        artic_label.bind("<Button-1>",DisplayArticulation)
 
         dynamics_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         dynamics_label = tk.Label(dynamics_frame,width=139,height=51,text="Dynamics",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
@@ -995,6 +1002,7 @@ class PageThree(tk.Frame):
         tree_histo.column("date&time",width=293,stretch=NO,anchor=CENTER)
         tree_histo.column("title",width=293,stretch=NO,anchor=CENTER)
         tree_histo.column("score",width=293,stretch=NO,anchor=CENTER)
+        tree_histo.bind('<Motion>', 'break')
         
         
        # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
