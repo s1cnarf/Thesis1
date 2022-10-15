@@ -1,5 +1,6 @@
 track,start,end,event,channel,note,velocity
 1,0,1536,Note_on,1,67,0
+1,1200,2300,Note_on,1,67,0
 1,1536,2048,Note_on,1,69,0
 1,2048,3072,Note_on,1,67,0
 1,3072,5888,Note_on,1,64,0

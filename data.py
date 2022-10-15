@@ -27,6 +27,7 @@ def Notes(pattern, text):
 
     correct, partial, extra, missed = 0, 0, 0, 0
     # The p
+    
     # notes = [i for i in range(0,len(pattern['event'])) if pattern['event'][i] == 'NOTE_ON']
 
     # If p - time note equals to t time and note
@@ -47,8 +48,10 @@ def Notes(pattern, text):
                 missed += 1
 
             j = i
+            # Check if there are note start time less than current end time
             for j in range (i, size):
-                if pattern['start'][j] < pattern['end'][i]: # end - 1536
+                if pattern['start'][j] < pattern['end'][i]: # 1 1 
+                    # Check the validity of the note
                     if pattern['start'][j] == text['start'][j]: # 0 1536
                         pass
                     elif pattern['start'][j] != text['start'][j]:
@@ -185,7 +188,7 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\silentnight1.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv\silentnight.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_dict = Pattern.to_dict('list')
@@ -195,17 +198,17 @@ if __name__ == '__main__':
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
-    Notes(pattern_dict, truth_dict)
+    #Notes(pattern_dict, truth_dict)
 
     #DATA FRAME
     MelodyLR(Pattern, Truth)
 
-    FingerPattern(Pattern, Truth)
+    #FingerPattern(Pattern, Truth)
 
     #Dictionary
-    Rhythm(pattern_dict, truth_dict)
+    #Rhythm(pattern_dict, truth_dict)
 
-    Articulation(pattern_dict, truth_dict)
+    #Articulation(pattern_dict, truth_dict)
 
     
 
