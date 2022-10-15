@@ -451,13 +451,14 @@ class PlayPage(tk.Frame):
             #data = label.cget("text")
             data = search_entry.get()
             dt = datetime.now()
-            dt_string = dt.strftime(" %d/%m/%Y %H:%M:%S")
+            dt_string = dt.strftime(" %d-%m-%Y %H:%M:%S")
 
             stack.append(data)
             stack2.append(data)
 
             song=stack2.pop()
-            listbox_songs2.insert(index_stack,dt_string,song)
+            #listbox_songs2.insert(index_stack,dt_string,song)
+            tree_histo.insert('',index_stack,values=song)
             listbox.insert(index_stack,song)
             index_stack+1
             song_label.configure(text=data)
@@ -965,8 +966,6 @@ class PageThree(tk.Frame):
         frame_histo = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
         frame_histoList = tk.Frame(self,width=500,height=200,bg="#2A2B2C",border=0)
 
-
-
         image = Image.open("Pictures/menuHisto.png")
         image = image.resize((950,100), Image.ANTIALIAS)
         imgMenu = ImageTk.PhotoImage(image)
@@ -976,17 +975,27 @@ class PageThree(tk.Frame):
         labelhisto_menu = tk.Label(self, image=imgMenu,border=0)
         labelhisto_menu.image = imgMenu
 
-        global listbox_songs2
-        listbox_songs2 = tk.Listbox(frame_histoList,width=80,height=20,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
-        scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
-        listbox_songs2.config(yscrollcommand=scrollbar2.set)
-        #listbox.pack(side="top", fill="both", expand=True)
-        scrollbar2.config(command=listbox_songs2.yview)
-        scrollbar2.pack(side=RIGHT,fill=Y)
-        #scrollbar.place(x=365,y=259)
-        listbox_songs2.pack(pady=1)
+        # global listbox_songs2
+        # listbox_songs2 = tk.Listbox(frame_histoList,width=80,height=20,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
+        # listbox_songs2.config(yscrollcommand=scrollbar2.set)
+            # #listbox.pack(side="top", fill="both", expand=True)
+        # scrollbar2.config(command=listbox_songs2.yview)
+        # scrollbar2.pack(side=RIGHT,fill=Y)
+            # #scrollbar.place(x=365,y=259)
+        # listbox_songs2.pack(pady=1)
         
-        listbox_songs2.bind("<<ListboxSelect>>", infos)
+        # listbox_songs2.bind("<<ListboxSelect>>", infos)
+
+        global tree_histo
+        tree_histo = ttk.Treeview(frame_histoList)
+        
+        scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
+        tree_histo.config(yscrollcommand=scrollbar2.set)
+        scrollbar2.config(command=tree_histo.yview)
+        scrollbar2.pack(side=RIGHT,fill=Y)
+        tree_histo.pack(pady=1)
+
         
         frame_histo.place(x=105,y=124)
         labelhisto_menu.place(x=120,y=128)
