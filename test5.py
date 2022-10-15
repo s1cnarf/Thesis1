@@ -56,8 +56,8 @@ class SampleApp(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
         
-        self.show_frame("StartPage")
-        #self.show_frame("PerformanceReport")
+        #self.show_frame("StartPage")
+        self.show_frame("PerformanceReport")
 
 
     def show_frame(self, page_name):
@@ -836,6 +836,14 @@ class PerformanceReport(tk.Frame):
             partialHits_bar2.place_forget()
             extraHits_bar2.place_forget()
             missedHits_bar2.place_forget()
+
+        def DisplayArticulation(event):
+
+            global articulationData_frame
+            articulationData_frame = tk.Frame(self,width=655,height=89,bg="#2A2B2C")
+            articulationData_frame.place(x=312,y=280)
+            articulationData_frame.pack_propagate(False)
+
             
         #notesData_frame = tk.Frame(self)
         #rhythmData_frame = tk.Frame(self)
