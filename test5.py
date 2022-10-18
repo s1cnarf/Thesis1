@@ -1145,3 +1145,4 @@ if __name__ == "__main__":
     app.attributes('-fullscreen',False)
     app.resizable(False,False)
     app.mainloop()
+
