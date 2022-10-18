@@ -368,7 +368,7 @@ class Register(tk.Frame):
         label5Reg_entry = tk.Entry(self,width=29,font=controller.title_font,show="*")
         label5Reg_entry.bind("<Return>",insertUser)
 
-        label6Reg = tk.Label(self, text="I already have an account",fg="grey", bg="#2A2B2C", font=controller.body3_font)
+        label6Reg = tk.Label(self, text="I already have an account",fg="grey", bg="#2A2B2C", font=controller.font_song)
         label7Reg = tk.Label(self, text="Sign In", cursor ="hand2", fg="#F7BF50", bg="#2A2B2C", borderwidth=0)
         label7Reg.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
 
