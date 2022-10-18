@@ -306,6 +306,7 @@ class Register(tk.Frame):
                     })
                     con.commit()
                     messagebox.showinfo('confirmation','Record Saved')
+                    controller.show_frame("LogIn")
 
                 except Exception as ep:
                     messagebox.showerror('',ep)
