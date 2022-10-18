@@ -13,7 +13,7 @@ from PIL import ImageTk, Image
 from datetime import datetime
 from collections import deque
 import time
-
+import sqlite3
 
 
 class SampleApp(tk.Tk):
@@ -37,6 +37,18 @@ class SampleApp(tk.Tk):
         self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
 
         ttk.Style().configure("Treeview", background="black",foreground="white", fieldbackground="black")
+
+        con = sqlite3.connect('userData.db')
+        cur = con.cursor()
+        cur.execute('''CREATE TABLE IF NOT EXISTS record(
+                        username text,
+                         email text,
+                        contactNo number,
+                        password text
+                        )
+                    ''')
+        con.commit()
+
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -110,25 +122,54 @@ class LogIn(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
         #self.controller.state("zoomed")
+        
 
         def login(e):
+            try:
+                con = sqlite3.connect('userData.db')
+                c = con.cursor()
+                for row in c.execute("Select * from record"):
+                    Username = row[1]
+                    Password = row[3]
+
+            except Exception as ep:
+                messagebox.showerror('',ep)
+
             uname = label_entry.get()
             passw = label2_entry.get()
-
-            file = open ('registersheet.txt' ,'r')
-            d = file.read()
-            r = ast.literal_eval(d)
-            file.close()
-
-            print(r.keys())
-            print(r.values())
-            print(r)
-
-            if uname in r.keys() and passw==r[uname]:
-                controller.show_frame("StartPage")
-
+            counter = 0
+            if uname == "":
+                warn = "Username can't be empty"
             else:
-                messagebox.showerror('Invalid', 'Invalid username and password')
+                counter += 1
+            
+            if passw == "":
+                warn = "Password can't be empty"
+            else:
+                counter += 1
+
+            if counter == 2:
+                if (uname == Username and passw == Password):
+                    messagebox.showinfo('Login Status', 'invalid Username or Password')
+                else:
+                    messagebox.showerror('Login Status', 'Invalid Username or Password')
+            else:
+                messagebox.showerror('',warn)
+
+            # file = open ('registersheet.txt' ,'r')
+            # d = file.read()
+            # r = ast.literal_eval(d)
+            # file.close()
+
+            # print(r.keys())
+            # print(r.values())
+            # print(r)
+
+            # if uname in r.keys() and passw==r[uname]:
+            #     controller.show_frame("StartPage")
+
+            # else:
+            #     messagebox.showerror('Invalid', 'Invalid username and password')
         
         frame1 = tk.Frame(self,width=463,height=461,bg="#2A2B2C",border=0)
         label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
@@ -221,37 +262,89 @@ class Register(tk.Frame):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
 
-        def register(event):
-            username = labelReg_entry.get()
-            password = label2Reg_entry.get()
-            contactNo = label3Reg_entry.get()
-            email = label4Reg_entry.get()
-            confirmPass = label5Reg_entry.get()
 
-            if password == confirmPass:
-                try:
-                    file = open('registersheet.txt','r+')
-                    d = file.read()
-                    r = ast.literal_eval(d)
-
-                    dict2 = {username:password ,contactNo:email}
-                    r.update(dict2)
-                    file.truncate(0)
-                    file.close()
-
-                    file = open('registersheet.txt','w')
-                    w = file.write(str(r))
-
-                    messagebox.showinfo('Signup','Sucessfully Sign Up')
-
-                except:
-                    file = open('registersheet.txt','w')
-                    displayDict = str({'Username':'Password','Contact No.':'Email'})
-                    file.write(displayDict)
-                    file.close()
-
+        def insertUser():
+            counter = 0
+            warn = ""
+            #Getting the username input
+            if labelReg_entry.get()=="":
+                warn = "Name can't be empty"
             else:
-                messagebox.showerror('Invalid',"Both Password Should Match")
+                counter += 1
+            #Getting the password input
+            if label2Reg_entry.get()=="":
+                warn = "Password can't be empty"
+            else:
+                counter += 1
+            #Getting the contact number input
+            if label3Reg_entry.get()=="":
+                warn = "Contact Number can't be empty"
+            else:
+                counter += 1
+            #Getting the email input
+            if label4Reg_entry.get()=="":
+                warn = "Email can't be empty"
+            else:
+                counter += 1
+
+            if label2Reg_entry.get() != label5Reg_entry.get():
+                warn = "Password didn't match!"
+            else:
+                counter += 1
+
+            if counter == 5:
+                try:
+                    con = sqlite3.connect('userData.db')
+                    cur = con.cursor()
+                    cur.execute("INSERT INTO record VALUES (:Username, :Email, :Contact No, :Password) ",{
+                                    'Username': labelReg_entry.get(),
+                                    'Email': label4Reg_entry.get(),
+                                    'Contact No': label3Reg_entry.get(),
+                                    'Password': label2Reg_entry.get()
+                                    
+                    })
+                    con.commit()
+                    messagebox.showinfo('confirmation','Record Saved')
+
+                except Exception as ep:
+                    messagebox.showerror('',ep)
+            else:
+                messagebox.showerror('Error', warn)
+
+
+            
+        
+        #def register(event):
+            # username = labelReg_entry.get()
+            # password = label2Reg_entry.get()
+            # contactNo = label3Reg_entry.get()
+            # email = label4Reg_entry.get()
+            # confirmPass = label5Reg_entry.get()
+
+            # if password == confirmPass:
+            #     try:
+            #         file = open('registersheet.txt','r+')
+            #         d = file.read()
+            #         r = ast.literal_eval(d)
+
+            #         dict2 = {username:password ,contactNo:email}
+            #         r.update(dict2)
+            #         file.truncate(0)
+            #         file.close()
+
+            #         file = open('registersheet.txt','w')
+            #         w = file.write(str(r))
+
+            #         messagebox.showinfo('Signup','Sucessfully Sign Up')
+
+            #     except:
+            #         file = open('registersheet.txt','w')
+            #         displayDict = str({'Username':'Password','Contact No.':'Email'})
+            #         file.write(displayDict)
+            #         file.close()
+
+            # else:
+            #     messagebox.showerror('Invalid',"Both Password Should Match")
     
         frame_reg = tk.Frame(self,width=860,height=480,bg="#2A2B2C",border=0)
         label_reg = tk.Label(self, text="CREATE ACCOUNT",fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
@@ -265,21 +358,21 @@ class Register(tk.Frame):
 
         label3Reg = tk.Label(self, text="CONTACT NO.",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         label3Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
-        label3Reg_entry.bind("<Return>",register)
+        label3Reg_entry.bind("<Return>",insertUser)
         
         label4Reg = tk.Label(self, text="EMAIL",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         label4Reg_entry = tk.Entry(self,width=29,font=controller.title_font)
 
         label5Reg = tk.Label(self, text="CONFIRM PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         label5Reg_entry = tk.Entry(self,width=29,font=controller.title_font,show="*")
-        label5Reg_entry.bind("<Return>",register)
+        label5Reg_entry.bind("<Return>",insertUser)
 
         label6Reg = tk.Label(self, text="I already have an account",fg="grey", bg="#2A2B2C", font=controller.body3_font)
         label7Reg = tk.Label(self, text="Sign In", cursor ="hand2", fg="#F7BF50", bg="#2A2B2C", borderwidth=0)
         label7Reg.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
 
         reg_button = tk.Label(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
-        reg_button.bind("<Button-1>",register)
+        reg_button.bind("<Button-1>",insertUser)
 
         #reg_button = Button(self, text="REGISTER",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=13, height=2 ,font=controller.button_font)
         #reg_button.bind("<Button-1>",register)
