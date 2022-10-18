@@ -45,18 +45,18 @@ class Piano:
         
         self.white_key_surface , self.black_key_surface = self.create_key_surfaces()
 
-        self.white_pressed_surface = pg.surface.Surface((1248,100),
+        self.white_pressed_surface = pg.surface.Surface((1540,200),
         pg.SRCALPHA, 32).convert_alpha()
 
-        self.black_pressed_surface = pg.surface.Surface((1248,100),
+        self.black_pressed_surface = pg.surface.Surface((1540,200),
         pg.SRCALPHA, 32).convert_alpha()
 
     def draw_keys(self, surface):
-        #self.draw_pressed()
+        self.draw_pressed()
         surface.blit(self.white_key_surface, (0, 600)) # Draw the UNPRESSED white key
-        surface.blit(self.white_pressed_surface, (0, 400)) # Draw the PRESSED white Key
+        surface.blit(self.white_pressed_surface, (0, 600)) # Draw the PRESSED white Key
         surface.blit(self.black_key_surface, (0, 600)) # Draw the UNPRESSED black key
-        surface.blit(self.black_pressed_surface, (0, 400)) # Draw the PRESSED black key
+        surface.blit(self.black_pressed_surface, (0, 600)) # Draw the PRESSED black key
        #self.button()
         pg.display.update()
         #self.buttonClick()
@@ -73,11 +73,14 @@ class Piano:
         self.white_pressed_surface.fill((0, 0, 0, 0)) # fill with white
         self.black_pressed_surface.fill((0, 0, 0, 0))
 
-        black_dict = { # Making a dict for black keys 
-            'c': 2, 'd': 3, 'f': 5, 'g': 6, 'a': 7
+
+
+        black_dict = {
+            'c': 0, 'd': 1, 'f': 3, 'g': 4, 'a': 5
         }
-        white_dict = { # Making a dict for white keys 
-            'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'a': 7, 'b': 8
+
+        white_dict = {
+            'c': 0, 'd': 1, 'e': 2, 'f': 3, 'g': 4, 'a': 5, 'b': 6
         }
 
         pressed_colour = (213, 50, 66, 200) # RED fill the keys when pressed
@@ -88,26 +91,26 @@ class Piano:
                 if key[0][-1] == '#':
                     if key[0] == 'a0#': # 1st element is sharp
                         pg.draw.rect(self.black_pressed_surface, 
-                        pressed_colour, (16, 0, 14, 70),
+                        pressed_colour, s(16, 0, 45, 207),
                         border_radius=5)
                     else:
                         pg.draw.rect(self.black_pressed_surface, 
-                        pressed_colour, (16 + 24 * 
-                        black_dict[key[0][0]] + 24 * 7 * 
-                        (int(key[0][1]) - 1), 0, 14, 70),
+                        pressed_colour, (26 + 43 * 
+                        black_dict[key[0][0]] + 43 * 7 * 
+                        (int(key[0][1]) - 1), 0, 30, 110),
                         border_radius=5)
 
                 else: # IF Not Sharp
                     if key[0] == 'a0':
                             pg.draw.rect(self.white_pressed_surface,
-                            pressed_colour, (0, 0, 24, 100), border_radius=5)
+                            pressed_colour, (0, 0, 45, 207), border_radius=5)
                     elif key[0] == 'b0':
                         pg.draw.rect(self.white_pressed_surface,
-                        pressed_colour, (24, 0, 24, 100), border_radius=5)
+                        pressed_colour, (24, 0, 45, 207), border_radius=5)
                     else:
                         pg.draw.rect(self.white_pressed_surface,
-                        pressed_colour, (24 * white_dict[key[0][0]] + 
-                        (int(key[0][1]) - 1) * 24 * 7, 0, 24, 100), border_radius=5)
+                        pressed_colour, (43 * white_dict[key[0][0]] + 
+                        (int(key[0][1]) - 1) * 43 * 7, 0, 45, 207), border_radius=5)
 
 
 

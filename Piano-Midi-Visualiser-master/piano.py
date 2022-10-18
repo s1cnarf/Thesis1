@@ -14,7 +14,7 @@ class Piano:
             (1248, 100), pg.SRCALPHA, 32).convert_alpha()
 
     def draw_keys(self, surface):
-        #self.draw_pressed()
+        self.draw_pressed()
         surface.blit(self.white_key_surface, (0, 400))
         surface.blit(self.white_pressed_surface, (0, 400))
         surface.blit(self.black_key_surface, (0, 400))

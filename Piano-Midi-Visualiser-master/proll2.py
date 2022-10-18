@@ -205,19 +205,21 @@ class pRoll:
                 return
             if not msg.is_meta:
                  # is msg is not meta 
-                 divider = round (10 + msg.time * 100)
+                 divider = round (10 + msg.time * 600)
+                 print("Divider Val: ", divider)
 
                  for _ in range(divider):
-                     pg.time.delay(round((msg.time * 4000) / divider))
+                     pg.time.delay(round((msg.time * 632) / divider))
                      self.time += msg.time / divider 
                     
                  if msg.type == "note_on":
                      self.piano.play_key(midi_number_to_note(msg.note),
                       msg.velocity)
+                      
                  elif msg.type == "note_off":
                     self.piano.stop_key(midi_number_to_note(msg.note))
 
-        pg.time.delay(500)
+        pg.time.delay(100)
         self.running = False
 
 
@@ -257,10 +259,10 @@ thread.start()
 display = pg.display.set_mode((1540, 800))
 while pr.running:
 
-    pr.clock.tick(50)
+    pr.clock.tick(600)
 
     # Calculate piano roll offaet
-    offset = pr.time * 100 + 400
+    offset = pr.time * 100 + 600
 
     #update keys 
     pr.display.blit(pr.background, (0, 0))
