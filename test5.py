@@ -41,10 +41,10 @@ class SampleApp(tk.Tk):
         con = sqlite3.connect('userData.db')
         cur = con.cursor()
         cur.execute('''CREATE TABLE IF NOT EXISTS record(
-                        username text,
-                         email text,
-                        contactNo number,
-                        password text
+                        Username text,
+                        Email text,
+                        ContactNo number,
+                        Password text
                         )
                     ''')
         con.commit()
@@ -70,7 +70,7 @@ class SampleApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
         
         #self.show_frame("StartPage")
-        self.show_frame("PerformanceReport")
+        self.show_frame("LogIn")
 
 
     def show_frame(self, page_name):
@@ -129,7 +129,7 @@ class LogIn(tk.Frame):
                 con = sqlite3.connect('userData.db')
                 c = con.cursor()
                 for row in c.execute("Select * from record"):
-                    Username = row[1]
+                    Username = row[0]
                     Password = row[3]
 
             except Exception as ep:
@@ -150,7 +150,8 @@ class LogIn(tk.Frame):
 
             if counter == 2:
                 if (uname == Username and passw == Password):
-                    messagebox.showinfo('Login Status', 'invalid Username or Password')
+                    messagebox.showinfo('Login Status', 'Successful')
+                    controller.show_frame("StartPage")
                 else:
                     messagebox.showerror('Login Status', 'Invalid Username or Password')
             else:
@@ -263,7 +264,7 @@ class Register(tk.Frame):
         self.controller = controller
 
 
-        def insertUser():
+        def insertUser(e):
             counter = 0
             warn = ""
             #Getting the username input
@@ -296,10 +297,10 @@ class Register(tk.Frame):
                 try:
                     con = sqlite3.connect('userData.db')
                     cur = con.cursor()
-                    cur.execute("INSERT INTO record VALUES (:Username, :Email, :Contact No, :Password) ",{
+                    cur.execute("INSERT INTO record VALUES (:Username, :Email, :ContactNo, :Password) ",{
                                     'Username': labelReg_entry.get(),
                                     'Email': label4Reg_entry.get(),
-                                    'Contact No': label3Reg_entry.get(),
+                                    'ContactNo': label3Reg_entry.get(),
                                     'Password': label2Reg_entry.get()
                                     
                     })
@@ -804,8 +805,6 @@ class PerformanceReport(tk.Frame):
             notes_frame.config(height=70,bg="#2A2B2C",cursor="")
             rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
-            artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
-            artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
 
             total_expected_hits = 110
             correct_hits = 85
@@ -902,8 +901,6 @@ class PerformanceReport(tk.Frame):
 
             notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
-            artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
-            artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_label.config(height=70,bg="#2A2B2C",cursor="")
             rhythm_frame.config(height=70,bg="#2A2B2C",cursor="")
 
@@ -944,31 +941,6 @@ class PerformanceReport(tk.Frame):
             articulationData_frame.place(x=312,y=280)
             articulationData_frame.pack_propagate(False)
 
-            artic_label.config(height=70,bg="#2A2B2C",cursor="")
-            artic_frame.config(height=70,bg="#2A2B2C",cursor="")
-            notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
-            notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
-            rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
-            rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
-
-            
-
-            try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
-                rhythmData_frame.place_forget()
-            except NameError:
-                print("okay lang")
-
-
-        #def DisplayDynamics(event):
-
-
-        #def DisplayFingerPattern(event):
-
             
         #notesData_frame = tk.Frame(self)
         #rhythmData_frame = tk.Frame(self)
@@ -1005,7 +977,6 @@ class PerformanceReport(tk.Frame):
         artic_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         artic_label = tk.Label(artic_frame,width=139,height=51,text="Articulation",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         artic_frame.pack_propagate(0)
-        artic_label.bind("<Button-1>",DisplayArticulation)
 
         dynamics_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         dynamics_label = tk.Label(dynamics_frame,width=139,height=51,text="Dynamics",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
@@ -1175,4 +1146,3 @@ if __name__ == "__main__":
     app.attributes('-fullscreen',False)
     app.resizable(False,False)
     app.mainloop()
-
