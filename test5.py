@@ -60,7 +60,7 @@ class SampleApp(tk.Tk):
                         )
                     ''')
         con.commit()
-
+        #con.close()
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -147,6 +147,7 @@ class LogIn(tk.Frame):
             except Exception as ep:
                 messagebox.showerror('',ep)
 
+            global uname
             uname = label_entry.get()
             passw = label2_entry.get()
             counter = 0
@@ -572,6 +573,18 @@ class PlayPage(tk.Frame):
             index_stack+1
             song_label.configure(text=data)
             #controller.show_frame("AfterPerformance")
+            con = sqlite3.connect('userData.db')
+            cur = con.cursor()
+            cur.execute("INSERT INTO History VALUES (:Username, :DateAndTime, :Title, :Score) ",{
+                                    'Username': uname,
+                                    'DateAndTime': dt_string,
+                                    'Title': song,
+                                    'Score': '80'
+                                    
+                    })
+            con.commit()
+
+    
 
         global combinedFunc
         def combinedFunc(e):
