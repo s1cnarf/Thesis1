@@ -52,7 +52,7 @@ class SampleApp(tk.Tk):
                         )
                     ''')
 
-        cur.execute('''CREATE TABLE IF NOT EXISTS history(
+        cur.execute('''CREATE TABLE IF NOT EXISTS History(
                         Username text,
                         DateAndTime text,
                         Title text,
