@@ -38,6 +38,10 @@ class SampleApp(tk.Tk):
 
         ttk.Style().configure("Treeview", background="black",foreground="white", fieldbackground="black")
 
+
+        # D A T A   B A S E
+
+
         con = sqlite3.connect('userData.db')
         cur = con.cursor()
         cur.execute('''CREATE TABLE IF NOT EXISTS record(
@@ -45,6 +49,14 @@ class SampleApp(tk.Tk):
                         Email text,
                         ContactNo number,
                         Password text
+                        )
+                    ''')
+
+        cur.execute('''CREATE TABLE IF NOT EXISTS history(
+                        Username text,
+                        DateAndTime text,
+                        Title text,
+                        Score text
                         )
                     ''')
         con.commit()
