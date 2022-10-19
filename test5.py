@@ -408,7 +408,7 @@ class Register(tk.Frame):
         label5Reg_entry.place(x=653, y=345)
         reg_button.place(x=700, y=450)
         label6Reg.place(x=675, y=510)
-        label7Reg.place(x=830, y=510)
+        label7Reg.place(x=870, y=513)
 
         logo_label.place(x=35,y=34)
         info_label.place(x=738, y=57)
