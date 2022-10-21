@@ -634,39 +634,6 @@ class PlayPage(tk.Frame):
             PushSongInStack(e)
             infos(e)
 
-            
-        def IncrementPlayCount(event):
-            selection = event.widget.curselection()
-            
-            index = selection[0]
-            data = event.widget.get(index)
-            listbox3.delete(0,END)
-            print("data",data)
-            
-            
-
-
-
-            if data in PlayCount_Dictionary:
-                PlayCount_Dictionary[data] = PlayCount_Dictionary.get(data)+1
-                print (PlayCount_Dictionary)
-                
-            for w in sorted(PlayCount_Dictionary, key = PlayCount_Dictionary.get):
-                if(PlayCount_Dictionary[w]>0):
-                    print("w = "+ w)
-                    listbox3.insert(0,w)
-                    
-                   
-
-        def CombineFunctions(event):
-            #PushSongInStack(event)
-            #IncrementPlayCount(event)
-            fillout(event)
-            #callback(event)
-
-        
-                        
-
         
         image = Image.open("Pictures/recents.png")
         #image = image.resize((40,49), Image.ANTIALIAS)
@@ -876,6 +843,8 @@ class PerformanceReport(tk.Frame):
             rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
             total_expected_hits = 110
             correct_hits = 85
@@ -961,6 +930,8 @@ class PerformanceReport(tk.Frame):
             try:
                 rhythmData_frame.place_forget()
                 articulationData_frame.place_forget()
+                  
+                dynamicsData_frame.place_forget()
             except NameError:
                 print("okay lang")
 
@@ -975,6 +946,8 @@ class PerformanceReport(tk.Frame):
             notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_label.config(height=70,bg="#2A2B2C",cursor="")
             rhythm_frame.config(height=70,bg="#2A2B2C",cursor="")
 
@@ -990,23 +963,27 @@ class PerformanceReport(tk.Frame):
             succesSwitch_label = tk.Label(switches_frame,text="Successful Switch",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
             succesSwitch_label.pack(side=LEFT,anchor=NW)
 
-            failedSwitch_label = tk.Label(switches_frame,text="Failed",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            failedSwitch_label = tk.Label(switches_frame,text="Failed",fg="#EB483F",bg="#2A2B2C",font=controller.song_font_after)
             failedSwitch_label.pack(side=RIGHT,anchor=NE)
 
             total = success_switch/(success_switch+failed_switch)*655
             success_bar = tk.LabelFrame(rhythmData_frame,text=success_switch,bg="#F7BF50",fg="#2A2B2C",border=0,width=total,height=16,labelanchor=E,font=controller.title_font)
             success_bar.pack(pady=5,side=LEFT)   
 
-            failed_bar = tk.LabelFrame(rhythmData_frame,text=failed_switch,bg="#3a3a3c",fg="#F7BF50",border=0,width=655,height=16,labelanchor=E,font=controller.title_font)
+            failed_bar = tk.LabelFrame(rhythmData_frame,text=failed_switch,bg="#3a3a3c",fg="#EB483F",border=0,width=655,height=16,labelanchor=E,font=controller.title_font)
             failed_bar.pack(pady=5,side=RIGHT) 
             try:
+
+                
+
                 notesData_frame.place_forget()
                 correctHits_bar2.place_forget()
                 partialHits_bar2.place_forget()
                 extraHits_bar2.place_forget()
                 missedHits_bar2.place_forget()
-
                 articulationData_frame.place_forget()
+                
+                dynamicsData_frame.place_forget()
                 
             except NameError:
                 print("okay lang")
@@ -1020,6 +997,8 @@ class PerformanceReport(tk.Frame):
             notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
             ontime_hits = 75
             late_hits = 10
@@ -1057,6 +1036,40 @@ class PerformanceReport(tk.Frame):
                 missedHits_bar2.place_forget()
 
                 rhythmData_frame.place_forget()
+                dynamicsData_frame.place_forget()
+            except NameError:
+                print("okay lang")
+
+       
+        def DisplayDynamics(event):
+
+            dynamics_label.config(height=70,bg="#2A2B2C",cursor="")
+            dynamics_frame.config(height=70,bg="#2A2B2C",cursor="")
+
+            notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+
+            global dynamicsData_frame
+            dynamicsData_frame = tk.Frame(self,width=713,height=425,bg="#2A2B2C")
+            dynamicsData_frame.place(x=312,y=180)
+            dynamicsData_frame.pack_propagate(False)
+
+
+
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
             except NameError:
                 print("okay lang")
 
@@ -1098,9 +1111,10 @@ class PerformanceReport(tk.Frame):
         artic_frame.pack_propagate(0)
         artic_label.bind("<Button-1>",DisplayArticulation)
 
-        dynamics_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        dynamics_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0,cursor='hand2')
         dynamics_label = tk.Label(dynamics_frame,width=139,height=51,text="Dynamics",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         dynamics_frame.pack_propagate(0)
+        dynamics_label.bind("<Button-1>",DisplayDynamics)
 
         melody_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         melody_label = tk.Label(melody_frame,width=139,height=51,text="Melody",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
