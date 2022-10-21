@@ -70,7 +70,7 @@ class SampleApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
         
         #self.show_frame("StartPage")
-        self.show_frame("LogIn")
+        self.show_frame("PerformanceReport")
 
 
     def show_frame(self, page_name):
@@ -928,12 +928,13 @@ class PerformanceReport(tk.Frame):
             failed_bar.pack(pady=5,side=RIGHT) 
             try:
                 notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
             except NameError:
                 print("okay lang")
-            correctHits_bar2.place_forget()
-            partialHits_bar2.place_forget()
-            extraHits_bar2.place_forget()
-            missedHits_bar2.place_forget()
+            
 
         def DisplayArticulation(event):
 
@@ -975,7 +976,7 @@ class PerformanceReport(tk.Frame):
         rhythm_label.bind("<Button-1>",DisplayRhythm)
         
 
-        artic_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        artic_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0,cursor="hand2")
         artic_label = tk.Label(artic_frame,width=139,height=51,text="Articulation",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         artic_frame.pack_propagate(0)
 
@@ -998,19 +999,19 @@ class PerformanceReport(tk.Frame):
 
         dash_frame.place(x=105,y=124)
         
-        notes_frame.pack(anchor=CENTER,pady=45)
+        notes_frame.pack(anchor=CENTER,pady=35)
         notes_label.pack(anchor=CENTER)
 
         rhythm_frame.pack(anchor=CENTER,pady=0)
         rhythm_label.pack(anchor=CENTER)
 
-        artic_frame.pack(anchor=CENTER,pady=45)
+        artic_frame.pack(anchor=CENTER,pady=35)
         artic_label.pack(anchor=CENTER)
 
         dynamics_frame.pack(anchor=CENTER,pady=0)
         dynamics_label.pack(anchor=CENTER)
 
-        finger_frame.pack(anchor=CENTER,pady=45)
+        finger_frame.pack(anchor=CENTER,pady=35)
         finger_label.pack(anchor=CENTER)
 
 
