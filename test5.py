@@ -12,7 +12,9 @@ from turtle import bgcolor, circle, color, title, width
 from PIL import ImageTk, Image
 from datetime import datetime
 from collections import deque
-import time
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import sqlite3
 
 
@@ -240,7 +242,7 @@ class LogIn(tk.Frame):
         def on_leave(e):
             name=label_entry.get()
             if name == '':
-                label_entry.insert(0,'Username')
+                label_entry.insert(0,'Enter Username')
         
         label_entry = tk.Entry(self,width=29,font=controller.title_font)
         label_entry.insert(0,"Enter your username")
@@ -872,6 +874,8 @@ class PerformanceReport(tk.Frame):
             notes_frame.config(height=70,bg="#2A2B2C",cursor="")
             rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
 
             total_expected_hits = 110
             correct_hits = 85
@@ -956,6 +960,7 @@ class PerformanceReport(tk.Frame):
 
             try:
                 rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
             except NameError:
                 print("okay lang")
 
@@ -968,6 +973,8 @@ class PerformanceReport(tk.Frame):
 
             notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_label.config(height=70,bg="#2A2B2C",cursor="")
             rhythm_frame.config(height=70,bg="#2A2B2C",cursor="")
 
@@ -998,16 +1005,60 @@ class PerformanceReport(tk.Frame):
                 partialHits_bar2.place_forget()
                 extraHits_bar2.place_forget()
                 missedHits_bar2.place_forget()
+
+                articulationData_frame.place_forget()
+                
             except NameError:
                 print("okay lang")
             
 
         def DisplayArticulation(event):
 
+            artic_label.config(height=70,bg="#2A2B2C",cursor="")
+            artic_frame.config(height=70,bg="#2A2B2C",cursor="")
+            notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+
+            ontime_hits = 75
+            late_hits = 10
+            early_hits = 25
+
+            def autopct_format(values):
+                def my_format(pct):
+                    total = sum(values)
+                    val = int(round(pct*total/100.0))
+                    return '{:.1f}%\n({v:d})'.format(pct, v=val)
+                return my_format
+
             global articulationData_frame
-            articulationData_frame = tk.Frame(self,width=655,height=89,bg="#2A2B2C")
-            articulationData_frame.place(x=312,y=280)
+            articulationData_frame = tk.Frame(self,width=713,height=425,bg="#2A2B2C")
+            articulationData_frame.place(x=312,y=180)
             articulationData_frame.pack_propagate(False)
+
+            hits = [ontime_hits,late_hits,early_hits]
+            legend = ['On-Time Hits','Late Hits', 'Early Hits']
+            colors = ['#4F6272', '#B7C3F3', '#DD7596', '#8EB897']
+
+            
+            fig = Figure(figsize=(5,5),dpi=100)
+            subplot = fig.add_subplot(111)
+            subplot.pie(hits,labels=legend,autopct=autopct_format(hits),labeldistance=1.15,textprops={'color':"white"},wedgeprops = { 'linewidth' : 1, 'edgecolor' : 'white' }, colors=colors)
+            fig.set_facecolor('#2A2B2C')
+            pie2 = FigureCanvasTkAgg(fig, articulationData_frame)
+            pie2.get_tk_widget().pack(side=TOP,anchor=CENTER)
+            
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+            except NameError:
+                print("okay lang")
 
             
         #notesData_frame = tk.Frame(self)
@@ -1025,12 +1076,12 @@ class PerformanceReport(tk.Frame):
         perfTitle_label = tk.Label(self, image=perfTitle_img,borderwidth=0)
         perfTitle_label.image = perfTitle_img
 
-        main_frame = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
+        main_frame = tk.Frame(self,width=988,height=563,bg="#2A2B2C",border=0)
         
-        dash_frame = tk.Frame(self,width=139,height=545,bg="#3A3A3C",border=0)
+        dash_frame = tk.Frame(self,width=139,height=563,bg="#3A3A3C",border=0)
         dash_frame.pack_propagate(0)
         
-        notes_frame = tk.Frame(dash_frame,width=139,height=70,bg="#3A3A3C",border=0)
+        notes_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         notes_label = tk.Label(notes_frame,width=139,height=51,text="Notes",fg="#F7BF50",bg="#3A3A3C",cursor="hand2",font=controller.Mont_bold20)
         notes_frame.pack_propagate(0)
         notes_label.bind("<Button-1>",DisplayNote)
@@ -1045,14 +1096,21 @@ class PerformanceReport(tk.Frame):
         artic_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0,cursor="hand2")
         artic_label = tk.Label(artic_frame,width=139,height=51,text="Articulation",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         artic_frame.pack_propagate(0)
+        artic_label.bind("<Button-1>",DisplayArticulation)
 
         dynamics_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         dynamics_label = tk.Label(dynamics_frame,width=139,height=51,text="Dynamics",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         dynamics_frame.pack_propagate(0)
 
+        melody_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        melody_label = tk.Label(melody_frame,width=139,height=51,text="Melody",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
+        melody_frame.pack_propagate(0)
+
         finger_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
         finger_label = tk.Label(finger_frame,width=139,height=51,text="Finger\nPattern",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         finger_frame.pack_propagate(0)
+
+        
 
         
         #####################################
@@ -1077,7 +1135,10 @@ class PerformanceReport(tk.Frame):
         dynamics_frame.pack(anchor=CENTER,pady=0)
         dynamics_label.pack(anchor=CENTER)
 
-        finger_frame.pack(anchor=CENTER,pady=35)
+        melody_frame.pack(anchor=CENTER,pady=35)
+        melody_label.pack(anchor=CENTER)
+
+        finger_frame.pack(anchor=CENTER,pady=0)
         finger_label.pack(anchor=CENTER)
 
 
