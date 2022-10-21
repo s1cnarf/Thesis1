@@ -168,7 +168,7 @@ class LogIn(tk.Frame):
                 else:
                     messagebox.showerror('',warn)
 
-                #right code
+                #first try code (after closing the program the first user who register cant log in)
                 # con = sqlite3.connect('userData.db')
                 # c = con.cursor()
                 # for row in c.execute("Select * from record"):
@@ -625,7 +625,7 @@ class PlayPage(tk.Frame):
                     })
             con.commit()
             con.close()
-    
+
 
         global combinedFunc
         def combinedFunc(e):
