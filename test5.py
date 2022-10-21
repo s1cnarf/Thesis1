@@ -38,8 +38,13 @@ class SampleApp(tk.Tk):
 
         ttk.Style().configure("Treeview", background="black",foreground="white", fieldbackground="black")
 
+
+        # D A T A   B A S E
+        
+
         con = sqlite3.connect('userData.db')
         cur = con.cursor()
+        
         cur.execute('''CREATE TABLE IF NOT EXISTS record(
                         Username text,
                         Email text,
@@ -47,8 +52,16 @@ class SampleApp(tk.Tk):
                         Password text
                         )
                     ''')
-        con.commit()
 
+        cur.execute('''CREATE TABLE IF NOT EXISTS History(
+                        Username text,
+                        DateAndTime text,
+                        Title text,
+                        Score text
+                        )
+                    ''')
+        con.commit()
+        con.close()
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -126,36 +139,76 @@ class LogIn(tk.Frame):
 
         def login(e):
             try:
-                con = sqlite3.connect('userData.db')
-                c = con.cursor()
-                for row in c.execute("Select * from record"):
-                    Username = row[0]
-                    Password = row[3]
+                global uname
+                uname = label_entry.get()
+                passw = label2_entry.get()
+                counter = 0
+                if uname == "":
+                    warn = "Username can't be empty"
+                else:
+                    counter += 1
+                
+                if passw == "":
+                    warn = "Password can't be empty"
+                else:
+                    counter += 1
+
+                if counter == 2:
+                    con = sqlite3.connect('userData.db')
+                    c = con.cursor()
+                    c.execute("Select * from record WHERE Username = ? AND PASSWORD = ?", (uname, passw))
+                    #if (c.execute("Select * from record WHERE Username = '{uname}' AND PASSWORD = '{passw}'")):
+                    if (c.fetchone()):
+                        messagebox.showinfo('Login Status', 'Successfuly Login')
+                        controller.show_frame("StartPage")
+                    else:
+                        messagebox.showerror('Login Status', 'Invalid Username or Password')
+
+                    c.close()
+                else:
+                    messagebox.showerror('',warn)
+
+                #first try code (after closing the program the first user who register cant log in)
+                # con = sqlite3.connect('userData.db')
+                # c = con.cursor()
+                # for row in c.execute("Select * from record"):
+                #     Username = row[0]
+                #     Password = row[3]
+                        # con = sqlite3.connect('userData.db')
+                        # c = con.cursor()
+                        # c.execute("Select * from record WHERE Username = '{uname} AND PASSWORD = '{passw}")
 
             except Exception as ep:
-                messagebox.showerror('',ep)
+                 messagebox.showerror('',ep)
 
-            uname = label_entry.get()
-            passw = label2_entry.get()
-            counter = 0
-            if uname == "":
-                warn = "Username can't be empty"
-            else:
-                counter += 1
+
+
+
+            #==================================================
+            # global uname
+            # uname = label_entry.get()
+            # passw = label2_entry.get()
+            # counter = 0
+            # if uname == "":
+            #     warn = "Username can't be empty"
+            # else:
+            #     counter += 1
             
-            if passw == "":
-                warn = "Password can't be empty"
-            else:
-                counter += 1
+            # if passw == "":
+            #     warn = "Password can't be empty"
+            # else:
+            #     counter += 1
 
-            if counter == 2:
-                if (uname == Username and passw == Password):
-                    messagebox.showinfo('Login Status', 'Successful')
-                    controller.show_frame("StartPage")
-                else:
-                    messagebox.showerror('Login Status', 'Invalid Username or Password')
-            else:
-                messagebox.showerror('',warn)
+            # if counter == 2:
+            #     if (uname == Username and passw == Password):
+            #         messagebox.showinfo('Login Status', 'Successfuly Login')
+            #         controller.show_frame("StartPage")
+            #     else:
+            #         messagebox.showerror('Login Status', 'Invalid Username or Password')
+            # else:
+            #     messagebox.showerror('',warn)
+
+            #=========================================================
 
             # file = open ('registersheet.txt' ,'r')
             # d = file.read()
@@ -305,6 +358,7 @@ class Register(tk.Frame):
                                     
                     })
                     con.commit()
+                    con.close()
                     messagebox.showinfo('confirmation','Record Saved')
                     controller.show_frame("LogIn")
 
@@ -560,6 +614,18 @@ class PlayPage(tk.Frame):
             index_stack+1
             song_label.configure(text=data)
             #controller.show_frame("AfterPerformance")
+            con = sqlite3.connect('userData.db')
+            cur = con.cursor()
+            cur.execute("INSERT INTO History VALUES (:Username, :DateAndTime, :Title, :Score) ",{
+                                    'Username': uname,
+                                    'DateAndTime': dt_string,
+                                    'Title': song,
+                                    'Score': '80'
+                                    
+                    })
+            con.commit()
+            con.close()
+
 
         global combinedFunc
         def combinedFunc(e):
