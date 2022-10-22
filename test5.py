@@ -8,7 +8,7 @@ from tkinter import font as tkfont
 from tkinter import *
 from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
-from turtle import bgcolor, circle, color, title, width
+from turtle import bgcolor, circle, color, left, title, width
 from PIL import ImageTk, Image
 from datetime import datetime
 from collections import deque
@@ -845,6 +845,10 @@ class PerformanceReport(tk.Frame):
             artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
             total_expected_hits = 110
             correct_hits = 85
@@ -932,6 +936,8 @@ class PerformanceReport(tk.Frame):
                 articulationData_frame.place_forget()
                   
                 dynamicsData_frame.place_forget()
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
             except NameError:
                 print("okay lang")
 
@@ -948,6 +954,10 @@ class PerformanceReport(tk.Frame):
             artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             rhythm_label.config(height=70,bg="#2A2B2C",cursor="")
             rhythm_frame.config(height=70,bg="#2A2B2C",cursor="")
 
@@ -984,7 +994,8 @@ class PerformanceReport(tk.Frame):
                 articulationData_frame.place_forget()
                 
                 dynamicsData_frame.place_forget()
-                
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
             except NameError:
                 print("okay lang")
             
@@ -999,6 +1010,10 @@ class PerformanceReport(tk.Frame):
             rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
             ontime_hits = 75
             late_hits = 10
@@ -1037,6 +1052,8 @@ class PerformanceReport(tk.Frame):
 
                 rhythmData_frame.place_forget()
                 dynamicsData_frame.place_forget()
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
             except NameError:
                 print("okay lang")
 
@@ -1052,13 +1069,55 @@ class PerformanceReport(tk.Frame):
             rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
             artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+
+            loud_hits = 65
+            expected_loud_hits = 60
+            soft_hits = 45
+            expected_soft_hits = 40
 
             global dynamicsData_frame
             dynamicsData_frame = tk.Frame(self,width=713,height=425,bg="#2A2B2C")
             dynamicsData_frame.place(x=312,y=180)
             dynamicsData_frame.pack_propagate(False)
 
+            LoudHits_frame = tk.Frame(dynamicsData_frame,bg="#2A2B2C",width=713,height=26)
+            LoudHits_frame.pack(side=TOP)
+            LoudHits_frame.pack_propagate(0)
 
+            LoudHits_label = tk.Label(LoudHits_frame,text="Loud Hits",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            LoudHits_label.pack(side=LEFT)
+
+            to = loud_hits/(loud_hits+expected_loud_hits)
+            actual_loud_bar = to*713
+            actualLoud_bar = tk.LabelFrame(dynamicsData_frame,text="Actual:     "+str(loud_hits),bg="#F7BF50",fg="#2A2B2C",border=0,width=actual_loud_bar,height=24,labelanchor=E,font=controller.title_font)
+            actualLoud_bar.pack(pady=10,side=TOP,anchor=NW) 
+            
+            to = expected_loud_hits/(loud_hits+expected_loud_hits)
+            expected_loud_bar = to*713
+            expectedLoud_bar = tk.LabelFrame(dynamicsData_frame,text="Expected:     "+str(expected_loud_hits),bg="#A5A5A5",fg="black",border=0,width=expected_loud_bar,height=24,labelanchor=E,font=controller.title_font)
+            expectedLoud_bar.pack(side=TOP,anchor=NW) 
+
+
+            SoftHits_frame = tk.Frame(dynamicsData_frame,bg="#2A2B2C",width=713,height=26)
+            SoftHits_frame.pack(pady=(70,0),side=TOP)
+            SoftHits_frame.pack_propagate(0)
+
+            SoftHits_label = tk.Label(SoftHits_frame,text="Soft Hits",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            SoftHits_label.pack(side=LEFT)
+
+            to = soft_hits/(soft_hits+expected_soft_hits)
+            actual_soft_bar = to*713
+            actualSoft_bar = tk.LabelFrame(dynamicsData_frame,text="Actual:     "+str(soft_hits),bg="#F7BF50",fg="#2A2B2C",border=0,width=actual_soft_bar,height=24,labelanchor=E,font=controller.title_font)
+            actualSoft_bar.pack(pady=10,side=TOP,anchor=NW) 
+
+            to = expected_soft_hits/(soft_hits+expected_soft_hits)
+            expected_soft_bar = to*713
+            expectedSoft_bar = tk.LabelFrame(dynamicsData_frame,text="Expected:     "+str(expected_soft_hits),bg="#A5A5A5",fg="black",border=0,width=expected_soft_bar,height=24,labelanchor=E,font=controller.title_font)
+            expectedSoft_bar.pack(side=TOP,anchor=NW) 
 
 
             try:
@@ -1070,6 +1129,162 @@ class PerformanceReport(tk.Frame):
 
                 rhythmData_frame.place_forget()
                 articulationData_frame.place_forget()
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
+            except NameError:
+                print("okay lang")
+
+        def DisplayMelody(event):
+            melody_label.config(height=70,bg="#2A2B2C",cursor="")
+            melody_frame.config(height=70,bg="#2A2B2C",cursor="")
+
+            notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+
+            melodyRate = 70
+
+            global melodyData_frame
+            melodyData_frame = tk.Frame(self,width=713,height=425,bg="#2A2B2C")
+            melodyData_frame.place(x=312,y=180)
+            melodyData_frame.pack_propagate(False)
+
+            MelodyRate_frame = tk.Frame(melodyData_frame,bg="#2A2B2C",width=713,height=26)
+            MelodyRate_frame.pack(side=TOP)
+            MelodyRate_frame.pack_propagate(0)
+
+            MelodyRate_label = tk.Label(MelodyRate_frame,text="Melody Rate:",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            MelodyRate_label.pack(side=LEFT)
+
+            MelodyRate_bar2 = tk.LabelFrame(melodyData_frame,bg="#3a3a3c",fg="#2A2B2C",border=0,width=713,height=24,labelanchor=E,font=controller.title_font)
+            MelodyRate_bar2.place(y=36)
+
+            melodyrate_bar = melodyRate*0.01*713
+            MelodyRate_bar = tk.LabelFrame(melodyData_frame,text=str(melodyRate)+"%",bg="#F7BF50",fg="#2A2B2C",border=0,width=melodyrate_bar,height=24,labelanchor=E,font=controller.title_font)
+            MelodyRate_bar.pack(pady=(10,0),side=TOP,anchor=NW) 
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
+                dynamicsData_frame.place_forget()
+                fingerData_frame.place_forget()
+            except NameError:
+                print("okay lang")
+
+        def DisplayFinger(event):
+            finger_label.config(height=70,bg="#2A2B2C",cursor="")
+            finger_frame.config(height=70,bg="#2A2B2C",cursor="")
+
+            notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            rhythm_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            artic_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            dynamics_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_label.config(height=51,bg="#3A3A3C",cursor="hand2")
+            melody_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
+
+            correct_left = 35
+            incorrect_left = 15
+
+            correct_right = 50
+            incorrect_right = 10
+
+            global fingerData_frame
+            fingerData_frame = tk.Frame(self,width=713,height=425,bg="#2A2B2C")
+            fingerData_frame.place(x=312,y=180)
+            fingerData_frame.pack_propagate(False)
+
+            LeftHand_Frame = tk.Frame(fingerData_frame,bg="#2A2B2C",width=356,height=425)
+            LeftHand_Frame.pack_propagate(False)
+            LeftHand_Frame.pack(side=LEFT)
+
+            LeftHand_label = tk.Label(LeftHand_Frame,text="Left Hand",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            LeftHand_label.pack(side=TOP,anchor=NW)
+
+            RightHand_Frame = tk.Frame(fingerData_frame,bg="#2A2B2C",width=356,height=425)
+            RightHand_Frame.pack_propagate(False)
+            RightHand_Frame.pack(side=RIGHT)
+
+            RightHand_label = tk.Label(RightHand_Frame ,text="Right Hand",fg="#F7BF50",bg="#2A2B2C",font=controller.song_font_after)
+            RightHand_label.pack(side=TOP,anchor=NE)
+
+            x = ['Correct\nHits','Incorrect\nHits']
+            y = [correct_left,incorrect_left]
+
+            fig = Figure(figsize=(5,5),dpi=100)
+            subplot = fig.add_subplot(111)
+            subplot.bar(x,y,color=['#F7BF50','#ED695E'])
+
+            subplot.xaxis.label.set_color("white")
+            subplot.tick_params(axis='x', colors='white') 
+            subplot.tick_params(axis='y', colors='#2A2B2C') 
+            subplot.spines['left'].set_color('#2A2B2C') 
+            subplot.spines['top'].set_color('#2A2B2C') 
+            subplot.spines['bottom'].set_color('#2A2B2C') 
+            subplot.spines['right'].set_color('#2A2B2C')
+            subplot.set_facecolor('#2A2B2C')
+            fig.set_facecolor('#2A2B2C')
+
+            for i in range(len(y)):
+                subplot.annotate(str(y[i]), xy=(x[i],y[i]), ha='center', va='bottom',color="white")
+            
+            #subplot.axis('off')
+            barL = FigureCanvasTkAgg(fig, LeftHand_Frame)
+            barL.get_tk_widget().pack(side=LEFT,anchor=W,padx=(0,150))
+
+        ######################## RIGHT HAND ##############  
+            x= ['Incorrect\nHits','Correct\nHits']
+            y = [incorrect_right,correct_right]
+            fig = Figure(figsize=(5,5),dpi=100)
+            subplot = fig.add_subplot(111)
+            subplot.bar(x,y,color=['#ED695E','#F7BF50'])
+
+            subplot.xaxis.label.set_color("white")
+            subplot.tick_params(axis='x', colors='white') 
+            subplot.tick_params(axis='y', colors='#2A2B2C') 
+            subplot.spines['left'].set_color('#2A2B2C') 
+            subplot.spines['top'].set_color('#2A2B2C') 
+            subplot.spines['bottom'].set_color('#2A2B2C') 
+            subplot.spines['right'].set_color('#2A2B2C')
+            subplot.set_facecolor('#2A2B2C')
+            fig.set_facecolor('#2A2B2C')
+
+            for i in range(len(y)):
+                subplot.annotate(str(y[i]), xy=(x[i],y[i]), ha='center', va='bottom',color="white")
+            
+            #subplot.axis('off')
+            barR = FigureCanvasTkAgg(fig, RightHand_Frame)
+            barR.get_tk_widget().pack(side=RIGHT,anchor=E,padx=(150,0))
+
+            
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
+                dynamicsData_frame.place_forget()
+                melodyData_frame.place_forget()
             except NameError:
                 print("okay lang")
 
@@ -1116,13 +1331,15 @@ class PerformanceReport(tk.Frame):
         dynamics_frame.pack_propagate(0)
         dynamics_label.bind("<Button-1>",DisplayDynamics)
 
-        melody_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        melody_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0,cursor='hand2')
         melody_label = tk.Label(melody_frame,width=139,height=51,text="Melody",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         melody_frame.pack_propagate(0)
+        melody_label.bind("<Button-1>",DisplayMelody)
 
-        finger_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0)
+        finger_frame = tk.Frame(dash_frame,width=139,height=51,bg="#3A3A3C",border=0,cursor="hand2")
         finger_label = tk.Label(finger_frame,width=139,height=51,text="Finger\nPattern",fg="#F7BF50",bg="#3a3a3c",font=controller.Mont_bold20)
         finger_frame.pack_propagate(0)
+        finger_label.bind("<Button-1>",DisplayFinger)
 
         
 
