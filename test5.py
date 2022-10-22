@@ -85,7 +85,7 @@ class SampleApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
         
         #self.show_frame("StartPage")
-        self.show_frame("PerformanceReport")
+        self.show_frame("LogIn")
 
 
     def show_frame(self, page_name):
