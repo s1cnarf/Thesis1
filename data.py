@@ -32,6 +32,7 @@ def Notes(pattern, text):
 
     correct, partial, extra, missed = 0, 0, 0, 0
     # The p
+    
     # notes = [i for i in range(0,len(pattern['event'])) if pattern['event'][i] == 'NOTE_ON']
 
     # If p - time note equals to t time and note
@@ -101,7 +102,6 @@ def Notes(pattern, text):
             #print (f'1 TABLE TRUTH: {truth}')
             #truth = Missed(truth, notes_in_truth, user, notes_in_user)
            
-
 
             notes_in_truth.clear()
             notes_in_user.clear()
@@ -176,6 +176,35 @@ def Articulation(pattern_dict, text_dict):
 
     print(f"Timed : {Timed} Late : {Late} Early : {Early}")
 
+# DATA FRAME
+def FingerPattern(pattern, text):
+    rhits, rwrong = 0,0
+
+    #Filter data for right hand pattern
+    condition = (pattern['track'] == 1) & (pattern['note'] > 0)
+    pattern_Right = pattern[condition]
+
+    condition = (text['track'] == 1) & (text['note'] > 0)
+    text_Right = text[condition]
+
+    # Count match and mismatch value in right hand
+    matched, un_matched = pattern_Right[pattern_Right['note']==text_Right['note']].shape[0], pattern_Right[pattern_Right['note']!=text_Right['note']].shape[0]
+    print(f"Right Hand: Matched = {matched} Unmatched = {un_matched}")
+
+    # Filter data for left hand pattern
+    condition = (pattern['track'] == 2) & (pattern['note'] > 0)
+    pattern_Left= pattern[condition]
+
+    condition = (text['track'] == 2) & (text['note'] > 0)
+    text_Left = text[condition]
+
+    # Count match and mismatch in left hand 
+    matched, un_matched = pattern_Left[pattern_Left['note']==text_Left['note']].shape[0], pattern_Left[pattern_Left['note']!=text_Left['note']].shape[0]
+    print(f"Left Hand: Matched = {matched} Unmatched = {un_matched}")
+
+
+   
+
 
 def ModifyEvents(dictobj):
     acc = []
@@ -212,7 +241,7 @@ if __name__ == '__main__':
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
-    Notes(pattern_dict, truth_dict)
+    #Notes(pattern_dict, truth_dict)
 
     # #DATA FRAME
     # MelodyLR(Pattern, Truth)
