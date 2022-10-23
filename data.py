@@ -44,7 +44,7 @@ def Notes(pattern, text):
             end = text['end'][i]
             start = text['start'][i] 
             # line 14 1,17234,19000,Note_on,1,30,0
-            #print (f'start: {start} end: {end}')
+            print (f'start: {start} end: {end}')
             for p in range(0,size):
                 if pattern['start'][p] >= start and pattern['end'][p] <= end:
                     notes_in_user.append([pattern['start'][p], # 0 , 1 , 2
@@ -58,8 +58,8 @@ def Notes(pattern, text):
                                         text['note'][t]])
 
             
-            #print(f'truth: {notes_in_truth}')
-            #print(f'user: {notes_in_user}')
+            print(f'truth: {notes_in_truth}')
+            print(f'user: {notes_in_user}')
             
             truth = [0] * len(notes_in_truth)
             user = [0] * len(notes_in_user)
@@ -67,7 +67,6 @@ def Notes(pattern, text):
             #print(f'truth: {truth}')
             #print(f'user: {user}')
             for idx, i in enumerate(notes_in_truth): 
-                print (i)
                 
                 if truth[idx] == 0:
                     for y in range(0, len(notes_in_user)):
@@ -178,10 +177,6 @@ def Articulation(pattern_dict, text_dict):
     print(f"Timed : {Timed} Late : {Late} Early : {Early}")
 
 
-
-
-
-
 def ModifyEvents(dictobj):
     acc = []
     size = len(dictobj['event'])
@@ -206,31 +201,26 @@ def ModifyEvents(dictobj):
 
 
 
-
-
-
-
-
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\silentnight1.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_dict = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("csv\silentnight1.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv\sample.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
     Notes(pattern_dict, truth_dict)
 
-    #DATA FRAME
-    MelodyLR(Pattern, Truth)
+    # #DATA FRAME
+    # MelodyLR(Pattern, Truth)
 
-    #Dictionary
-    Rhythm(pattern_dict, truth_dict)
+    # #Dictionary
+    # Rhythm(pattern_dict, truth_dict)
 
-    Articulation(pattern_dict, truth_dict)
+    # Articulation(pattern_dict, truth_dict)
 
 
 
