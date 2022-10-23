@@ -16,25 +16,31 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import sqlite3
-
+import pyglet
 
 class SampleApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        self.title_font = tkfont.Font(family='Montserrat', size=16,slant="italic")
-        self.score_font = tkfont.Font(family='Montserrat', size=96,weight="bold")
-        self.song_font_after = tkfont.Font(family='Montserrat', size=18,weight="bold")
-        self.grade_font = tkfont.Font(family='Montserrat', size=24,weight="bold")
-        self.Mont_bold20 = tkfont.Font(family='Montserrat', size=20,weight="bold")
+        pyglet.font.add_file('Fonts/Lemon Milk.otf')
+        pyglet.font.add_file('Fonts/Lemon Milk Light.otf')
+        pyglet.font.add_file('Fonts/Montserrat.ttf')
+        pyglet.font.add_file('Fonts/Montserrat Italic.ttf')
+        pyglet.font.add_file('Fonts/Montserrat Bold.ttf')
+
+        self.title_font = tkfont.Font(family='Montserrat Italic', size=12,slant="italic")
+        self.score_font = tkfont.Font(family='Montserrat Bold', size=78,weight="bold")
+        self.song_font_after = tkfont.Font(family='Montserrat Bold', size=12,weight="bold")
+        self.grade_font = tkfont.Font(family='Montserrat Bold', size=18,weight="bold")
+        self.Mont_bold20 = tkfont.Font(family='Montserrat Bold', size=16,weight="bold")
 
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
-        self.button_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
-        self.button2_font = tkfont.Font(family='Lemon Milk Regular Italic', size=16, weight="bold", slant="italic")
-        self.body_font = tkfont.Font(family='Lemon Milk', size=16)
-        self.font_song = tkfont.Font(family='Montserrat',size=16)
+        self.button_font = tkfont.Font(family='Montserrat Bold', size=16)
+        self.button2_font = tkfont.Font(family='Montserrat Italic', size=16)
+        self.body_font = tkfont.Font(family='Lemon Milk Light', size=14)
+        self.font_song = tkfont.Font(family='Montserrat',size=12)
         self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
 
@@ -228,8 +234,8 @@ class LogIn(tk.Frame):
             #     messagebox.showerror('Invalid', 'Invalid username and password')
         
         frame1 = tk.Frame(self,width=463,height=461,bg="#2A2B2C",border=0)
-        label = tk.Label(self, text="USERNAME",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
-        label2 = tk.Label(self, text="PASSWORD",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label = tk.Label(self, text="Username",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        label2 = tk.Label(self, text="Password",fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
         #sign_in = tk.Label(self, text="Sign In",fg="#F7BF50", bg="#2A2B2C", font=controller.title_font)
 
         line = tk.Frame(self, bg="#281801")
@@ -244,7 +250,7 @@ class LogIn(tk.Frame):
             if name == '':
                 label_entry.insert(0,'Enter Username')
         
-        label_entry = tk.Entry(self,width=29,font=controller.title_font)
+        label_entry = tk.Entry(self,width=28,font=controller.title_font)
         label_entry.insert(0,"Enter your username")
         label_entry.bind('<FocusIn>', on_enter)
         label_entry.bind('<FocusOut>', on_leave)
@@ -260,7 +266,7 @@ class LogIn(tk.Frame):
             if name == '':
                 label2_entry.insert(0,'Password')
 
-        label2_entry = tk.Entry(self,width=29,font=controller.title_font,show="*")
+        label2_entry = tk.Entry(self,width=28,font=controller.title_font,show="*")
         label2_entry.insert(0,"Enter your password")
         label2_entry.bind('<FocusIn>', on_enter)
         label2_entry.bind('<FocusOut>', on_leave)
@@ -288,7 +294,7 @@ class LogIn(tk.Frame):
         names_label= tk.Label(self, image=names_img,borderwidth=0)
         names_label.image = names_img
 
-        log_in = tk.Label(self, text="Log In",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=15, height=1, font=controller.button_font)
+        log_in = tk.Label(self, text="Login",bg="#F7BF50", fg="#2A2B2C", cursor ="hand2", borderwidth=0, width=15, height=1, font=controller.button_font)
         log_in.bind("<Button-1>",login)
         register= tk.Label(self, text="Register",fg="#F7BF50", bg="#2A2B2C", cursor ="hand2", borderwidth=0,font=controller.button2_font)
         register.bind("<Button-1>", lambda e: controller.show_frame("Register"))
@@ -298,8 +304,8 @@ class LogIn(tk.Frame):
         label2.place(x=746, y=322)
         #sign_in.place(x=540,y=220)
 
-        label_entry.place(x=746,y=243)
-        label2_entry.place(x=746,y=352)
+        label_entry.place(x=746,y=253)
+        label2_entry.place(x=746,y=362)
 
         #logo_label.place(x=35,y=34)
         #info_label.place(x=738, y=57)
@@ -309,8 +315,8 @@ class LogIn(tk.Frame):
         info_label.place(x=98, y=416)
         names_label.place(x=660, y=660)
 
-        log_in.place(x=810,y=465)
-        register.place(x=862, y=510)
+        log_in.place(x=793,y=465)
+        register.place(x=859, y=510)
 
 class Register(tk.Frame):
 
@@ -452,19 +458,25 @@ class Register(tk.Frame):
 
         frame_reg.place(x=180,y=134)
         label_reg.place(x=510,y=170)
+
         labelReg.place(x=220,y=220)
-        labelReg_entry.place(x=223, y=245)
+        labelReg_entry.place(x=223, y=255)
+
         label2Reg.place(x=220, y=320)
-        label2Reg_entry.place(x=223, y=345)
+        label2Reg_entry.place(x=223, y=355)
+
         label3Reg.place(x=220, y=420)
-        label3Reg_entry.place(x=223, y=445)
+        label3Reg_entry.place(x=223, y=455)
+
         label4Reg.place(x=650, y=220)
-        label4Reg_entry.place(x=653, y=245)
+        label4Reg_entry.place(x=653, y=255)
+
         label5Reg.place(x=650, y=320)
-        label5Reg_entry.place(x=653, y=345)
+        label5Reg_entry.place(x=653, y=355)
+
         reg_button.place(x=700, y=450)
-        label6Reg.place(x=675, y=510)
-        label7Reg.place(x=870, y=513)
+        label6Reg.place(x=655, y=510)
+        label7Reg.place(x=870, y=515)
 
         logo_label.place(x=35,y=34)
         info_label.place(x=738, y=57)
@@ -698,7 +710,7 @@ class PlayPage(tk.Frame):
         frame1 = tk.Frame(self,width=226,height=306,border=0,bg="#2A2B2C")
         frame1.place(x=831,y=256)
 
-        listbox = tk.Listbox(frame1,width=22,height=15,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        listbox = tk.Listbox(frame1,width=19,height=13,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
         scrollbar = tk.Scrollbar(frame1,orient=VERTICAL)
         listbox.config(yscrollcommand=scrollbar.set)
         #listbox.pack(side="top", fill="both", expand=True)
@@ -714,7 +726,7 @@ class PlayPage(tk.Frame):
         frame2 = tk.Frame(self,width=549,height=294,border=0,bg="#2A2B2C")
         frame2.place(x=136,y=256)
 
-        listbox_songs = tk.Listbox(frame2,width=50,height=15,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
+        listbox_songs = tk.Listbox(frame2,width=46,height=13,fg="#FFFFFF",bg="#2A2B2C",borderwidth=0,font=controller.font_song)
         scrollbar2 = tk.Scrollbar(frame2,orient=VERTICAL)
         listbox_songs.config(yscrollcommand=scrollbar2.set)
         #listbox.pack(side="top", fill="both", expand=True)
@@ -800,7 +812,7 @@ class AfterPerformance(tk.Frame):
 
         img= Image.open("Pictures/circle.png")
         circle_img = ImageTk.PhotoImage(img)
-        circle_label =  tk.Label(self, image=circle_img,cursor="hand2",borderwidth=0)
+        circle_label =  tk.Label(self, image=circle_img,borderwidth=0)
         circle_label.image = circle_img
 
         print("afdter")
@@ -826,7 +838,7 @@ class AfterPerformance(tk.Frame):
         ErrorAnal_label.place(x=613,y=499)
 
         circle_label.place(x=182,y=192)
-        score_label.place(x=229,y=275)
+        score_label.place(x=225,y=265)
         song_frame.place(x=182,y=520)
         grade_frame.place(x=182,y=570)
 
@@ -1418,7 +1430,7 @@ class PageThree(tk.Frame):
 
 
         frame_histo = tk.Frame(self,width=988,height=545,bg="#2A2B2C",border=0)
-        frame_histoList = tk.Frame(self,width=880,height=200,bg="white",border=0)
+        frame_histoList = tk.Frame(self,width=880,height=400,bg="#2A2B2C",border=0)
         frame_histoList.pack_propagate(0)
         
         image = Image.open("Pictures/menuHisto.png")
@@ -1443,7 +1455,10 @@ class PageThree(tk.Frame):
         # listbox_songs2.bind("<<ListboxSelect>>", infos)
 
         global tree_histo
-        tree_histo = ttk.Treeview(frame_histoList,column=("c1","c2","c3"),show="headings")
+        ttk.Style().theme_use('clam')
+        ttk.Style().configure("Treeview",background="#2A2B2", foreground="white", fieldbackground="#2A2B2C")
+        tree_histo = ttk.Treeview(frame_histoList,column=("c1","c2","c3"),show="headings",height=293)
+       
         tree_histo["columns"]=("date&time","title","score")
         tree_histo.column("date&time",width=293,stretch=NO,anchor=CENTER)
         tree_histo.column("title",width=293,stretch=NO,anchor=CENTER)
