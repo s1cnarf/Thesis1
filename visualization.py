@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import pandas as pd
+from matplotlib.figure import Figure
 from music21 import note
 
 def plot_rect(truth_data, user_data, delta=0.5):
@@ -12,7 +13,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
     print(yplaces)
     ylabels = truth_data.keys()
 
-    fig = plt.figure()
+    fig = Figure(figsize=(10,5),dpi=100)
     ax = fig.add_subplot(111)
     ax.set_yticks(yplaces)
     ax.set_yticklabels(ylabels)
@@ -46,7 +47,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
             for u in user_data[label]:
                 start, end = u
                 #print (f'start: {start} end: {end}')
-                u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, color='b', label='User'))
+                u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, color='#F7BF50', label='User'))
 
     # little small trick, draw an invisible line so that the x axis
     # limits are automatically adjusted...
@@ -59,7 +60,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
     # the vlines are simply the x grid lines
     #ax.grid(axis='x')
     # eventually return what we have done
-    return ax
+    return ax,fig
 
 
 def Convert(df):
@@ -119,7 +120,7 @@ if __name__ == '__main__':
     #         'G':[(1989,2007)]}
 
     # call the function and give its result a name
-    ax = plot_rect(truth_data, user_data)
+    ax= plot_rect(truth_data, user_data)
     # so that we can further manipulate it using the `axes` methods, e.g.
     ax.set_xlabel('Time(s)')
     ax.set_ylabel('Notes')
