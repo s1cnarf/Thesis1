@@ -116,13 +116,29 @@ def Notes(pattern, text):
 
 
 def Dynamics(pattern,text):
-    dynamics = 0
-    for i in pattern['velocity']:
-        if i == text['velocity']:
-            dynamics += 1
+    '''
+    Loudness and Softness of Velocity
+    Get the Mean/Average of the velocities in the MIDI
+    '''
+    dynamics = [127,112,96,80,64,49,33,16]
+    term = ['extremely loud', 'very loud', 'loud', 'moderately loud', 'moderately soft', 
+            'soft', 'very soft', 'extremely soft']
+
+    t_mean = sum(text['velocity']) / len(text['velocity'])
+    p_mean = sum(pattern['velocity']) / len(pattern['velocity'])
+
+    for i in range(len(dynamics)):
+        if t_mean > dynamics[i]:
+            print(term[i])
+            break
+
 
 
 def MelodyLR(pattern, text):
+    ''' 
+    Linear Matching 
+    If note p is not equal to note t then the melody is not right
+    '''
     condition = (pattern['track'] == 1) & (pattern['note'] > 0)
     pattern_Right = pattern[condition].note.tolist()
 
@@ -130,9 +146,11 @@ def MelodyLR(pattern, text):
     text_Right = text[condition].note.tolist()
 
     #track the index of the the mismatch elements
-
+    
     mismatch = [i for i, (a, b) in enumerate(zip(pattern_Right, text_Right)) if a != b]
-    print(mismatch)
+
+    percentage = (len(mismatch)/len(text_Right))*100
+    print(percentage)
 
 
 # dict parameter
@@ -148,8 +166,8 @@ def Rhythm(pattern_dict ,text_dict):
     pattern_dym = pattern_dict['start']
     text_dym = text_dict['start']
     index = 0
-    for i in pattern_dym:
-        if i == text_dym[index]:
+    for i in text_dym:
+        if i == pattern_dym[index]:
             Success += 1
         else:
             Failed += 1
@@ -231,12 +249,12 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv\sample_errors.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_dict = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("csv\sample.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
@@ -245,6 +263,8 @@ if __name__ == '__main__':
 
     # #DATA FRAME
     # MelodyLR(Pattern, Truth)
+    # Dynamics(Pattern, Truth)
+    FingerPattern(Pattern, Truth)
 
     # #Dictionary
     # Rhythm(pattern_dict, truth_dict)
