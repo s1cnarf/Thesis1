@@ -145,10 +145,8 @@ class LogIn(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
         #self.controller.state("zoomed")
+
         
-        df = pd.read_csv('csv/result.csv')
-        correct = df.loc[df["Element"]=="Correct","Data"].iloc[0]
-        print(correct)
 
         def login(e):
             try:
@@ -928,6 +926,12 @@ class PerformanceReport(tk.Frame):
         tk.Frame.__init__(self, parent,bg="#F7BF50")
         self.controller = controller
 
+        def ReadCSVtoVariable(category):
+            df = pd.read_csv('csv/result.csv')
+
+            data = df.loc[df["Element"]==category,"Data"].iloc[0]
+            return data
+
         def DisplayNote(event):
             
             notes_label.config(height=70,bg="#2A2B2C",cursor="")
@@ -943,11 +947,12 @@ class PerformanceReport(tk.Frame):
             finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
-            total_expected_hits = 110
-            correct_hits = 85
-            partial_hits = 15
-            extra_hits = 5 
-            missed_hits = 10
+            
+            correct_hits = int(ReadCSVtoVariable("Correct"))
+            partial_hits = int(ReadCSVtoVariable("Partial"))
+            extra_hits = int(ReadCSVtoVariable("Extra"))
+            missed_hits = int(ReadCSVtoVariable("Missed"))
+            total_expected_hits = correct_hits+partial_hits+extra_hits+missed_hits
 
             global notesData_frame
             notesData_frame = tk.Frame(self,width=734,height=414,bg="#2A2B2C")
@@ -1038,8 +1043,8 @@ class PerformanceReport(tk.Frame):
 
         def DisplayRhythm(event):
 
-            success_switch = 75
-            failed_switch = 35
+            success_switch = int(ReadCSVtoVariable("Success_Switch"))
+            failed_switch = int(ReadCSVtoVariable("Failed_Switch"))
 
             notes_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             notes_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
@@ -1108,9 +1113,9 @@ class PerformanceReport(tk.Frame):
             finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
-            ontime_hits = 75
-            late_hits = 10
-            early_hits = 25
+            ontime_hits = int(ReadCSVtoVariable("Timed_Hit"))
+            late_hits = int(ReadCSVtoVariable("Late_Hit"))
+            early_hits = int(ReadCSVtoVariable("Early_Hit"))
 
             def autopct_format(values):
                 def my_format(pct):
@@ -1167,9 +1172,9 @@ class PerformanceReport(tk.Frame):
             finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
-            loud_hits = 65
+            loud_hits = int(ReadCSVtoVariable("Loud_Hit"))
             expected_loud_hits = 60
-            soft_hits = 45
+            soft_hits = int(ReadCSVtoVariable("Soft_Hit"))
             expected_soft_hits = 40
 
             global dynamicsData_frame
@@ -1242,7 +1247,7 @@ class PerformanceReport(tk.Frame):
             finger_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             finger_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
-            melodyRate = 70
+            melodyRate = int(ReadCSVtoVariable("Melody"))
 
             global melodyData_frame
             melodyData_frame = tk.Frame(self,width=713,height=425,bg="#2A2B2C")
@@ -1292,11 +1297,11 @@ class PerformanceReport(tk.Frame):
             melody_label.config(height=51,bg="#3A3A3C",cursor="hand2")
             melody_frame.config(height=51,bg="#3A3A3C",cursor="hand2")
 
-            correct_left = 35
-            incorrect_left = 15
+            correct_left = int(ReadCSVtoVariable("LH_Correct"))
+            incorrect_left = int(ReadCSVtoVariable("LH_Fail"))
 
-            correct_right = 50
-            incorrect_right = 10
+            correct_right = int(ReadCSVtoVariable("RH_Correct"))
+            incorrect_right = int(ReadCSVtoVariable("RH_Fail"))
 
             global fingerData_frame
             fingerData_frame = tk.Frame(self,width=713,height=425,bg="#2A2B2C")
