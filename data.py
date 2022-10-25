@@ -1,5 +1,3 @@
-import mimetypes
-from multiprocessing.synchronize import Condition
 import pandas as pd
 import csv
 
@@ -195,31 +193,54 @@ def Articulation(pattern_dict, text_dict):
     print(f"Timed : {Timed} Late : {Late} Early : {Early}")
 
 # DATA FRAME
-def FingerPattern(pattern, text):
-    rhits, rwrong = 0,0
+def FingerPattern(pattern, truth):
+    condition = (truth['track'] == 1 ) | (pattern['track'] == 1)
+    Truth_R = truth[condition].name.to_list()
+    Pattern_R = pattern[condition].name.to_list()
 
-    #Filter data for right hand pattern
-    condition = (pattern['track'] == 1) & (pattern['note'] > 0)
-    pattern_Right = pattern[condition]
+    condition2 = (truth['track'] == 2 ) | (pattern['track'] == 2)
+    Truth_L = truth[condition2].name.to_list()
+    Pattern_L = pattern[condition2].name.to_list()
 
-    condition = (text['track'] == 1) & (text['note'] > 0)
-    text_Right = text[condition]
+    R_rows, R_cols = len(Pattern_R) + 1, len(Truth_R) + 1
+    L_rows, L_cols = len(Pattern_L) + 1, len(Truth_L) + 1
 
-    # Count match and mismatch value in right hand
-    matched, un_matched = pattern_Right[pattern_Right['note']==text_Right['note']].shape[0], pattern_Right[pattern_Right['note']!=text_Right['note']].shape[0]
-    print(f"Right Hand: Matched = {matched} Unmatched = {un_matched}")
+    # Matrix for Approx Match
+    R = [[0 for i in range(R_cols)] for j in range(R_rows)]
+    for i in range (len(R)):
+        R[i][0] = i
+    for j in range (len(R[0])):
+        R[0][j] = j      
 
-    # Filter data for left hand pattern
-    condition = (pattern['track'] == 2) & (pattern['note'] > 0)
-    pattern_Left= pattern[condition]
+    L = [[0 for i in range(L_cols)] for j in range(L_rows)]
+    for i in range (len(L)):
+        L[i][0] = i
+    for j in range (len(L[0])):
+        L[0][j] = j      
 
-    condition = (text['track'] == 2) & (text['note'] > 0)
-    text_Left = text[condition]
+    # Iterate through the list
+        # If Pi == Tj then value in [i][j] equals to the diagonal
+        # Else, Add 1 to the minimum number in vertical, horizontal, diagonal side of the cell
 
-    # Count match and mismatch in left hand 
-    matched, un_matched = pattern_Left[pattern_Left['note']==text_Left['note']].shape[0], pattern_Left[pattern_Left['note']!=text_Left['note']].shape[0]
-    print(f"Left Hand: Matched = {matched} Unmatched = {un_matched}")
+    for m in range(1, R_rows):
+        for n in range(1, R_cols):
+            if Pattern_R[m-1] == Truth_R[n-1]:
+                R[m][n] = R[m-1][n-1]
+            else:
+                R[m][n] = 1 + min(R[m-1][n], R[m-1][n-1], R[m][n-1])
+    
+    R_miss = R[m][n]
 
+    for m in range(1, L_rows):
+        for n in range(1, L_cols):
+            if Pattern_L[m-1] == Truth_L[n-1]:
+                L[m][n] = L[m-1][n-1]
+            else:
+                L[m][n] = 1 + min(L[m-1][n], L[m-1][n-1], L[m][n-1])
+
+    L_miss = L[m][n]
+
+    print (f'Left: {L_miss}  Right: {R_miss}')
 
    
 
@@ -259,7 +280,7 @@ if __name__ == '__main__':
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
-    #Notes(pattern_dict, truth_dict)
+    # Notes(pattern_dict, truth_dict)
 
     # #DATA FRAME
     # MelodyLR(Pattern, Truth)
