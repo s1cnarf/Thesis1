@@ -18,8 +18,6 @@ def plot_rect(truth_data, user_data, delta=0.5):
     ax.set_yticklabels(ylabels)
     ax.set_ylim((0,yspan))
 
-
-
     # later we'll need the min and max in the union of intervals
     for keys in ylabels:
         try:
@@ -46,7 +44,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
             for u in user_data[label]:
                 start, end = u
                 #print (f'start: {start} end: {end}')
-                u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, color='b', label='User'))
+                u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, facecolor='b', edgecolor ='black', linewidth = 1,label='User'))
 
     # little small trick, draw an invisible line so that the x axis
     # limits are automatically adjusted...
@@ -98,8 +96,8 @@ def MidiNoteNumbers():
 if __name__ == '__main__':
 
 
-    Truth = pd.read_csv("sample_in_seconds.csv",error_bad_lines=False) 
-    User = pd.read_csv("sample_errors_in_seconds.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv\sample_in_seconds.csv",error_bad_lines=False) 
+    User = pd.read_csv("csv\sample_errors_in_seconds.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_object = Truth.to_dict('list')
