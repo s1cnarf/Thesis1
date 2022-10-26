@@ -27,9 +27,7 @@ def Notes(pattern, text):
 
     notes_in_truth = []
     notes_in_user = []
-
-    truth = []
-
+    
     correct, partial, extra, missed = 0, 0, 0, 0
     # The p
     
@@ -39,24 +37,36 @@ def Notes(pattern, text):
         # correct hit
     # Else if p time not equal t time
         # test 
+    
+    # Get the data in the start index
+    start_elements = []
     start, end = 0, 0
     for i in range (0, len(text['event'])):
-        if text['end'][i] > end :
+        if text['end'][i] > end:
             end = text['end'][i]
             start = text['start'][i] 
             # line 14 1,17234,19000,Note_on,1,30,0
             print (f'start: {start} end: {end}')
-            for p in range(0,size):
-                if pattern['start'][p] >= start and pattern['end'][p] <= end:
-                    notes_in_user.append([pattern['start'][p], # 0 , 1 , 2
-                                        pattern['end'][p],
-                                        pattern['note'][p]])
-
             for t in range(0,len(text['event'])):
                 if text['start'][t] >= start and text['end'][t] <= end:
-                    notes_in_truth.append([text['start'][t], # 0 , 1 , 2
+                    t_data = [text['start'][t], # 0 , 1 , 2
                                         text['end'][t],
-                                        text['note'][t]])
+                                        text['note'][t]]
+
+                    if t_data != start_elements:
+                        notes_in_truth.append(t_data)
+
+            for p in range(0,size):
+                if pattern['start'][p] >= start and pattern['end'][p] <= end:
+                    p_data = [pattern['start'][p], # 0 , 1 , 2
+                                        pattern['end'][p],
+                                        pattern['note'][p]]
+
+                    if p_data != start_elements:
+                        notes_in_user.append(p_data)
+
+            # value of the start basis index
+            start_elements = notes_in_truth[0]
 
             
             print(f'truth: {notes_in_truth}')
@@ -81,7 +91,6 @@ def Notes(pattern, text):
                                     #print(f'Correct: {notes_in_user[y][2]} = {i[2]}, {y}')
                                     truth[idx] = 1
                                     user[y] = 1
-                                    correct += 1
                                 # elif notes_in_user[y][2] != i[2]:
                                 #     #print(f'Extra: {notes_in_user[y][2]} = {i[2]}, {y}')
                                 #     truth[idx] = 3
@@ -90,7 +99,6 @@ def Notes(pattern, text):
                             elif notes_in_user[y][0] >= i[0] and notes_in_user[y][1] <= i[1]:
                                 if notes_in_user[y][2] == i[2]:
                                     #print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}')
-                                    partial += 1
                                     truth[idx] = 2
                                     user[y] = 2  
                                 # elif notes_in_user[y][2] != i[2]:
@@ -108,17 +116,25 @@ def Notes(pattern, text):
             
             print (f'TABLE TRUTH: {truth}')
             print (f'TABLE USER: {user}')
+
+            correct += truth.count(1)
+            partial += truth.count(2)
+            extra += user.count(0)
+            missed += truth.count(0)
             
 
-            print (correct, partial, extra, missed)
+    print (correct, partial, extra, missed)
 
 
 
 
 def Dynamics(pattern,text):
+    # Error In Key
+    # Length Difference
     dynamics = 0
-    for i in pattern['velocity']:
-        if i == text['velocity']:
+    for idx, i in enumerate(pattern['velocity'], start=0):
+        print (i)
+        if i == text['velocity'][idx]:
             dynamics += 1
 
 
@@ -231,20 +247,24 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv\sample_errors.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_dict = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("csv\sample.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
-    #Notes(pattern_dict, truth_dict)
+    # Notes(pattern_dict, truth_dict)
 
     # #DATA FRAME
-    # MelodyLR(Pattern, Truth)
+    MelodyLR(Pattern, Truth)
+    # Dynamics(Pattern,Truth)
+
+
+
 
     # #Dictionary
     # Rhythm(pattern_dict, truth_dict)
