@@ -9,7 +9,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
 
     yspan = len(truth_data)
     yplaces = [.5+i for i in range(yspan)]
-    print(yplaces)
+    #print(yplaces)
     ylabels = truth_data.keys()
 
     fig = plt.figure()
@@ -33,7 +33,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
             for l in truth_data[label]:
                 #print (f'pos: {pos} label: {label}')
                 start, end = l
-                print (f'start: {start} end: {end}')
+                #print (f'start: {start} end: {end}')
                 t_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),
                                         end-start,delta, linewidth=1, 
                                         edgecolor='r', facecolor='none', label='Truth'))
@@ -69,6 +69,7 @@ def Convert(df):
         n = note.Note(i).nameWithOctave
         midi_note[n] = None
 
+    # Adding values to the key 
     for x in range(len(df)):
         currentid = note.Note(df.iloc[x,5]).nameWithOctave
         c1, c2 = df.iloc[x,1], df.iloc[x,2]
@@ -92,17 +93,34 @@ def MidiNoteNumbers():
 
 
 
+def plot_dynamics(truth, user):
+    condition = (user['track'] == 1)
+    time = user[condition].end.to_list()
+    velocity = user[condition].velocity.to_list()
+
+    time2 = user[user['track']==2].end.to_list()
+    velocity2 = user[user['track']==2].velocity.to_list()
+  
+    plt.plot(time, velocity, color='red', marker='o')
+    plt.plot(time2, velocity2, color='blue', marker='o')
+    plt.xlabel('Time', fontsize=14)
+    plt.ylabel('Year', fontsize=14)
+    plt.grid(True)
+    plt.show()
+
+
 
 if __name__ == '__main__':
 
 
     Truth = pd.read_csv("csv\sample_in_seconds.csv",error_bad_lines=False) 
-    User = pd.read_csv("csv\sample_errors_in_seconds.csv",error_bad_lines=False) 
+    User = pd.read_csv("csv\sample_perfect_in_seconds.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_object = Truth.to_dict('list')
     user_object = User.to_dict('list')
 
+    plot_dynamics(Truth, User)
 
     truth_data = Convert(Truth)
     user_data = Convert(User)

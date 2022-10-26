@@ -27,6 +27,9 @@ def Notes(pattern, text):
     notes_in_user = []
     
     correct, partial, extra, missed = 0, 0, 0, 0
+
+    user_articulation = {'Timed': 0, 'Late': 0, 'Early': 0}
+
     # The p
     
     # notes = [i for i in range(0,len(pattern['event'])) if pattern['event'][i] == 'NOTE_ON']
@@ -89,21 +92,26 @@ def Notes(pattern, text):
                                     #print(f'Correct: {notes_in_user[y][2]} = {i[2]}, {y}')
                                     truth[idx] = 1
                                     user[y] = 1
+                                    user_articulation['Timed'] += 1
                                 # elif notes_in_user[y][2] != i[2]:
                                 #     #print(f'Extra: {notes_in_user[y][2]} = {i[2]}, {y}')
                                 #     truth[idx] = 3
                                 #     user[y] = 3
                                 #     extra += 1
-                            elif notes_in_user[y][0] >= i[0] and notes_in_user[y][1] <= i[1]:
-                                if notes_in_user[y][2] == i[2]:
-                                    #print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}')
-                                    truth[idx] = 2
-                                    user[y] = 2  
-                                # elif notes_in_user[y][2] != i[2]:
-                                #     #print(f'Extra: {notes_in_user[y][2]} = {i[2]}, {y}')
-                                #     truth[idx] = 3 
-                                #     user[y] = 3 
-                                #     extra += 1
+                            else:
+                                if notes_in_user[y][0] >= i[0] and notes_in_user[y][1] <= i[1]:
+                                    if notes_in_user[y][2] == i[2]:
+                                        #print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}')
+                                        truth[idx] = 2
+                                        user[y] = 2
+                                        user_articulation['Late'] += 1
+                                elif notes_in_user[y][0] <= i[0] and notes_in_user[y][1] <= i[1]:
+                                    if notes_in_user[y][2] == i[2]:
+                                        #print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}')
+                                        truth[idx] = 2
+                                        user[y] = 2 
+                                        user_articulation['Early'] += 1
+                                
                                     
             #print (f'1 TABLE TRUTH: {truth}')
             #truth = Missed(truth, notes_in_truth, user, notes_in_user)
@@ -283,22 +291,22 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\sample_errors.csv",error_bad_lines=False) 
+    Pattern = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     pattern_dict = Pattern.to_dict('list')
 
-    Truth = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
+    Truth = pd.read_csv("csv\sample.csv",error_bad_lines=False) 
 
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
-    # Notes(pattern_dict, truth_dict)
+    Notes(pattern_dict, truth_dict)
 
     # #DATA FRAME
     # MelodyLR(Pattern, Truth)
     # Dynamics(Pattern, Truth)
-    FingerPattern(Pattern, Truth)
+    # FingerPattern(Pattern, Truth)
 
     # #Dictionary
     # Rhythm(pattern_dict, truth_dict)
