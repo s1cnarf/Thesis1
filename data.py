@@ -270,22 +270,22 @@ def ModifyEvents(dictobj):
 
 
 if __name__ == '__main__':
-    Pattern = pd.read_csv("csv\sample_errors.csv",error_bad_lines=False) 
-
+    Pattern = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
     #LOAD CSV FILE TO DICTIONARY
     pattern_dict = Pattern.to_dict('list')
-
+    
     Truth = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
-
+    Truth.sort_values(['start', 'end'], ascending=[True, True], inplace=True)
+    print(Truth)
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
-    # Notes(pattern_dict, truth_dict)
+    Notes(pattern_dict, truth_dict)
 
     # #DATA FRAME
     # MelodyLR(Pattern, Truth)
     # Dynamics(Pattern, Truth)
-    FingerPattern(Pattern, Truth)
+    # FingerPattern(Pattern, Truth)
 
     # #Dictionary
     # Rhythm(pattern_dict, truth_dict)
