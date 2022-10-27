@@ -41,22 +41,29 @@ def MidiInfo(midi_out):
         events_list = midi.translate.getTimeForEvents(i)
         for x, y in events_list:
             # x - start , y - midi event
-            #print(y)
-            if y.type == midi.ChannelVoiceMessages.NOTE_ON:
+            
+            if y.type == midi.ChannelVoiceMessages.NOTE_ON and y.velocity != 0:
                 
                 # Get midi information
-                start = x * seconds_per_tick
+                start = x #* seconds_per_tick
 
                 for l, k in events_list:
-                    if k.type == midi.ChannelVoiceMessages.NOTE_OFF and k.pitch == y.pitch and l > x:
-                        end = l * seconds_per_tick
-                        # track - start - end - event - channel - note - velocity
-                        note_events.append([y.track.index , start, end, 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave]) 
-                        break
+                    if k.type == midi.ChannelVoiceMessages.NOTE_OFF:
+                        if k.pitch == y.pitch and l > x:
+                            end = l #* seconds_per_tick
+                            # track - start - end - event - channel - note - velocity
+                            note_events.append([y.track.index , start, end, 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave]) 
+                            break
+                    elif k.type == midi.ChannelVoiceMessages.NOTE_ON and k.velocity == 0:
+                        if k.pitch == y.pitch and l > x:
+                            end = l #* seconds_per_tick
+                            # track - start - end - event - channel - note - velocity
+                            note_events.append([y.track.index , start, end, 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave]) 
+                            break
 
 
-    # Load to CSV  File
-    with open('csv\sample_perfect_in_seconds.csv', 'w', encoding='UTF8', newline='') as f:
+    #Load to CSV  File
+    with open('csv\sample.csv', 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f)
 
         # write the header
@@ -70,6 +77,6 @@ def MidiInfo(midi_out):
 if __name__ == '__main__':
     #score = converter.parse('sample_errors.mid')
     #midi_out = score.write('midi', fp='sample_errors1.mid')
-    events = MidiInfo('midi\sample_perfect1.mid')
+    events = MidiInfo('midi\sample1.mid')
     
     #PatternMatch(events)
