@@ -1,17 +1,16 @@
-﻿Element,Data
-Correct,85
-Partial,15
-Extra,5
-Missed,10
-Success_Switch,75
-Failed_Switch,35
-Timed_Hit,75
-Late_Hit,10
-Early_Hit,25
-Loud_Hit,65
-Soft_Hit,45
-LH_Correct,35
-RH_Correct,50
-LH_Fail,15
-RH_Fail,10
-Melody,70%
+Correct, 90
+Partial, 0
+Extra, 0
+Missed, 0
+Success_Switch, 90
+Failed_Switch, 0
+Timed_Hit, 90
+Late_Hit, 0
+Early_Hit:, 0
+Truth_Dynamics, 76.84444444444445
+User_Dynamics, 76.84444444444445
+LH_Correct, 42
+RH_Correct, 48
+LH_Fail, 0
+RH_Fail, 0
+Melody, 0.0

@@ -47,7 +47,7 @@ def Notes(pattern, text):
             end = text['end'][i]
             start = text['start'][i] 
             # line 14 1,17234,19000,Note_on,1,30,0
-            print (f'start: {start} end: {end}')
+            # print (f'start: {start} end: {end}')
             for t in range(0,len(text['event'])):
                 if text['start'][t] >= start and text['end'][t] <= end:
                     t_data = [text['start'][t], # 0 , 1 , 2
@@ -70,8 +70,8 @@ def Notes(pattern, text):
             start_elements = notes_in_truth[0]
 
             
-            print(f'truth: {notes_in_truth}')
-            print(f'user: {notes_in_user}')
+            #print(f'truth: {notes_in_truth}')
+            #print(f'user: {notes_in_user}')
             
             truth = [0] * len(notes_in_truth)
             user = [0] * len(notes_in_user)
@@ -120,8 +120,8 @@ def Notes(pattern, text):
             notes_in_truth.clear()
             notes_in_user.clear()
             
-            print (f'TABLE TRUTH: {truth}')
-            print (f'TABLE USER: {user}')
+            #print (f'TABLE TRUTH: {truth}')
+            #print (f'TABLE USER: {user}')
 
             correct += truth.count(1)
             partial += truth.count(2)
@@ -129,7 +129,7 @@ def Notes(pattern, text):
             missed += truth.count(0)
             
 
-    print (correct, partial, extra, missed)
+    return [correct, partial, extra, missed] + list(user_articulation.values())
 
 
 
@@ -151,6 +151,8 @@ def Dynamics(pattern,text):
             print(term[i])
             break
 
+    return [t_mean, p_mean]
+
 
 
 def MelodyLR(pattern, text):
@@ -169,7 +171,7 @@ def MelodyLR(pattern, text):
     mismatch = [i for i, (a, b) in enumerate(zip(pattern_Right, text_Right)) if a != b]
 
     percentage = (len(mismatch)/len(text_Right))*100
-    print(percentage)
+    return percentage
 
 
 # dict parameter
@@ -192,7 +194,7 @@ def Rhythm(pattern_dict ,text_dict):
             Failed += 1
         index += 1
 
-    print(f"Success : {Success} Failed : {Failed}")
+    return [Success,Failed]
     
 
 def Articulation(pattern_dict, text_dict):
@@ -218,6 +220,9 @@ def FingerPattern(pattern, truth):
     condition = (truth['track'] == 1 ) | (pattern['track'] == 1)
     Truth_R = truth[condition].name.to_list()
     Pattern_R = pattern[condition].name.to_list()
+
+    #print(f'Truth Right: {Truth_R}')
+    #print(F'Pattern Right: {Pattern_R}')
 
     condition2 = (truth['track'] == 2 ) | (pattern['track'] == 2)
     Truth_L = truth[condition2].name.to_list()
@@ -261,7 +266,10 @@ def FingerPattern(pattern, truth):
 
     L_miss = L[m][n]
 
-    print (f'Left: {L_miss}  Right: {R_miss}')
+    L_Correct = len(Truth_L) - L_miss
+    R_Correct = len(Truth_R) - R_miss
+
+    return [L_Correct, R_Correct, L_miss,R_miss]
 
    
 
@@ -287,28 +295,54 @@ def ModifyEvents(dictobj):
     return acc
 
 
-
+def Data_to_csv(data_d):
+    with open('csv\Result.csv', 'w') as f:
+        for key in data_d.keys():
+            f.write("%s, %s\n" % (key, data_d[key]))
 
 
 if __name__ == '__main__':
     Pattern = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
     #LOAD CSV FILE TO DICTIONARY
+    Pattern.sort_values(['start', 'end', 'note'], ascending=[True, True, True], inplace=True)
     pattern_dict = Pattern.to_dict('list')
 
     Truth = pd.read_csv("csv\sample_perfect.csv",error_bad_lines=False) 
 
+    #Sort first the data frame
+    Truth.sort_values(['start', 'end', 'note'], ascending=[True, True, True], inplace=True)
+    
     #LOAD CSV FILE TO DICTIONARY
     truth_dict = Truth.to_dict('list')
 
-    # Notes(pattern_dict, truth_dict)
+    notes = Notes(pattern_dict, truth_dict)
 
     # #DATA FRAME
-    # MelodyLR(Pattern, Truth)
-    # Dynamics(Pattern, Truth)
-    FingerPattern(Pattern, Truth)
+    melody = MelodyLR(Pattern, Truth)
+    dynamics = Dynamics(Pattern, Truth)
+    fingerpattern = FingerPattern(Pattern, Truth)
 
     # #Dictionary
-    # Rhythm(pattern_dict, truth_dict)
+    rhythm = Rhythm(pattern_dict, truth_dict)
+
+    data = {'Correct':notes[0], 
+            'Partial':notes[1],
+            'Extra':notes[2],
+            'Missed':notes[3],
+            'Success_Switch':rhythm[0],
+            'Failed_Switch':rhythm[1],
+            'Timed_Hit':notes[4],
+            'Late_Hit':notes[5],
+            'Early_Hit:':notes[6],
+            'Truth_Dynamics': dynamics[0],
+            'User_Dynamics': dynamics[1],
+            'LH_Correct' : fingerpattern[0],
+            'RH_Correct' :fingerpattern[1],
+            'LH_Fail' : fingerpattern[2],
+            'RH_Fail' :fingerpattern[3],
+            'Melody' : melody}
+
+    Data_to_csv(data)
 
     # Articulation(pattern_dict, truth_dict)
 
