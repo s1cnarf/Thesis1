@@ -5,7 +5,10 @@ from piano_roll import index_of_note
 import sys
 from keySample import * 
 from pianoSampleTest import Piano 
-from threading import Thread 
+from threading import Thread
+import threading
+import time as tm
+
 
 
 class pRoll:
@@ -13,6 +16,8 @@ class pRoll:
     # Define Constructor 
     def __init__ (self) -> None:
 
+        self.delayVal = 0
+        self.lock = threading.Lock()
         self.midiFile = self.load_midi_file() ## addons ulets
 
         # Attribute for transcribing the MIDI file 
@@ -28,6 +33,7 @@ class pRoll:
         self.song_name = sys.argv[1]
         self.running = True
         self.clock = pg.time.Clock()
+        self.customClock = pg.time.Clock()
         self.time = 0
         self.piano = Piano()
         self.display = self.setup_pygame(self.song_name)
@@ -43,6 +49,7 @@ class pRoll:
     # Transcription of MIDI File 
 
     def transcribe(self, song: MidiFile) -> list [tuple[str, float, float]]:
+
 
        
         note_history = []  # [note, start_time, end_time]
@@ -92,6 +99,7 @@ class pRoll:
 
     def drawNotesToSurface(self) -> pg.surface.Surface:
 
+
         # Create dictionary for black keys - 
 
         black_dict = {
@@ -122,7 +130,7 @@ class pRoll:
         # Create a loop to to traverse the data we gathered in transcription func
         for (note,start,end) in self.transcribed_song:
 
-            print("This is Note 0: ", note[0], "This is Note 1: ", note[1])
+            #print("This is Note 0: ", note[0], "This is Note 1: ", note[1])
             
             if itr == 3:
                 pass
@@ -181,8 +189,8 @@ class pRoll:
                     ( int(note[1]) - 1) * 43 * 7, nstart, 45, length), # + (66-1) x 43 x  7 
                      border_radius=5)
                      
-                    print(43 * white_dict[note[0]],"-> white dict value")
-                    print((int(note[1]) - 1) * 43 * 7, "-> block value")
+                   # print(43 * white_dict[note[0]],"-> white dict value")
+                   # print((int(note[1]) - 1) * 43 * 7, "-> block value")
 
                     pg.draw.rect(surface, (0, 0, 0, 0), (43 * white_dict[note[0]] + 
                     (int(note[1]) - 1) * 43 * 7, nstart, 45, length),
@@ -199,27 +207,82 @@ class pRoll:
         return -1
 
     def play_notes(self):
+
+
+        cnt = 1
+        delayChange = True
+        NoteCheck = False
+        accVal = 0
+        div = 70
+
+
         for msg in self.midiFile:
 
             if not self.running:
                 return
             if not msg.is_meta:
-                 # is msg is not meta 
-                 divider = round (10 + msg.time * 600)
-                 print("Divider Val: ", divider)
 
-                 for _ in range(divider):
-                     pg.time.delay(round((msg.time * 632) / divider))
-                     self.time += msg.time / divider 
-                    
+#
+                 # is msg is not meta
+                 divider = round (10 + msg.time * 100)
+                 formula = (msg.time*3000) / divider
+                 #print("Divider Value: ",divider)
+                # #print("Divider Val: ", divider)
+
+                 for _ in range(divider): # RUN THE FALLING NOTES (without this hindi baba ang notes)
+                     #pg.init
+
+
+                     #pg.time.delay(1000)
+                     #print("XXX MSG TIME VAL:" , msg.time, "MSG TIME converted: ", msg.time*1000, "DELAY TIME: ", round((msg.time*1000 / divider)))
+                     pg.time.delay(round((msg.time*1000 / divider)-1.4))
+                     accVal = accVal + round(msg.time*1000 / divider)
+                     #print("DELAYED: ", pg.time.delay())
+                     self.time += msg.time / divider
+                 #print ("TOTAL DELAY IN MS: ", accVal, "---------- TOTAL DELAY IN S: ", accVal/1000)
+                 accVal = 0
+                     #print(msg.time/divider,"time --> ",cnt)
+                 #     if delayChange and formula != 0.0:
+                 #        print("Delay Change: ", round(msg.time * 1000 / divider), "-- D# ", cnt)
+                 #        cnt = cnt + 1
+                 #        delayChange = False
+                 #     else:
+                 #         delayChange = False
+                 #
+                 # delayChange = True
+
+                     #print(pg.time.get_ticks())
+                    # print("SELF TIME: ", self.time, "Divider: ", divider)
+
+
                  if msg.type == "note_on":
+                     NoteCheck = True
+                     #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
+                     #cnt = cnt + 1
+                     #print("Note: ",msg.note ,"Note ON : ", "---- ", pg.time.get_ticks() / 1000)
+                     #print("NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
+                     #print("NOTE ON DETECTED AT: ", self.time)
                      self.piano.play_key(midi_number_to_note(msg.note),
                       msg.velocity)
-                      
+
+
+                     #cnt = cnt + 1
+                     #break
+
+
                  elif msg.type == "note_off":
+                    NoteCheck = False
+                    #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
+                    #cnt = cnt + 1
+                    #print("TIME IN TICKS/S: ", pg.time.get_ticks() / 1000)
+                    #print("NoteOFF: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
+                    #print("NOTE OFF DETECTED AT: ", self.time)
                     self.piano.stop_key(midi_number_to_note(msg.note))
 
-        pg.time.delay(100)
+
+
+
+        #pg.time.delay(100)
         self.running = False
 
 
@@ -239,10 +302,122 @@ class pRoll:
 
     def create_background(self):
         background = pg.Surface((1540, 800))
-        background.fill((255, 255, 0))
+       # background.fill((255, 255, 0))
         image = pg.image.load('doodad.png')
-        background.blit(image, (0, 0))
+        background.blit(image, (180, 100))
         return background
+
+    def input_main(self,surface,device_id=None):
+
+       # pg.init()
+        pr.piano.white_pressed_surface.fill((0, 0, 0, 0))  # fill with white
+        pr.piano.black_pressed_surface.fill((0, 0, 0, 0))
+
+        keyCoordinates = {
+        36: 0, 38: 43, 40: 86,
+        41: 129, 43: 172, 45: 215,
+        47: 258, 48: 301, 50: 344,
+        52: 387,
+
+        53: 430, 55: 473, 57: 516,
+        59: 559, 60: 602, 62: 645,
+        64: 688, 65: 731, 67:774,
+        69: 817,
+
+        71: 860, 72: 903, 74: 946,
+        76: 989, 77: 1032, 79: 1075,
+        81: 1118, 83: 1161, 84: 1204,
+        86: 1247,
+
+        88: 1290, 89: 1333, 91: 1376,
+        93: 1419, 95: 1462, 96: 1505
+
+        }
+
+        blackCoordinates = {
+        37: 28, 39: 71, 42: 157, 44: 200, 46: 243,
+        49: 329, 51: 372, 54: 458, 56: 501, 58: 544,
+        61: 630, 63: 673, 66: 749, 68: 802, 70: 845,
+        73: 931, 75: 974, 78: 1060, 80: 1103, 82: 1146,
+        85: 1232, 87: 1275, 90: 1361, 92: 1404, 94: 1447
+        }
+
+
+        event_get = pg.fastevent.get
+        event_post = pg.fastevent.post
+
+        if device_id is None:
+            input_id = pg.midi.get_default_input_id()
+            print("INPUT:",input_id)
+        else:
+            input_id = device_id
+            print("DID NOT ACCESS")
+
+        print("using input_id :%s:" % input_id)
+        i = pg.midi.Input(input_id)
+
+        going = True
+        while going:
+            events = event_get()
+            for e in events:
+                if e.type in [pg.QUIT]:
+                    going = False
+                if e.type in [pg.KEYDOWN]:
+                    going = False
+                if e.type in [pg.midi.MIDIIN]:
+                    print(e.__dict__['data1'], "Test!!")
+                    val = e.__dict__['data1']
+                    stat = e.__dict__['status']
+                    print("KEY VAL: ", val)
+
+
+                    if stat!=128:
+
+                        if val in keyCoordinates.keys():
+
+                            pg.draw.rect(pr.piano.white_pressed_surface,
+                                     (213, 50, 66, 200), (keyCoordinates.get(val), 0, 45, 207), border_radius=5)
+                        # "Gap" animation between the keys
+                            pg.draw.rect(pr.piano.white_pressed_surface, (0, 0, 0),
+                                     (keyCoordinates.get(val), 0, 45, 207),  # Location
+                                     width=1, border_radius=5)
+
+                        if val in blackCoordinates.keys():
+                            pg.draw.rect(pr.piano.black_pressed_surface, (213, 50, 66, 200),
+                                         (blackCoordinates.get(val), 0, 30, 110))
+
+
+                    else:
+
+                        if val in keyCoordinates.keys():
+                            pg.draw.rect(pr.piano.white_pressed_surface,
+                                         (155, 255, 255), (keyCoordinates.get(val), 0, 45, 207), border_radius=5)
+
+                            pg.draw.rect(pr.piano.white_pressed_surface, (0, 0, 0),
+                                         (keyCoordinates.get(val), 0, 45, 207),  # Location
+                                         width=1, border_radius=5)
+
+                        if val in blackCoordinates.keys():
+                            pg.draw.rect(pr.piano.black_pressed_surface, (0,0,0),
+                                             (blackCoordinates.get(val), 0, 30, 110))
+
+
+                surface.blit(pr.piano.white_key_surface, (0, 600))  # Draw the UNPRESSED white key
+                surface.blit(pr.piano.white_pressed_surface, (0, 600))  # Draw the PRESSED white Key
+                surface.blit(pr.piano.black_key_surface, (0, 600))  # Draw the UNPRESSED black key
+                surface.blit(pr.piano.black_pressed_surface, (0, 600))  # Draw the PRESSED black key
+                pg.display.update()
+
+
+
+            if i.poll():
+                midi_events = i.read(10)
+                # convert them into pygame events.
+                midi_evs = pg.midi.midis2events(midi_events, i.device_id)
+
+                for m_e in midi_evs:
+                    event_post(m_e)
+
 
 
 
@@ -253,21 +428,29 @@ pr = pRoll()
  # Start playing midi File in separate Thread
 thread = Thread(target=pr.play_notes)
 thread.start()
+
 #display = pg.display.set_mode((1248, 500))
 #pg.mixer.init()
 
 display = pg.display.set_mode((1540, 800))
+lp = 0
 while pr.running:
+    print("LOOP BACK: ", lp)
+    lp = lp + 1
+    #print("TIME IN TICKS/S: ",pg.time.get_ticks()/1000)
+    pr.clock.tick(90)
 
-    pr.clock.tick(600)
 
-    # Calculate piano roll offaet
+
+    # Calculate piano roll offset
+    pr.input_main(display)
     offset = pr.time * 100 + 600
-
-    #update keys 
+    #update keys
     pr.display.blit(pr.background, (0, 0))
     pr.draw(pr.display, offset)
-    pr.piano.draw_keys(display)
+
+    #pr.piano.draw_keys(display)
+
     pg.display.flip()
     
     
@@ -278,5 +461,5 @@ while pr.running:
 
  # Makes sure thread has stopped before ending program
 if thread.is_alive():
-    thread.join() 
+    thread.join()
         

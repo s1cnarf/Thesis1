@@ -46,7 +46,7 @@ class keySample:
         # Function to Stop a Key
     def stop(self) -> None:
         self.is_pressed = False # The sound will stop when the key is released
-        mixer.Channel(self.channel_id).fadeout(300)
+        mixer.Channel(self.channel_id).fadeout(100)
 
 
 

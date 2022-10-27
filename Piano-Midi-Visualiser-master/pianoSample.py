@@ -189,7 +189,7 @@ class Piano:
 
 
 
-
+'''
 pn = Piano()
 
 
@@ -201,6 +201,6 @@ display = pg.display.set_mode((1080, 720))
 pn.draw_keys(display)
 
 # Makes sure thread has stopped before ending program
-
+'''
 
 

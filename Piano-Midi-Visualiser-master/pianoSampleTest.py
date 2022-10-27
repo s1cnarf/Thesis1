@@ -1,7 +1,11 @@
 from threading import Thread
 from keySample import keySample
 from kmapSample import kmap
-import pygame as pg 
+import pygame as pg
+import pygame.midi
+import sys
+import os
+
 from sys import exit
 from pygame.locals import *
 import sys
@@ -29,16 +33,22 @@ from threading import Thread
 
 '''
 
+ready = False
+
 class Piano: 
     
     # Define the constructor 
     def __init__(self) -> None:
         pg.init()
-     
+        pg.fastevent.init()
+        pg.midi.init()
+
+        self.ready = False
+        self.running = True
         self.display = pg.display.set_mode((1540, 800))
         self.rectList = []
         self.iterVal = 0
-        self.font = pg.font.SysFont('Arial', 15)
+        #self.font = pg.font.SysFont('Arial', 15)
         self.globalVal = 0
         self.keys = self.load_keys()
         # We Define the surfaces of the Piano Keys 
@@ -52,14 +62,25 @@ class Piano:
         pg.SRCALPHA, 32).convert_alpha()
 
     def draw_keys(self, surface):
-        self.draw_pressed()
+        #self.draw_pressed()
+        #self.input_main()
         surface.blit(self.white_key_surface, (0, 600)) # Draw the UNPRESSED white key
         surface.blit(self.white_pressed_surface, (0, 600)) # Draw the PRESSED white Key
         surface.blit(self.black_key_surface, (0, 600)) # Draw the UNPRESSED black key
         surface.blit(self.black_pressed_surface, (0, 600)) # Draw the PRESSED black key
        #self.button()
+
         pg.display.update()
+        '''
+        if self.ready == False:
+            pg.time.wait((3000))
+            self.ready = True
+            pg.init()
+        else:
+            self.ready = True
+        '''
         #self.buttonClick()
+
 
         
         
@@ -91,7 +112,7 @@ class Piano:
                 if key[0][-1] == '#':
                     if key[0] == 'a0#': # 1st element is sharp
                         pg.draw.rect(self.black_pressed_surface, 
-                        pressed_colour, s(16, 0, 45, 207),
+                        pressed_colour, (16, 0, 45, 207),
                         border_radius=5)
                     else:
                         pg.draw.rect(self.black_pressed_surface, 
@@ -145,18 +166,20 @@ class Piano:
                                 pg.Rect(i *43, 0, 45, 200),
                                 border_radius=5))
                     self.globalVal = self.globalVal + 1
-                    print("Val: ", self.globalVal)
+                    #print("Val: ", self.globalVal)
+                    '''
                     smallfont = pg.font.SysFont('Arial',36) 
                     text = smallfont.render('1' , True , (0,0,0))
                    # self.iterVal = self.iterVal + 45
                     white_keys.blit(text , (10 , 130))
                     white_keys.blit(text , (50 , 130))
                     white_keys.blit(text , (100 , 130))
-                    newVal = newVal+45
+                    '''
+                    #print("Key Value: ", newVal)
+                    newVal = newVal+43
 
-                    	
-                    mouse = pg.mouse.get_pos()
-                    
+
+
 
                     # "Gap" animation between the keys
                     pg.draw.rect(white_keys, (0, 0, 0),
@@ -175,7 +198,10 @@ class Piano:
                                 pg.Rect(i *43, 0, 45, 200),
                                 border_radius=5))
                     self.globalVal = self.globalVal + 1
-                    print("Val: ", self.globalVal)
+                    #print("Val: ", self.globalVal)
+                  #  print("Key Value: ", newVal)
+                    newVal = newVal+43
+
                     
 
                     # "Gap" animation between the keys
@@ -194,8 +220,7 @@ class Piano:
                                 pg.Rect(i *43, 0, 45, 200),
                                 border_radius=5))
                     self.globalVal = self.globalVal + 1
-                    print("Val: ", self.globalVal)
-                    
+
 
                     # "Gap" animation between the keys
                     pg.draw.rect(white_keys, (0, 0, 0),
@@ -213,9 +238,6 @@ class Piano:
                                 pg.Rect(i *43, 0, 45, 200),
                                 border_radius=5))
                     self.globalVal = self.globalVal + 1
-                    print("Val: ", self.globalVal)
-                  #  display.blit(self.font.render('HELLO', True, (255,0,0)), (i *43, 0, 235, 630))
-                   # pg.display.update()
 
                     
 
@@ -231,11 +253,14 @@ class Piano:
 
 
 
+
                 # Black colored keys
                 pg.draw.rect(black_keys, (0, 0, 0), 
-                            (i * 43 + 26 + 2, 0, 30, 110),
-                           )
-            
+                            (i * 43 + 26 + 2, 0, 30, 110))
+                counter = i * 43 + 26 + 2
+                #print("COUNTER BLK: ", counter)
+
+
 
         return (white_keys, black_keys)
 
@@ -299,20 +324,146 @@ class Piano:
             k: keySample(k, keymap[k], i) for i, k in enumerate(keymap)
         }
 
+    def input_main(self,surface,device_id=None):
 
-'''
-pn = Piano()
+       # pg.init()
+        self.white_pressed_surface.fill((0, 0, 0, 0))  # fill with white
+        self.black_pressed_surface.fill((0, 0, 0, 0))
+
+        keyCoordinates = {
+        36: 0, 38: 43, 40: 86,
+        41: 129, 43: 172, 45: 215,
+        47: 258, 48: 301, 50: 344,
+        52: 387,
+
+        53: 430, 55: 473, 57: 516,
+        59: 559, 60: 602, 62: 645,
+        64: 688, 65: 731, 67:774,
+        69: 817,
+
+        71: 860, 72: 903, 74: 946,
+        76: 989, 77: 1032, 79: 1075,
+        81: 1118, 83: 1161, 84: 1204,
+        86: 1247,
+
+        88: 1290, 89: 1333, 91: 1376,
+        93: 1419, 95: 1462, 96: 1505
+
+        }
+
+        blackCoordinates = {
+        37: 28, 39: 71, 42: 157, 44: 200, 46: 243,
+        49: 329, 51: 372, 54: 458, 56: 501, 58: 544,
+        61: 630, 63: 673, 66: 749, 68: 802, 70: 845,
+        73: 931, 75: 974, 78: 1060, 80: 1103, 82: 1146,
+        85: 1232, 87: 1275, 90: 1361, 92: 1404, 94: 1447
+        }
+
+
+        event_get = pg.fastevent.get
+        event_post = pg.fastevent.post
+
+        if device_id is None:
+            input_id = pg.midi.get_default_input_id()
+            print("INPUT:",input_id)
+        else:
+            input_id = device_id
+            print("DID NOT ACCESS")
+
+        print("using input_id :%s:" % input_id)
+        i = pg.midi.Input(input_id)
+
+        going = True
+        while going:
+            events = event_get()
+            for e in events:
+                if e.type in [pg.QUIT]:
+                    going = False
+                if e.type in [pg.KEYDOWN]:
+                    going = False
+                if e.type in [pg.midi.MIDIIN]:
+                    print(e.__dict__['data1'], "Test!!")
+                    val = e.__dict__['data1']
+                    stat = e.__dict__['status']
+                    print("KEY VAL: ", val)
+
+
+                    if stat!=128:
+
+                        if val in keyCoordinates.keys():
+
+                            pg.draw.rect(self.white_pressed_surface,
+                                     (213, 50, 66, 200), (keyCoordinates.get(val), 0, 45, 207), border_radius=5)
+                        # "Gap" animation between the keys
+                            pg.draw.rect(self.white_pressed_surface, (0, 0, 0),
+                                     (keyCoordinates.get(val), 0, 45, 207),  # Location
+                                     width=1, border_radius=5)
+
+                        if val in blackCoordinates.keys():
+                            pg.draw.rect(self.black_pressed_surface, (213, 50, 66, 200),
+                                         (blackCoordinates.get(val), 0, 30, 110))
+
+
+
+
+
+                    else:
+
+                        if val in keyCoordinates.keys():
+                            pg.draw.rect(self.white_pressed_surface,
+                                         (155, 255, 255), (keyCoordinates.get(val), 0, 45, 207), border_radius=5)
+
+                            pg.draw.rect(self.white_pressed_surface, (0, 0, 0),
+                                         (keyCoordinates.get(val), 0, 45, 207),  # Location
+                                         width=1, border_radius=5)
+
+                        if val in blackCoordinates.keys():
+                            pg.draw.rect(self.black_pressed_surface, (0,0,0),
+                                             (blackCoordinates.get(val), 0, 30, 110))
+
+
+
+
+                surface.blit(self.white_key_surface, (0, 600))  # Draw the UNPRESSED white key
+                surface.blit(self.white_pressed_surface, (0, 600))  # Draw the PRESSED white Key
+                surface.blit(self.black_key_surface, (0, 600))  # Draw the UNPRESSED black key
+                surface.blit(self.black_pressed_surface, (0, 600))  # Draw the PRESSED black key
+                pg.display.update()
+
+
+
+            if i.poll():
+                midi_events = i.read(10)
+                # convert them into pygame events.
+                midi_evs = pg.midi.midis2events(midi_events, i.device_id)
+
+                for m_e in midi_evs:
+                    event_post(m_e)
+
 
 
  # Start playing midi File in separate Thread
 
+# pn = Piano()
+#
+#
+# display = pg.display.set_mode((1540, 800))
+# while pn.running:
+#
+#
+#     pn.draw_keys(display)
+#     pn.input_main(display)
+#     pg.display.flip()
+#
+#     for event in pg.event.get():
+#         if event.type == pg.QUIT:
+#             pn.running = False
 
-display = pg.display.set_mode((1540, 800))
+
 
 #display = pg.display.set_mode((0,0), pg.FULLSCREEN)
 
-pn.draw_keys(display)
 
 # Makes sure thread has stopped before ending program
-'''
+
 

@@ -45,8 +45,9 @@ class Main:
             if not msg.is_meta:
                 divider = round(10 + msg.time * 100)
                 for _ in range(divider):
-                    pg.time.delay(round((msg.time * 1000) / divider))
+                    #pg.time.delay(round((msg.time * 1000) / divider))
                     self.time += msg.time / divider
+                    print("DELAY VALUE: ",round((msg.time * 1000) / divider))
                 if msg.type == "note_on":
                     self.piano.play_key(
                         midi_number_to_note(msg.note), msg.velocity)
@@ -71,6 +72,7 @@ class Main:
 
         # Pygame Main loop
         while self.running:
+            print(pg.time.get_ticks())
             self.clock.tick(50)
 
             # Calculate piano roll offaet
