@@ -578,6 +578,7 @@ class PlayPage(tk.Frame):
 
         global infos
         def infos(e):
+            app.withdraw()
 
             pn = Piano()
             display = pg.display.set_mode((1540, 800))
@@ -593,8 +594,10 @@ class PlayPage(tk.Frame):
                         pn.running = False
                         pg.display.quit()
                         pg.quit()
+                        app.deiconify()
+                        controller.show_frame("AfterPerformance")
                         
-            controller.show_frame("AfterPerformance")
+            
                         
             #controller.show_frame("PianoRoll")
 
@@ -1611,6 +1614,7 @@ class PageFour(tk.Frame):
 
 
 if __name__ == "__main__":
+    global app
     app = SampleApp()
     def close_window():
         app.quit()
