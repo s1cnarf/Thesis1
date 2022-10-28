@@ -591,8 +591,10 @@ class PlayPage(tk.Frame):
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
                         pn.running = False
-                        controller.show_frame("AfterPerformance")
-
+                        pg.display.quit()
+                        pg.quit()
+                        
+            controller.show_frame("AfterPerformance")
                         
             #controller.show_frame("PianoRoll")
 
@@ -1610,6 +1612,9 @@ class PageFour(tk.Frame):
 
 if __name__ == "__main__":
     app = SampleApp()
+    def close_window():
+        app.quit()
+    app.protocol("WM_DELETE_WINDOW", close_window)
 
     window_width = 1206
     window_height = 730
