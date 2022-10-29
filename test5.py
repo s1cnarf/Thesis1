@@ -688,9 +688,6 @@ class PlayPage(tk.Frame):
             con.commit()
             con.close()
 
-        def infos(e):
-            controller.show_frame("AfterPerformance")
-
         global infos2
         def infos2(e):
             selectedItem = tree_histo.focus()
