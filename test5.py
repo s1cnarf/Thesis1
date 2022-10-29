@@ -172,27 +172,11 @@ class LogIn(tk.Frame):
                     c = con.cursor()
                     c.execute("Select * from record WHERE Username = ? AND PASSWORD = ?", (uname, passw))
                     #if (c.execute("Select * from record WHERE Username = '{uname}' AND PASSWORD = '{passw}'")):
-                    
+
                     if (c.fetchone()):
                         messagebox.showinfo('Login Status', 'Successfuly Login')
                         
-                        con = sqlite3.connect('userData.db')
-                        cu = con.cursor()
-
-                        #             #cu.execute("Select if (Username = username), history.* from history")
-                        cu.execute("SELECT * FROM history WHERE Username = ?",(label_entry.get(),))
-                        #cu.execute("SELECT * FROM history")
-                        historyData = cu.fetchall()
-
-                        for histo in historyData:
-                        #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
-                            tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
-                        #             #print(histo)
-                        #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
-
-                        con.commit()
-                        con.close()
-
+                        UpdateHistory()
                         controller.show_frame("StartPage")
                     else:
                         messagebox.showerror('Login Status', 'Invalid Username or Password')
@@ -516,6 +500,10 @@ class StartPage(tk.Frame):
         self.controller.title("Chop-In")
         #self.controller.state("zoomed")
 
+        def CombineFunctions(e):
+            UpdateHistory()
+            controller.show_frame("PageThree")
+
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((386,82),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
@@ -549,7 +537,7 @@ class StartPage(tk.Frame):
         play_label2.image = img2
 
         play_label3 = tk.Label(self, image=img3, cursor ="hand2", borderwidth=0)
-        play_label3.bind("<Button-1>", lambda e: controller.show_frame("PageThree"))
+        play_label3.bind("<Button-1>", CombineFunctions)
         play_label3.image = img3
 
         play_label4 = tk.Label(self, image=img4, cursor ="hand2", borderwidth=0)
@@ -588,7 +576,7 @@ class PlayPage(tk.Frame):
             search_entry.delete(0, END)
 
             search_entry.insert(0,song)
-            tree_histo.selection_clear()
+            #tree_histo.selection_clear()
 
         def GetSongList2(e):
             song2 = listbox.get(ANCHOR)
@@ -670,31 +658,12 @@ class PlayPage(tk.Frame):
 
             song=stack2.pop()
 
-            con = sqlite3.connect('userData.db')
-            cu = con.cursor()
 
-            #cu.execute("Select if (Username = username), history.* from history")
-            #cu.execute("SELECT * FROM history WHERE Username = ?",(username,))
-            cu.execute("SELECT * FROM history")
-            historyData = cu.fetchall()
-
-            for histo in historyData:
-                #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
-                tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
-                #print(histo)
-                #tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
-
-            con.commit()
-            con.close()
-
-
-            #listbox_songs2.insert(index_stack,dt_string,song)
-            #tree_histo.insert('',tk.END, values=("gc","OCT 26",'Alex'))
-            #tree_histo.insert('',index_stack,values=(dt_string,song,80))
             listbox.insert(index_stack,song)
             index_stack+1
             song_label.configure(text=data)
-            #controller.show_frame("AfterPerformance")
+   
+   
             con = sqlite3.connect('userData.db')
             cur = con.cursor()
             cur.execute("INSERT INTO History VALUES (:Username, :DateAndTime, :Title, :Score) ",{
@@ -706,6 +675,10 @@ class PlayPage(tk.Frame):
                     })
             con.commit()
             con.close()
+            print("INSERTED")
+
+
+          
 
         global infos2
         def infos2(e):
@@ -1632,23 +1605,31 @@ class PageThree(tk.Frame):
         tree_histo.config(yscrollcommand=scrollbar2.set)
         scrollbar2.config(command=tree_histo.yview)
         scrollbar2.pack(side=RIGHT,fill=Y)
+        
+        global UpdateHistory
+        def UpdateHistory():
 
-        con = sqlite3.connect('userData.db')
-        cu = con.cursor()
+            for item in tree_histo.get_children():
+                tree_histo.delete(item)
 
-        #             #cu.execute("Select if (Username = username), history.* from history")
-        cu.execute("SELECT * FROM history WHERE Username = ?",(label_entry.get(),))
-        #cu.execute("SELECT * FROM history")
-        historyData = cu.fetchall()
+            con = sqlite3.connect('userData.db')
+            cu = con.cursor()
 
-        for histo in historyData:
-        #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
-           tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
-        #             #print(histo)
-        #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
+            #             #cu.execute("Select if (Username = username), history.* from history")
+            cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY DateAndTime DESC",(label_entry.get(),))
+            #cu.execute("SELECT * FROM history")
+            historyData = cu.fetchall()
 
-        con.commit()
-        con.close()
+            for histo in historyData:
+            #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
+                tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
+            #             #print(histo)
+            #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
+
+            con.commit()
+            con.close()
+
+            print("FLAGG")
         # if(cu.fetchall()):
         #     tree_histo.insert(parent='',index='end', iid='counter', text='', values=(cu[0], cu[1], cu[2], cu[3]))
         #historyData = cu.fetchall()
