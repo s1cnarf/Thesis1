@@ -176,7 +176,6 @@ class LogIn(tk.Frame):
                     if (c.fetchone()):
                         messagebox.showinfo('Login Status', 'Successfuly Login')
                         
-                        UpdateHistory()
                         controller.show_frame("StartPage")
                     else:
                         messagebox.showerror('Login Status', 'Invalid Username or Password')
@@ -504,6 +503,10 @@ class StartPage(tk.Frame):
             UpdateHistory()
             controller.show_frame("PageThree")
 
+        def _create_circle(self, x, y, r, **kwargs):
+            return self.create_oval(x-r, y-r, x+r, y+r, **kwargs)
+        tk.Canvas.create_circle = _create_circle
+
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic= logo_pic.resize((386,82),Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
@@ -525,6 +528,10 @@ class StartPage(tk.Frame):
         #image = image.resize((69,53), Image.ANTIALIAS)
         img4 = ImageTk.PhotoImage(image)
 
+        image = Image.open("Pictures/DeviceDetect.png")
+        #image = image.resize((69,53), Image.ANTIALIAS)
+        img5 = ImageTk.PhotoImage(image)
+
         logo_label = tk.Label(self, image=logo_img,borderwidth=0)
         logo_label.image = logo_img
 
@@ -543,12 +550,21 @@ class StartPage(tk.Frame):
         play_label4 = tk.Label(self, image=img4, cursor ="hand2", borderwidth=0)
         play_label4.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
         play_label4.image = img4
+
+        DetectDevice_label = tk.Label(self, image=img5,borderwidth=0)
+        DetectDevice_label.image = img5
+
+        canvas = tk.Canvas(self,width=20,height=20,bg="#2A2B2C")
+        canvas.create_circle(13, 13, 10, fill="#ED695E", outline="")
+        
     
         logo_label.place(x=400,y=200)
         play_label.place(x=364, y=375)
         play_label2.place(x=490, y=375)
         play_label3.place(x=644, y=374)
         play_label4.place(x=792, y=375)
+        DetectDevice_label.place(x=919,y=26)
+        canvas.place(x=950,y=45)
 
 
 class PlayPage(tk.Frame):
