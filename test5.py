@@ -172,8 +172,27 @@ class LogIn(tk.Frame):
                     c = con.cursor()
                     c.execute("Select * from record WHERE Username = ? AND PASSWORD = ?", (uname, passw))
                     #if (c.execute("Select * from record WHERE Username = '{uname}' AND PASSWORD = '{passw}'")):
+                    
                     if (c.fetchone()):
                         messagebox.showinfo('Login Status', 'Successfuly Login')
+                        
+                        con = sqlite3.connect('userData.db')
+                        cu = con.cursor()
+
+                        #             #cu.execute("Select if (Username = username), history.* from history")
+                        cu.execute("SELECT * FROM history WHERE Username = ?",(label_entry.get(),))
+                        #cu.execute("SELECT * FROM history")
+                        historyData = cu.fetchall()
+
+                        for histo in historyData:
+                        #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
+                            tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
+                        #             #print(histo)
+                        #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
+
+                        con.commit()
+                        con.close()
+
                         controller.show_frame("StartPage")
                     else:
                         messagebox.showerror('Login Status', 'Invalid Username or Password')
