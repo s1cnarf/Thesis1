@@ -18,6 +18,8 @@ import pandas as pd
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from visualization import plot_rect,Convert,MidiNoteNumbers
+from pianoSampleTest import Piano
+import pygame as pg
 import sqlite3
 import pyglet
 
@@ -577,6 +579,30 @@ class PlayPage(tk.Frame):
             search_entry.insert(0,song2)
             return None
 
+        global infos
+        def infos(e):
+            app.withdraw()
+
+            pn = Piano()
+            display = pg.display.set_mode((1540, 800))
+            while pn.running:
+
+
+                pn.draw_keys(display)
+                #pn.input_main(display)
+                pg.display.flip()
+
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pn.running = False
+                        pg.display.quit()
+                        pg.quit()
+                        app.deiconify()
+                        controller.show_frame("AfterPerformance")
+                        
+            
+                        
+            #controller.show_frame("PianoRoll")
 
         def search(e):
             typed = search_entry.get()
@@ -810,7 +836,6 @@ class PlayPage(tk.Frame):
         frame2_play.place(x=90,y=148)
         label_play.place(x=138, y=179)
         #label2_play.place(x=550, y=180)
-        
 
 class AfterPerformance(tk.Frame):
 
@@ -1662,7 +1687,11 @@ class PageFour(tk.Frame):
 
 
 if __name__ == "__main__":
+    global app
     app = SampleApp()
+    def close_window():
+        app.quit()
+    app.protocol("WM_DELETE_WINDOW", close_window)
 
     window_width = 1206
     window_height = 730
