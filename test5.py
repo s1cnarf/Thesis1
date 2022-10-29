@@ -9,6 +9,7 @@ from tkinter import *
 from tkinter import messagebox,ttk
 from tkinter.ttk import Progressbar
 from turtle import bgcolor, circle, color, left, title, width
+from typing import Counter
 from PIL import ImageTk, Image
 from datetime import datetime
 from collections import deque
@@ -253,6 +254,7 @@ class LogIn(tk.Frame):
             if name == '':
                 label_entry.insert(0,'Enter Username')
         
+        global label_entry
         label_entry = tk.Entry(self,width=28,font=controller.title_font)
         label_entry.insert(0,"Enter your username")
         label_entry.bind('<FocusIn>', on_enter)
@@ -565,6 +567,7 @@ class PlayPage(tk.Frame):
             search_entry.delete(0, END)
 
             search_entry.insert(0,song)
+            tree_histo.selection_clear()
 
         def GetSongList2(e):
             song2 = listbox.get(ANCHOR)
@@ -574,9 +577,6 @@ class PlayPage(tk.Frame):
             search_entry.insert(0,song2)
             return None
 
-        global infos
-        def infos(e):
-            controller.show_frame("AfterPerformance")
 
         def search(e):
             typed = search_entry.get()
@@ -624,9 +624,28 @@ class PlayPage(tk.Frame):
             stack2.append(data)
 
             song=stack2.pop()
+
+            con = sqlite3.connect('userData.db')
+            cu = con.cursor()
+
+            #cu.execute("Select if (Username = username), history.* from history")
+            #cu.execute("SELECT * FROM history WHERE Username = ?",(username,))
+            cu.execute("SELECT * FROM history")
+            historyData = cu.fetchall()
+
+            for histo in historyData:
+                #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
+                tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
+                #print(histo)
+                #tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
+
+            con.commit()
+            con.close()
+
+
             #listbox_songs2.insert(index_stack,dt_string,song)
             #tree_histo.insert('',tk.END, values=("gc","OCT 26",'Alex'))
-            tree_histo.insert('',index_stack,values=(dt_string,song,80))
+            #tree_histo.insert('',index_stack,values=(dt_string,song,80))
             listbox.insert(index_stack,song)
             index_stack+1
             song_label.configure(text=data)
@@ -643,13 +662,31 @@ class PlayPage(tk.Frame):
             con.commit()
             con.close()
 
+        def infos(e):
+            controller.show_frame("AfterPerformance")
+
+        global infos2
+        def infos2(e):
+            selectedItem = tree_histo.focus()
+            search_entry.delete(0,END)
+            try:
+                data2 = tree_histo.item(selectedItem)['values'][1]
+                song_label.config(text=data2)
+                #search_entry.insert(0,)
+                # item = tree_histo.item(selectedItem)
+                # print(item.get[1])
+                controller.show_frame("AfterPerformance")
+            except IndexError:
+                print("ayos lang")
+
 
         global combinedFunc
         def combinedFunc(e):
             PushSongInStack(e)
             infos(e)
-
+            
         
+
         image = Image.open("Pictures/recents.png")
         #image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
@@ -1555,8 +1592,41 @@ class PageThree(tk.Frame):
         scrollbar2.config(command=tree_histo.yview)
         scrollbar2.pack(side=RIGHT,fill=Y)
 
+        con = sqlite3.connect('userData.db')
+        cu = con.cursor()
+
+        #             #cu.execute("Select if (Username = username), history.* from history")
+        cu.execute("SELECT * FROM history WHERE Username = ?",(label_entry.get(),))
+        #cu.execute("SELECT * FROM history")
+        historyData = cu.fetchall()
+
+        for histo in historyData:
+        #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
+           tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
+        #             #print(histo)
+        #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
+
+        con.commit()
+        con.close()
+        # if(cu.fetchall()):
+        #     tree_histo.insert(parent='',index='end', iid='counter', text='', values=(cu[0], cu[1], cu[2], cu[3]))
+        #historyData = cu.fetchall()
+
+        # counter = 0
+
+        # for histo in historyData:
+        #     if counter % 2 == 0:
+        #         tree_histo.insert("", 'end', iid=histo[0], values=(histo[0], histo[1], histo[2], histo[3]))
+        #     else:
+        #         tree_histo.insert(parent='',index='end', iid='counter', text='', values=(histo[0], histo[1], histo[2], histo[3]))
+
+        #     counter += 1
+        
+
+
         tree_histo.bind('<Motion>', 'break')
-        tree_histo.bind('<<TreeviewSelect>>' ,infos)
+        tree_histo.bind('<<TreeviewSelect>>' ,infos2)
+        
         
         
        # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
