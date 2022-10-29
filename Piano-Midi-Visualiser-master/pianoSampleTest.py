@@ -52,8 +52,12 @@ class Piano:
         self.globalVal = 0
         self.keys = self.load_keys()
         # We Define the surfaces of the Piano Keys 
-        
-        self.white_key_surface , self.black_key_surface = self.create_key_surfaces()
+
+        # self.white_key_surface, self.black_key_surface = self.create_key_surfaces()
+        self.white_key_surface = pg.surface.Surface(
+            (1540,200))
+        self.black_key_surface =  pg.surface.Surface(
+            (1540,200), pg.SRCALPHA, 32).convert_alpha()
 
         self.white_pressed_surface = pg.surface.Surface((1540,200),
         pg.SRCALPHA, 32).convert_alpha()
@@ -62,7 +66,7 @@ class Piano:
         pg.SRCALPHA, 32).convert_alpha()
 
     def draw_keys(self, surface):
-        #self.draw_pressed()
+        self.draw_pressed()
         #self.input_main()
         surface.blit(self.white_key_surface, (0, 600)) # Draw the UNPRESSED white key
         surface.blit(self.white_pressed_surface, (0, 600)) # Draw the PRESSED white Key
@@ -140,6 +144,8 @@ class Piano:
  # ----------------------------------------------------------------------------------------
 
     def create_key_surfaces(self):
+
+        print("ACCESS")
 
         display = pg.display.set_mode((1540, 800))
 
@@ -260,9 +266,12 @@ class Piano:
                 counter = i * 43 + 26 + 2
                 #print("COUNTER BLK: ", counter)
 
+        self.white_key_surface = white_keys
+        self.black_key_surface = black_keys
 
-
-        return (white_keys, black_keys)
+        print(white_keys)
+        print(black_keys)
+        # return (white_keys, black_keys)
 
 
     def highlight(self):
@@ -372,9 +381,11 @@ class Piano:
 
         print("using input_id :%s:" % input_id)
         i = pg.midi.Input(input_id)
-
+        value = 1
         going = True
         while going:
+            #print("VALUE AMOUNT: ", value)
+            value = value + 1
             events = event_get()
             for e in events:
                 if e.type in [pg.QUIT]:
@@ -450,7 +461,7 @@ class Piano:
 # display = pg.display.set_mode((1540, 800))
 # while pn.running:
 #
-#
+#     pn.create_key_surfaces()
 #     pn.draw_keys(display)
 #     pn.input_main(display)
 #     pg.display.flip()
