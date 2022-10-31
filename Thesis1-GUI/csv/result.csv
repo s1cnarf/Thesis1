@@ -1,0 +1,17 @@
+﻿Element,Data
+Correct,85
+Partial,15
+Extra,5
+Missed,10
+Success_Switch,75
+Failed_Switch,35
+Timed_Hit,75
+Late_Hit,10
+Early_Hit,25
+Loud_Hit,65
+Soft_Hit,45
+LH_Correct,35
+RH_Correct,50
+LH_Fail,15
+RH_Fail,10
+Melody,70
