@@ -16,16 +16,16 @@ class pRoll:
 
     # Define Constructor 
     def __init__ (self) -> None:
+        
         pg.init()
         pg.fastevent.init()
         pg.midi.init()
-
-
+        
         self.input_id = pg.midi.get_default_input_id()
-        self.i = pg.midi.Input(self.input_id)
+        #self.i = pg.midi.Input(self.input_id)
         self.lp = 0
         self.delayVal = 0
-        self.lock = threading.Lock()
+        #self.lock = threading.Lock()
         self.midiFile = self.load_midi_file() ## addons ulets
         
         # Attribute for transcribing the MIDI file 
@@ -46,7 +46,11 @@ class pRoll:
         self.piano = Piano()
         self.display = self.setup_pygame(self.song_name)
         self.background = self.create_background()
-    
+        
+        #Extra
+        self.getTicksLastFrame = 0
+        self.timer = 0
+        self.start = 0
 
 
     #  Draw the Image of the surface 
@@ -219,31 +223,50 @@ class pRoll:
 
         cnt = 1
         delayChange = True
-        NoteCheck = False
+        NoteCheck = True
         accVal = 0
         div = 70
-
+        real = 500000
+        self.start = tm.time()
+        elapsed_time = 0
+        deltaTime = 0
         for msg in self.midiFile:
-            #print (msg)
+            #print(f'Ticks: {self.timer} Time: {self.time}')
             if not self.running:
                 return
+
+            if msg.type == 'set_tempo':
+                #use tempo to sync the running time of the program
+                t_midi = msg.tempo
+                tempo = round((t_midi/real), 2)
+                print ('TEMPO MIDI: ', t_midi, " TEMPO: ", tempo)
+
             if not msg.is_meta:
                 # is msg is not meta
                 divider = round (10 + msg.time * 100)
-                formula = (msg.time*3000) / divider
-                #print("Divider Value: ",divider)
-            # #print("Divider Val: ", divider)
+                #formula = (msg.time*3000) / divider
+                #print("Formula: ",formula)
+                
+                # #print("Divider Val: ", divider)
+                t = pg.time.get_ticks() 
+                # deltaTime in seconds.
+                deltaTime = ((t - self.getTicksLastFrame) / 1000.0)
+                #print(f't : {t}, deltatime : {deltaTime} lasttick: {self.getTicksLastFrame}')
+                self.getTicksLastFrame = t
 
                 for _ in range(divider): # RUN THE FALLING NOTES (without this hindi baba ang notes)
                     #pg.init
 
-
+                    
                     #pg.time.delay(1000)
                     #print("XXX MSG TIME VAL:" , msg.time, "MSG TIME converted: ", msg.time*1000, "DELAY TIME: ", round((msg.time*1000 / divider)))
-                    pg.time.delay(round((msg.time*1000 / divider)-1.5))
+                    pg.time.delay(round((msg.time*1000 / divider) - tempo))
                     accVal = accVal + round(msg.time*1000 / divider)
-                    #print("DELAYED: ", pg.time.delay())
+                    #print("DELAYED: ", accVal)
                     self.time += msg.time / divider
+                
+                
+                
                 #print ("TOTAL DELAY IN MS: ", accVal, "---------- TOTAL DELAY IN S: ", accVal/1000)
                 accVal = 0
                     #print(msg.time/divider,"time --> ",cnt)
@@ -258,15 +281,22 @@ class pRoll:
 
                     #print(pg.time.get_ticks())
                 # print("SELF TIME: ", self.time, "Divider: ", divider)
-
-
+                
                 if msg.type == "note_on":
-                    NoteCheck = True
+                    if self.time == 0.0:
+                        self.start = tm.time() 
+                        NoteCheck = False
+                        
+                    self.timer += deltaTime
+                    end_time = tm.time()
+                    elapsed_time = end_time - self.start
+                    #print("TIME : ", pr.timer)
                     #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
                     #cnt = cnt + 1
                     #print("Note: ",msg.note ,"Note ON : ", "---- ", pg.time.get_ticks() / 1000)
-                    print("NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
-                    #print("NOTE ON DETECTED AT: ", self.time)
+                    print(self.clock.get_fps()," NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", elapsed_time, "TIME DIFFERENCE: ", "%.2f" %((self.time)-elapsed_time)," -- ")
+                    #print("NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", self.timer, "TIME DIFFERENCE: ", "%.2f" %((self.time)-self.timer)," -- ")
+                    #rint("NOTE ON DETECTED AT: ", self.time)
                     self.piano.play_key(midi_number_to_note(msg.note),
                     msg.velocity)
 
@@ -276,18 +306,26 @@ class pRoll:
 
 
                 elif msg.type == "note_off":
-                    NoteCheck = False
+                    self.timer += deltaTime
+                    end_time = tm.time()
+                    elapsed_time = end_time - pr.start
+                    #print("TIME : ", pr.timer)
                     #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
                     #cnt = cnt + 1
                     #print("TIME IN TICKS/S: ", pg.time.get_ticks() / 1000)
                     #print("NoteOFF: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
                     #print("NOTE OFF DETECTED AT: ", self.time)
                     self.piano.stop_key(midi_number_to_note(msg.note))
+            
+
+
+        end_time = tm.time()
+        elapsed_time = end_time - pr.start
+        print('END' , elapsed_time, ' Ticks(s): ', (pg.time.get_ticks()/1000))
 
 
 
-
-        #pg.time.delay(100)
+        #pg.time.delay(20000)
         self.running = False
 
 
@@ -308,7 +346,7 @@ class pRoll:
     def create_background(self):
         background = pg.Surface((1540, 800))
        # background.fill((255, 255, 0))
-        image = pg.image.load('doodad.png')
+        image = pg.image.load('doodad.png').convert()
         background.blit(image, (180, 100))
         return background
 
@@ -432,46 +470,61 @@ class pRoll:
 
 
 if __name__ == '__main__':
+    #print ('start ', tm.time())
     pr = pRoll()
-
-
+    print("TIME IN TICKS/S: ",pg.time.get_ticks()/1000)
     # Start playing midi File in separate Thread
+   
     thread = Thread(target=pr.play_notes)
-
-
+    
+    font = pg.font.SysFont('Calibri',40)
     #display = pg.display.set_mode((1248, 500))
-    #pg.mixer.init()
 
     display = pg.display.set_mode((1540, 800))
-
-
+    
+    
+    fps = 60
     thread.start()
-
-    #print("TIME IN TICKS/S: ",pg.time.get_ticks()/1000)
     pr.piano.create_key_surfaces()
+    
     while pr.running:
         #print("LOOP BACK: ", pr.lp)
         pr.lp = pr.lp + 1
-    
-        pr.clock.tick(90)
-
+        
+        
+       
+        #print(pr.clock.get_fps())
+        # print(f'FPS : {pr.clock.get_fps()}')
+        # print(f'Ticks: {pg.time.get_ticks()}')
 
         # Calculate piano roll offset
         
-        offset = pr.time * 100 + 600
         
+        offset = pr.time * 100 + 600
         #update keys
         pr.display.blit(pr.background, (0, 0))
         pr.draw(pr.display, offset)
         
-        #pr.piano.draw_keys(display)
-
-        pr.input_main(display)
-        pg.display.update(0, 0, 1540, 600)
+        pr.piano.draw_keys(display)
         
+        
+        #pg.display.flip()
+        #pr.input_main(display)
+       
 
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pr.running = False
+
+        pg.display.update()
+        pr.clock.tick(fps)
+        
+    
+    # end_time = tm.time()
+    # elapsed_time = end_time - pr.start
+    # print('END' , elapsed_time, ' Ticks(s): ', (pg.time.get_ticks()/1000))
 
     # Makes sure thread has stopped before ending program
-    if thread.is_alive():
-        thread.join()
+    # if thread.is_alive():
+    #     thread.join()
         
