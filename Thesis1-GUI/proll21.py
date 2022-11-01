@@ -447,7 +447,7 @@ if __name__ == '__main__':
         pr.display.blit(pr.background, (0, 0))
         pr.draw(pr.display, offset)
 
-        # pr.piano.draw_keys(display)
+        #pr.piano.draw_keys(display)
 
         #pr.input_main(display)
         pg.display.update(0, 0, 1540, 600)

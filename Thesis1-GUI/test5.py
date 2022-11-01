@@ -31,11 +31,11 @@ class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        pyglet.font.add_file('Fonts/Lemon Milk.otf')
-        pyglet.font.add_file('Fonts/Lemon Milk Light.otf')
-        pyglet.font.add_file('Fonts/Montserrat.ttf')
-        pyglet.font.add_file('Fonts/Montserrat Italic.ttf')
-        pyglet.font.add_file('Fonts/Montserrat Bold.ttf')
+        pyglet.font.add_file('Fonts\Lemon_Milk.otf')
+        pyglet.font.add_file('Fonts\Lemon_Milk_Light.otf')
+        pyglet.font.add_file('Fonts\Montserrat.ttf')
+        pyglet.font.add_file('Fonts\Montserrat_Italic.ttf')
+        pyglet.font.add_file('Fonts\Montserrat_Bold.ttf')
 
         self.title_font = tkfont.Font(family='Montserrat Italic', size=12, slant="italic")
         self.score_font = tkfont.Font(family='Montserrat Bold', size=78, weight="bold")
