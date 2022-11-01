@@ -1,0 +1,16 @@
+Correct, 61
+Partial, 2
+Extra, 6
+Missed, 3
+Success_Switch, 46
+Failed_Switch, 44
+Timed_Hit, 61
+Late_Hit, 7
+Early_Hit:, 0
+Truth_Dynamics, 76.84444444444445
+User_Dynamics, 77.10204081632654
+LH_Correct, 34
+RH_Correct, 39
+LH_Fail, 8
+RH_Fail, 9
+Melody, 56.25
