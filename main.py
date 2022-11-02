@@ -59,7 +59,7 @@ class chopin:
     # Constraint 2.1:  Match the distance between Note Off and Note On
     # Constraint 2.2:  Pairing of Velocity with NoteNumber
     def NoteMatching_Verification(self):
-        df = pd.read_csv("convertedTwink.csv",error_bad_lines=False) 
+        df = pd.read_csv("csv\encoded.csv",error_bad_lines=False) 
         # df.fillna(0, inplace = True)
 
         # reader = csv.DictReader(open('convertedTwink.csv'))
@@ -78,23 +78,23 @@ class chopin:
         #           else pass 
         acc = []
         index = []
-        size = len(dictobj['event'])
+        size = len(dictobj['Event'])
 
         print('EVENT' + '\t     NOTE NUMBER' + '\tSTART TIME' + '\tEND TIME'+ '\tDISTANCE')
         for i in range(0, size):
-            if dictobj['event'][i] == ' Note_on_c':
-                event = dictobj['event'][i]
-                time = dictobj['time'][i]
-                note_num = dictobj['note'][i]
+            if dictobj['Event'][i] == 'Note_on':
+                event = dictobj['Event'][i]
+                time = dictobj['Time'][i]
+                note_num = dictobj['Note'][i]
                 acc.append(list((event,time,note_num)))
                 index.append(i)
-            elif dictobj['event'][i] == ' Note_off_c':
+            elif dictobj['Event'][i] == 'Note_off':
                 for j in range(0, len(acc)):
-                    if dictobj['note'][i] == acc[j][2]:
+                    if dictobj['Note'][i] == acc[j][2]:
                         s = acc[j][1]
-                        e = dictobj['time'][i]
+                        e = dictobj['Time'][i]
                         dist = e - s
-                        print('Note On/Off\t' + str(acc[j][2]) + '\t\t' + str(acc[j][1]) + '\t\t' + str(dictobj['time'][i])+ '\t\t' + str(dist))
+                        print('Note On/Off\t' + str(acc[j][2]) + '\t\t' + str(acc[j][1]) + '\t\t' + str(dictobj['Time'][i])+ '\t\t' + str(dist))
                         acc.pop(j)
                         break
             
@@ -102,4 +102,4 @@ class chopin:
 # Manual Terminal 
 a = chopin()
 
-a.Pitch_Verification()
+a.NoteMatching_Verification()

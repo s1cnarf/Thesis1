@@ -84,7 +84,7 @@ class SampleApp(tk.Tk):
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
+        
         self.frames = {}
         for F in (
         LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance, ErrorAnalysis, PerformanceReport, PageTwo,
@@ -862,9 +862,14 @@ class PlayPage(tk.Frame):
 class AfterPerformance(tk.Frame):
 
     def __init__(self, parent, controller):
+        print("after")
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
         self.controller.title("Chop-In")
+        
+        def CombineFunError(event):
+            controller.show_frame("ErrorAnalysis")
+            show_data()
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
@@ -890,11 +895,11 @@ class AfterPerformance(tk.Frame):
         PerfReport_label = tk.Label(self, image=PerfReport_img, cursor="hand2", borderwidth=0)
         PerfReport_label.bind("<Button-1>", lambda e: controller.show_frame("PerformanceReport"))
         PerfReport_label.image = PerfReport_img
-
+          
         img = Image.open("Pictures/ErrAnal.png")
         ErrorAnal_img = ImageTk.PhotoImage(img)
         ErrorAnal_label = tk.Label(self, image=ErrorAnal_img, cursor="hand2", borderwidth=0)
-        ErrorAnal_label.bind("<Button-1>", lambda e: controller.show_frame("ErrorAnalysis"))
+        ErrorAnal_label.bind("<Button-1>", CombineFunError)
         ErrorAnal_label.image = ErrorAnal_img
 
         img = Image.open("Pictures/circle.png")
@@ -902,7 +907,7 @@ class AfterPerformance(tk.Frame):
         circle_label = tk.Label(self, image=circle_img, borderwidth=0)
         circle_label.image = circle_img
 
-        print("afdter")
+        
         global song_label
         score_label = tk.Label(self, text="80%", borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
 
@@ -950,61 +955,64 @@ class ErrorAnalysis(tk.Frame):
 
         main_frame = tk.Frame(self, width=988, height=563, bg="#2A2B2C", border=0)
         main_frame.pack_propagate(False)
+    
+        global show_data
+        def show_data():
+            print ("DATA HAS BEEN SHOWNED")
+            Truth = pd.read_csv("csv/sample_in_seconds.csv", error_bad_lines=False)
+            User = pd.read_csv("csv/sample_errors_in_seconds.csv", error_bad_lines=False)
 
-        Truth = pd.read_csv("csv/sample_in_seconds.csv", error_bad_lines=False)
-        User = pd.read_csv("csv/sample_errors_in_seconds.csv", error_bad_lines=False)
+            truth_object = Truth.to_dict('list')
+            user_object = User.to_dict('list')
 
-        truth_object = Truth.to_dict('list')
-        user_object = User.to_dict('list')
+            truth_data = Convert(Truth)
+            user_data = Convert(User)
 
-        truth_data = Convert(Truth)
-        user_data = Convert(User)
+            ax, fig = plot_rect(truth_data, user_data)
 
-        ax, fig = plot_rect(truth_data, user_data)
+            kino = FigureCanvasTkAgg(fig, main_frame)
+            kino.get_tk_widget().pack(side=LEFT, anchor=W)
 
-        kino = FigureCanvasTkAgg(fig, main_frame)
-        kino.get_tk_widget().pack(side=LEFT, anchor=W)
-
-        ax.set_xlabel('Time(s)')
-        ax.set_ylabel('Notes')
-        ax.set_facecolor('#2A2B2C')
-        fig.set_facecolor('#2A2B2C')
-
-        ax.tick_params(axis='x', colors='white')
-        ax.tick_params(axis='y', colors='white')
-        ax.xaxis.label.set_color("white")
-        ax.yaxis.label.set_color("white")
-        ax.spines['left'].set_color('white')
-        ax.spines['top'].set_color('white')
-        ax.spines['bottom'].set_color('white')
-        ax.spines['right'].set_color('white')
-
-        '''
-            fig = Figure(figsize=(5,5),dpi=100)
-            subplot = fig.add_subplot(111)
-            subplot.bar(x,y,color=['#F7BF50','#ED695E'])
-
-            subplot.xaxis.label.set_color("white")
-            subplot.tick_params(axis='x', colors='white') 
-            subplot.tick_params(axis='y', colors='#2A2B2C') 
-            subplot.spines['left'].set_color('#2A2B2C') 
-            subplot.spines['top'].set_color('#2A2B2C') 
-            subplot.spines['bottom'].set_color('#2A2B2C') 
-            subplot.spines['right'].set_color('#2A2B2C')
-            subplot.set_facecolor('#2A2B2C')
+            ax.set_xlabel('Time(s)')
+            ax.set_ylabel('Notes')
+            ax.set_facecolor('#2A2B2C')
             fig.set_facecolor('#2A2B2C')
 
-            for i in range(len(y)):
-                subplot.annotate(str(y[i]), xy=(x[i],y[i]), ha='center', va='bottom',color="white")
+            ax.tick_params(axis='x', colors='white')
+            ax.tick_params(axis='y', colors='white')
+            ax.xaxis.label.set_color("white")
+            ax.yaxis.label.set_color("white")
+            ax.spines['left'].set_color('white')
+            ax.spines['top'].set_color('white')
+            ax.spines['bottom'].set_color('white')
+            ax.spines['right'].set_color('white')
 
-            #subplot.axis('off')
-            barL = FigureCanvasTkAgg(fig, LeftHand_Frame)
-            barL.get_tk_widget().pack(side=LEFT,anchor=W,padx=(0,150))
-        '''
+            '''
+                fig = Figure(figsize=(5,5),dpi=100)
+                subplot = fig.add_subplot(111)
+                subplot.bar(x,y,color=['#F7BF50','#ED695E'])
 
-        main_frame.place(x=105, y=124)
-        back_label.place(x=57, y=36)
-        errAnal_title_label.place(x=930, y=45)
+                subplot.xaxis.label.set_color("white")
+                subplot.tick_params(axis='x', colors='white') 
+                subplot.tick_params(axis='y', colors='#2A2B2C') 
+                subplot.spines['left'].set_color('#2A2B2C') 
+                subplot.spines['top'].set_color('#2A2B2C') 
+                subplot.spines['bottom'].set_color('#2A2B2C') 
+                subplot.spines['right'].set_color('#2A2B2C')
+                subplot.set_facecolor('#2A2B2C')
+                fig.set_facecolor('#2A2B2C')
+
+                for i in range(len(y)):
+                    subplot.annotate(str(y[i]), xy=(x[i],y[i]), ha='center', va='bottom',color="white")
+
+                #subplot.axis('off')
+                barL = FigureCanvasTkAgg(fig, LeftHand_Frame)
+                barL.get_tk_widget().pack(side=LEFT,anchor=W,padx=(0,150))
+            '''
+
+            main_frame.place(x=105, y=124)
+            back_label.place(x=57, y=36)
+            errAnal_title_label.place(x=930, y=45)
 
 
 class PerformanceReport(tk.Frame):

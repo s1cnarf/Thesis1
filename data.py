@@ -432,7 +432,7 @@ class Data:
 
 # if __name__ == '__main__':
 #     data = Data()
-#     data.read_csv('sample.csv')
+#     data.read_csv('frj.csv')
 #     data.Data_to_csv()
 
 

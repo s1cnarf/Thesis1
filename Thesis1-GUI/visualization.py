@@ -10,7 +10,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
 
     yspan = len(truth_data)
     yplaces = [.5+i for i in range(yspan)]
-    print(yplaces)
+    #print(yplaces)
     ylabels = truth_data.keys()
 
     fig = Figure(figsize=(10,5),dpi=100)
@@ -36,7 +36,7 @@ def plot_rect(truth_data, user_data, delta=0.5):
             for l in truth_data[label]:
                 #print (f'pos: {pos} label: {label}')
                 start, end = l
-                print (f'start: {start} end: {end}')
+                #print (f'start: {start} end: {end}')
                 t_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),
                                         end-start,delta, linewidth=1, 
                                         edgecolor='r', facecolor='none', label='Truth'))
