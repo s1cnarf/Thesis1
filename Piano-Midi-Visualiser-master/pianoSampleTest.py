@@ -2,6 +2,7 @@ from threading import Thread
 from keySample import keySample
 from kmapSample import kmap
 import pygame as pg
+
 import pygame.midi
 import sys
 import os
@@ -41,7 +42,7 @@ class Piano:
     def __init__(self) -> None:
         pg.init()
         pg.fastevent.init()
-        pg.midi.init()
+        # pg.midi.init()
 
         self.ready = False
         self.running = True
@@ -143,7 +144,7 @@ class Piano:
 
  # ----------------------------------------------------------------------------------------
 
-    def create_key_surfaces(self):
+    def create_key_surfaces(self,surface):
 
         print("ACCESS")
 
@@ -168,9 +169,9 @@ class Piano:
                                 border_radius=5) # Border
 
                     # White Colored Keys
-                    self.rectList.append(pg.draw.rect(white_keys, (155, 255, 255),
-                                pg.Rect(i *43, 0, 45, 200),
-                                border_radius=5))
+                    self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
+                                                      pg.Rect(i * 43, 0, 45, 200),
+                                                      border_radius=5))
                     self.globalVal = self.globalVal + 1
                     #print("Val: ", self.globalVal)
                     '''
@@ -200,15 +201,13 @@ class Piano:
                                 border_radius=5) # Border
 
                     # White Colored Keys
-                    self.rectList.append(pg.draw.rect(white_keys, (100, 155, 255),
-                                pg.Rect(i *43, 0, 45, 200),
-                                border_radius=5))
+                    self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
+                                                      pg.Rect(i * 43, 0, 45, 200),
+                                                      border_radius=5))
                     self.globalVal = self.globalVal + 1
                     #print("Val: ", self.globalVal)
                   #  print("Key Value: ", newVal)
                     newVal = newVal+43
-
-                    
 
                     # "Gap" animation between the keys
                     pg.draw.rect(white_keys, (0, 0, 0),
@@ -222,9 +221,9 @@ class Piano:
                                 border_radius=5) # Border
 
                     # White Colored Keys
-                    self.rectList.append(pg.draw.rect(white_keys, (55, 25, 255),
-                                pg.Rect(i *43, 0, 45, 200),
-                                border_radius=5))
+                    self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
+                                                      pg.Rect(i * 43, 0, 45, 200),
+                                                      border_radius=5))
                     self.globalVal = self.globalVal + 1
 
 
@@ -271,7 +270,13 @@ class Piano:
 
         print(white_keys)
         print(black_keys)
-        # return (white_keys, black_keys)
+
+        surface.blit(self.white_key_surface, (0, 600))  # Draw the UNPRESSED white key
+        surface.blit(self.white_pressed_surface, (0, 600))  # Draw the PRESSED white Key
+        surface.blit(self.black_key_surface, (0, 600))  # Draw the UNPRESSED black key
+        surface.blit(self.black_pressed_surface, (0, 600))  # Draw the PRESSED black
+
+        #return (white_keys, black_keys)
 
 
     def highlight(self):
@@ -414,10 +419,6 @@ class Piano:
                             pg.draw.rect(self.black_pressed_surface, (213, 50, 66, 200),
                                          (blackCoordinates.get(val), 0, 30, 110))
 
-
-
-
-
                     else:
 
                         if val in keyCoordinates.keys():
@@ -460,8 +461,8 @@ class Piano:
 #
 # display = pg.display.set_mode((1540, 800))
 # while pn.running:
-#
-#     pn.create_key_surfaces()
+#     pg.midi.init()
+#     pn.create_key_surfaces(display)
 #     pn.draw_keys(display)
 #     pn.input_main(display)
 #     pg.display.flip()
