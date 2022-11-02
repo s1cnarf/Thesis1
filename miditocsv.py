@@ -1,6 +1,7 @@
 
 from music21 import midi, note
 import csv
+import pandas as pd
 
 def MidiInfo(midi_out):
     mf = midi.MidiFile()
@@ -63,7 +64,7 @@ def MidiInfo(midi_out):
 
 
     #Load to CSV  File
-    with open('csv\sample.csv', 'w', encoding='UTF8', newline='') as f:
+    with open(r'csv\truth\t_frj.csv', 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f)
 
         # write the header
@@ -74,9 +75,50 @@ def MidiInfo(midi_out):
     return note_events    
 
 
+def modifycsv():
+    df = pd.read_csv("csv\encoded.csv",error_bad_lines=False) 
+    dictobj = df.to_dict('list')
+    note_events  = []
+    header = ['track','start', 'end', 'event','channel','note','velocity','name']
+    acc = []
+    index = []
+    size = len(dictobj['Event'])
+
+    print('EVENT' + '\t     NOTE NUMBER' + '\tSTART TIME' + '\tEND TIME'+ '\tDISTANCE')
+    for i in range(0, size):
+        if dictobj['Event'][i] == 'Note_on':
+            event = dictobj['Event'][i]
+            time = dictobj['Time'][i]
+            note_num = dictobj['Note'][i]
+            acc.append(list((event,time,note_num)))
+            index.append(i)
+        elif dictobj['Event'][i] == 'Note_off':
+            for j in range(0, len(acc)):
+                if dictobj['Note'][i] == acc[j][2]:
+                    s = acc[j][1]
+                    e = dictobj['Time'][i]
+                    n = acc[j][2]
+                    dist = e - s
+                    # note - start - end 
+                    #print('Note On/Off\t' + str(acc[j][2]) + '\t\t' + str(acc[j][1]) + '\t\t' + str(dictobj['Time'][i])+ '\t\t' + str(dist))
+                    note_events.append([1, s, e, 'Note_on', 1, n, dictobj['Velocity'][i], note.Note(n).nameWithOctave])
+                    acc.pop(j)
+                    break
+    
+    with open(r'csv\u_frj.csv', 'w', encoding='UTF8', newline='') as f:
+        writer = csv.writer(f)
+
+        # write the header
+        writer.writerow(header)
+
+        # write multiple rows
+        writer.writerows(note_events)
+
+
+
 if __name__ == '__main__':
     #score = converter.parse('sample_errors.mid')
     #midi_out = score.write('midi', fp='sample_errors1.mid')
-    events = MidiInfo('midi\sample1.mid')
-    
+    events = MidiInfo('midi\frj.mid')
+    #modifycsv()
     #PatternMatch(events)
