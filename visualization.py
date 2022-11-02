@@ -128,11 +128,11 @@ class Visual:
         pass
     
 
-if __name__ == '__main__':
-    v  = Visual()
-    v.read_csv('sample.csv')
-    v.plot_rect()
-    v.plot_dynamics()
+# if __name__ == '__main__':
+#     v  = Visual()
+#     v.read_csv('sample.csv')
+#     v.plot_rect()
+#     v.plot_dynamics()
 
     #LOAD CSV FILE TO DICTIONARY
     

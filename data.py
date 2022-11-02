@@ -430,10 +430,10 @@ class Data:
         except FileNotFoundError:
             print("File doesn't exist")
 
-if __name__ == '__main__':
-    data = Data()
-    data.read_csv('sample.csv')
-    data.Data_to_csv()
+# if __name__ == '__main__':
+#     data = Data()
+#     data.read_csv('sample.csv')
+#     data.Data_to_csv()
 
 
     
