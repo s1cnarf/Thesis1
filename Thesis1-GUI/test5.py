@@ -1,8 +1,10 @@
 import ast
 from ast import Load
 from cgitb import text
+from itertools import count
 # from ast import *
 from logging import root
+from optparse import Values
 import tkinter as tk
 from tkinter import font as tkfont
 from tkinter import *
@@ -1656,6 +1658,8 @@ class PageThree(tk.Frame):
 
         def UpdateHistory():
 
+            count = []
+
             for item in tree_histo.get_children():
                 tree_histo.delete(item)
 
@@ -1663,13 +1667,16 @@ class PageThree(tk.Frame):
             cu = con.cursor()
 
             #             #cu.execute("Select if (Username = username), history.* from history")
-            cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY DateAndTime DESC", (label_entry.get(),))
+            cu.execute("SELECT * FROM History WHERE Username = ?", (label_entry.get(),))
             # cu.execute("SELECT * FROM history")
             historyData = cu.fetchall()
 
             for histo in historyData:
                 #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
-                tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
+                i = len(count)
+                count.append(tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3])))
+                tree_histo.see(count[-1])
+                
             #             #print(histo)
             #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
 
@@ -1677,7 +1684,6 @@ class PageThree(tk.Frame):
             con.close()
 
             print("FLAGG")
-
         # if(cu.fetchall()):
         #     tree_histo.insert(parent='',index='end', iid='counter', text='', values=(cu[0], cu[1], cu[2], cu[3]))
         # historyData = cu.fetchall()
@@ -1691,10 +1697,8 @@ class PageThree(tk.Frame):
         #         tree_histo.insert(parent='',index='end', iid='counter', text='', values=(histo[0], histo[1], histo[2], histo[3]))
 
         #     counter += 1
-
         tree_histo.bind('<Motion>', 'break')
         tree_histo.bind('<<TreeviewSelect>>', infos2)
-
         # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
         # tree_histo.config(yscrollcommand=scrollbar2.set)
         # scrollbar2.config(command=tree_histo.yview)
