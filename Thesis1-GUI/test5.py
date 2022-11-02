@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from visualization import plot_rect, Convert, MidiNoteNumbers
 from pianoSampleTest import Piano
 from prollMatic import pRoll
 from threading import Thread
@@ -26,6 +25,7 @@ import pygame as pg
 import sqlite3
 import pyglet
 import get_data 
+import visualization
 
 
 class SampleApp(tk.Tk):
@@ -960,17 +960,12 @@ class ErrorAnalysis(tk.Frame):
     
         global show_data
         def show_data():
+            v = visualization.Visual()
+            song = search_entry.get() + '.csv'
             print ("DATA HAS BEEN SHOWNED")
-            Truth = pd.read_csv("../csv/truth/t_frj.csv", error_bad_lines=False)
-            User = pd.read_csv("../csv/truth/u_frj.csv", error_bad_lines=False)
+            v.read_csv(song)
 
-            truth_object = Truth.to_dict('list')
-            user_object = User.to_dict('list')
-
-            truth_data = Convert(Truth)
-            user_data = Convert(User)
-
-            ax, fig = plot_rect(truth_data, user_data)
+            ax, fig = v.plot_rect()
 
             kino = FigureCanvasTkAgg(fig, main_frame)
             kino.get_tk_widget().pack(side=LEFT, anchor=W)
@@ -1286,9 +1281,9 @@ class PerformanceReport(tk.Frame):
             finger_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
-            loud_hits = int(ReadCSVtoVariable("Loud_Hit"))
+            loud_hits = int(ReadCSVtoVariable("Truth_Dynamics"))
             expected_loud_hits = 60
-            soft_hits = int(ReadCSVtoVariable("Soft_Hit"))
+            soft_hits = int(ReadCSVtoVariable("User_Dynamics"))
             expected_soft_hits = 40
 
             global dynamicsData_frame
