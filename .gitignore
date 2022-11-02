@@ -1,0 +1,4 @@
+# .gitignore
+__pycache__/
+
+Thesis1-GUI/__pycache__/

@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import pandas as pd
-import os
 from music21 import note
 
 class Visual:
@@ -114,14 +113,13 @@ class Visual:
 
     def read_csv(self, pathFileName):
         try:
-            abspath = os.path.dirname(__file__)
-            truth = os.path.join(abspath, (r"csv\truth\t_" + pathFileName))
-            user = os.path.join(abspath, (r"csv\user\u_" + pathFileName))
+            truth = r"csv\truth\t_" + pathFileName
+            user = r"csv\user\u_" + pathFileName
             self.Truth = pd.read_csv(truth, on_bad_lines='skip')
             self.User = pd.read_csv(user, on_bad_lines='skip') 
             self.truth_data = self.Convert(self.Truth)
             self.user_data = self.Convert(self.User) 
-        except:
+        except FileNotFoundError:
             print("File doesn't exist")
         
 

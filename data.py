@@ -1,8 +1,7 @@
-from cmath import e
-from tkinter import E
 import pandas as pd
 import csv
 import os
+from music21 import midi, note
 
 class Data:
     def __init__(self):
@@ -338,9 +337,8 @@ class Data:
 
     def read_csv(self, pathFileName):
         try:
-            abspath = os.path.dirname(__file__)
-            truth = os.path.join(abspath, (r"csv\truth\t_" + pathFileName))
-            pattern = os.path.join(abspath, (r"csv\user\u_" + pathFileName))
+            truth = r"csv\truth\t_" + pathFileName
+            pattern = r"csv\user\u_" + pathFileName
             self.Truth = pd.read_csv(truth, on_bad_lines='skip')
             self.Pattern = pd.read_csv(pattern, on_bad_lines='skip')
 
@@ -350,9 +348,87 @@ class Data:
             
             self.truth_data = self.Truth.to_dict('list')
             self.pattern_data = self.Pattern.to_dict('list')
-        except e:
-            print("File doesn't exist" + e)
+        except FileNotFoundError:
+            print("File doesn't exist")
 
+
+    
+    def miditocsv(self, midiPath):
+        try:
+            path = "midi\\" + midiPath
+            mf = midi.MidiFile()
+            mf.open(midiPath)
+            mf.read() 
+            mf.close()
+            events = mf.tracks
+
+            # for tracks in events:
+                # for event in tracks.events: 
+                    # DELTA TIME CORRESPONDS TO NOTE ON AND OFF
+
+                    # getTimeForEvents(miditrack) abs start time
+                    # print (midi.translate.getTimeForEvents(tracks))
+                    # if event.isNoteOn():
+                    #     print(event, midi.translate.midiEventsToNote(event)
+
+            for e in events:
+                for y in e.events:
+                    if y.type == midi.MetaEvents.SET_TEMPO: 
+                        data = y.data
+
+            mspq = midi.getNumber(data, len(data))[0]
+            bpm = round(60_000_000 / mspq, 1)
+            tempo = round((60 * 1000000) / bpm)
+            print(f'MSPQ {mspq}')
+            print(F'true bpm {bpm}') 
+            print(F'true tempo {tempo}')  
+
+            ticks_per_quarter = mf.ticksPerQuarterNote
+            µs_per_quarter = mspq
+            µs_per_tick = µs_per_quarter / ticks_per_quarter
+            seconds_per_tick = µs_per_tick / 1_000_000     
+            
+            note_events  = []
+            header = ['track','start', 'end', 'event','channel','note','velocity','name']
+            for i in events:
+                events_list = midi.translate.getTimeForEvents(i)
+                for x, y in events_list:
+                    # x - start , y - midi event
+                    
+                    if y.type == midi.ChannelVoiceMessages.NOTE_ON and y.velocity != 0:
+                        
+                        # Get midi information
+                        start = x #* seconds_per_tick
+
+                        for l, k in events_list:
+                            if k.type == midi.ChannelVoiceMessages.NOTE_OFF:
+                                if k.pitch == y.pitch and l > x:
+                                    end = l #* seconds_per_tick
+                                    # track - start - end - event - channel - note - velocity
+                                    note_events.append([y.track.index , start, end, 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave]) 
+                                    break
+                            # note on with 0 velocity considered as note off
+                            elif k.type == midi.ChannelVoiceMessages.NOTE_ON and k.velocity == 0:
+                                if k.pitch == y.pitch and l > x:
+                                    end = l #* seconds_per_tick
+                                    # track - start - end - event - channel - note - velocity
+                                    note_events.append([y.track.index , start, end, 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave]) 
+                                    break
+
+
+            #Load to CSV  File
+            csvPath = "csv\\" + midiPath
+            with open(csvPath, 'w', encoding='UTF8', newline='') as f:
+                writer = csv.writer(f)
+
+                # write the header
+                writer.writerow(header)
+
+                # write multiple rows
+                writer.writerows(note_events)
+
+        except FileNotFoundError:
+            print("File doesn't exist")
 
 if __name__ == '__main__':
     data = Data()
