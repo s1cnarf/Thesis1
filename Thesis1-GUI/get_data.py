@@ -1,7 +1,9 @@
+from cgitb import text
 import pandas as pd
 import csv
 import os
 from music21 import midi, note
+import sys
 
 class Data:
     def __init__(self):
@@ -198,10 +200,15 @@ class Data:
         
         pattern_dym = pattern_dict['start']
         text_dym = text_dict['start']
+        print (len(text_dym))
+        print (len(pattern_dym))
         index = 0
         for i in text_dym:
-            if i == pattern_dym[index]:
-                Success += 1
+            if index < len(pattern_dym):
+                if i == pattern_dym[index]:
+                    Success += 1
+                else:
+                    Failed += 1
             else:
                 Failed += 1
             index += 1
@@ -272,7 +279,7 @@ class Data:
                 else:
                     L[m][n] = 1 + min(L[m-1][n], L[m-1][n-1], L[m][n-1])
 
-        L_miss = L[m][n]
+        L_miss = L[L_rows- 1][L_cols - 1]
 
         L_Correct = len(Truth_L) - L_miss
         R_Correct = len(Truth_R) - R_miss
@@ -303,8 +310,8 @@ class Data:
         return acc
 
 
-    def Data_to_csv(self):
-
+    def Data_to_csv(self, pathFile):
+        header = ['Element', 'Data']
         # #DATA FRAME
         melody = self.MelodyLR()
         dynamics = self.Dynamics()
@@ -321,7 +328,7 @@ class Data:
                 'Failed_Switch':rhythm[1],
                 'Timed_Hit':notes[4],
                 'Late_Hit':notes[5],
-                'Early_Hit:':notes[6],
+                'Early_Hit':notes[6],
                 'Truth_Dynamics': dynamics[0],
                 'User_Dynamics': dynamics[1],
                 'LH_Correct' : fingerpattern[0],
@@ -329,35 +336,40 @@ class Data:
                 'LH_Fail' : fingerpattern[2],
                 'RH_Fail' :fingerpattern[3],
                 'Melody' : melody}
-
-        with open('csv\Result.csv', 'w') as f:
-            for key in data.keys():
-                f.write("%s, %s\n" % (key, data[key]))
-
+        try:
+            path = '../csv/Result_' + pathFile
+            print (path)
+            with open(path, 'w', encoding='UTF8', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(header)
+                for row in data.items():
+                    writer.writerow(row)
+        except FileNotFoundError:
+            print('File doesnt exist from Data_to_csv')
 
     def read_csv(self, pathFileName):
         try:
-            truth = r"csv\truth\t_" + pathFileName
-            pattern = r"csv\user\u_" + pathFileName
+            truth = r"..\csv\truth\t_" + pathFileName
+            pattern = r"..\csv\user\u_" + pathFileName
             self.Truth = pd.read_csv(truth, on_bad_lines='skip')
             self.Pattern = pd.read_csv(pattern, on_bad_lines='skip')
 
             #Sort first the data frame
             self.Pattern.sort_values(['start', 'end', 'note'], ascending=[True, True, True], inplace=True)
             self.Truth.sort_values(['start', 'end', 'note'], ascending=[True, True, True], inplace=True)
-            
+            print (self.Truth)
             self.truth_data = self.Truth.to_dict('list')
             self.pattern_data = self.Pattern.to_dict('list')
         except FileNotFoundError:
-            print("File doesn't exist")
+            print("File doesn't exist from read_csv")
 
 
     
     def miditocsv(self, midiPath):
         try:
-            path = "midi\\" + midiPath
+            path = "../midi/" + midiPath
             mf = midi.MidiFile()
-            mf.open(midiPath)
+            mf.open(path)
             mf.read() 
             mf.close()
             events = mf.tracks
@@ -417,7 +429,7 @@ class Data:
 
 
             #Load to CSV  File
-            csvPath = "csv\\" + midiPath
+            csvPath = "..\csv\\" + midiPath
             with open(csvPath, 'w', encoding='UTF8', newline='') as f:
                 writer = csv.writer(f)
 
@@ -428,12 +440,58 @@ class Data:
                 writer.writerows(note_events)
 
         except FileNotFoundError:
-            print("File doesn't exist")
+            print("File doesn't exist miditocsv")
+    
+    def modifycsv(self, csvPath):
+        try:
+            c = '../csv/' + csvPath
+            print (c)
+            df = pd.read_csv(c , on_bad_lines='skip') 
+            dictobj = df.to_dict('list')
+            note_events  = []
+            header = ['track','start', 'end', 'event','channel','note','velocity','name']
+            acc = []
+            index = []
+            size = len(dictobj['Event'])
 
-# if __name__ == '__main__':
-#     data = Data()
-#     data.read_csv('frj.csv')
-#     data.Data_to_csv()
+            print('EVENT' + '\t     NOTE NUMBER' + '\tSTART TIME' + '\tEND TIME'+ '\tDISTANCE')
+            for i in range(0, size):
+                if dictobj['Event'][i] == 'Note_on':
+                    event = dictobj['Event'][i]
+                    time = dictobj['Time'][i]
+                    note_num = dictobj['Note'][i]
+                    acc.append(list((event,time,note_num)))
+                    index.append(i)
+                elif dictobj['Event'][i] == 'Note_off':
+                    for j in range(0, len(acc)):
+                        if dictobj['Note'][i] == acc[j][2]:
+                            s = acc[j][1]
+                            e = dictobj['Time'][i]
+                            n = acc[j][2]
+                            dist = e - s
+                            # note - start - end 
+                            #print('Note On/Off\t' + str(acc[j][2]) + '\t\t' + str(acc[j][1]) + '\t\t' + str(dictobj['Time'][i])+ '\t\t' + str(dist))
+                            note_events.append([1, s, e, 'Note_on', 1, n, dictobj['Velocity'][i], note.Note(n).nameWithOctave])
+                            acc.pop(j)
+                            break
+            path = "../csv/user/u_" + csvPath
+            print (path)
+            with open(path, 'w', encoding='UTF8', newline='') as f:
+                writer = csv.writer(f)
+
+                # write the header
+                writer.writerow(header)
+
+                # write multiple rows
+                writer.writerows(note_events)
+        except FileNotFoundError:
+            print ('File doesnt exist from modifycsv')
+
+if __name__ == '__main__':
+    data = Data()
+    data.modifycsv('frj.csv')
+    data.read_csv('frj.csv')
+    data.Data_to_csv('frj.csv')
 
 
     
