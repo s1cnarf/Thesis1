@@ -10,6 +10,7 @@ from tkinter import messagebox, ttk
 from tkinter.ttk import Progressbar
 from turtle import bgcolor, circle, color, left, title, width
 from typing import Counter
+from unittest import skip
 from PIL import ImageTk, Image
 from datetime import datetime
 from collections import deque
@@ -24,6 +25,7 @@ from threading import Thread
 import pygame as pg
 import sqlite3
 import pyglet
+import get_data 
 
 
 class SampleApp(tk.Tk):
@@ -959,8 +961,8 @@ class ErrorAnalysis(tk.Frame):
         global show_data
         def show_data():
             print ("DATA HAS BEEN SHOWNED")
-            Truth = pd.read_csv("csv/sample_in_seconds.csv", error_bad_lines=False)
-            User = pd.read_csv("csv/sample_errors_in_seconds.csv", error_bad_lines=False)
+            Truth = pd.read_csv("../csv/truth/t_frj.csv", error_bad_lines=False)
+            User = pd.read_csv("../csv/truth/u_frj.csv", error_bad_lines=False)
 
             truth_object = Truth.to_dict('list')
             user_object = User.to_dict('list')
@@ -1021,8 +1023,16 @@ class PerformanceReport(tk.Frame):
         self.controller = controller
 
         def ReadCSVtoVariable(category):
-            df = pd.read_csv('csv/result.csv')
-
+            song = search_entry.get() + '.csv'
+            d = get_data.Data()
+            d.modifycsv(song)
+            d.read_csv(song)
+            d.Data_to_csv(song)
+            path = r'../csv/Result_' + song
+            try:
+                df = pd.read_csv(path, on_bad_lines='skip')
+            except FileNotFoundError:
+                print('File doesnt exist!')
             data = df.loc[df["Element"] == category, "Data"].iloc[0]
             return data
 
