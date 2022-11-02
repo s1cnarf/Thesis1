@@ -362,7 +362,19 @@ class Register(tk.Frame):
             else:
                 counter += 1
 
-            if counter == 5:
+            con = sqlite3.connect('userData.db')
+            c = con.cursor()
+
+            c.execute("SELECT * FROM record WHERE Username =?",(labelReg_entry.get(),))
+            if c.fetchall():
+                warn = "Username already taken"
+            else:
+                counter += 1
+            
+            con.commit()
+            con.close()
+
+            if counter == 6:
                 try:
                     con = sqlite3.connect('userData.db')
                     cur = con.cursor()
