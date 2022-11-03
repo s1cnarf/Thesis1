@@ -116,7 +116,7 @@ class Data:
                                             truth[idx] = 2
                                             user[y] = 2
                                             user_articulation['Late'] += 1
-                                    elif notes_in_user[y][0] <= i[0] and notes_in_user[y][1] <= i[1]:
+                                    elif notes_in_user[y][0] <= i[0] and notes_in_user[y][1] >= i[1]:
                                         if notes_in_user[y][2] == i[2]:
                                             #print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}')
                                             truth[idx] = 2
@@ -367,7 +367,7 @@ class Data:
     
     def miditocsv(self, midiPath):
         try:
-            path = "../midi/" + midiPath
+            path = "../midi/" + midiPath +'.mid'
             mf = midi.MidiFile()
             mf.open(path)
             mf.read() 
@@ -410,26 +410,26 @@ class Data:
                     if y.type == midi.ChannelVoiceMessages.NOTE_ON and y.velocity != 0:
                         
                         # Get midi information
-                        start = x #* seconds_per_tick
+                        start = x * seconds_per_tick
 
                         for l, k in events_list:
                             if k.type == midi.ChannelVoiceMessages.NOTE_OFF:
                                 if k.pitch == y.pitch and l > x:
-                                    end = l #* seconds_per_tick
+                                    end = l * seconds_per_tick
                                     # track - start - end - event - channel - note - velocity
-                                    note_events.append([y.track.index , start, end, 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave]) 
+                                    note_events.append([y.track.index , round(start), round(end), 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave])
                                     break
                             # note on with 0 velocity considered as note off
                             elif k.type == midi.ChannelVoiceMessages.NOTE_ON and k.velocity == 0:
                                 if k.pitch == y.pitch and l > x:
-                                    end = l #* seconds_per_tick
+                                    end = l * seconds_per_tick
                                     # track - start - end - event - channel - note - velocity
-                                    note_events.append([y.track.index , start, end, 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave]) 
+                                    note_events.append([y.track.index , round(start), round(end), 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave])
                                     break
 
 
             #Load to CSV  File
-            csvPath = "..\csv\\" + midiPath
+            csvPath = "../csv/truth/t_" + midiPath + '.csv'
             with open(csvPath, 'w', encoding='UTF8', newline='') as f:
                 writer = csv.writer(f)
 
@@ -452,30 +452,30 @@ class Data:
             header = ['track','start', 'end', 'event','channel','note','velocity','name']
             acc = []
             index = []
-            size = len(dictobj['Event'])
+            size = len(dictobj['event'])
 
             print('EVENT' + '\t     NOTE NUMBER' + '\tSTART TIME' + '\tEND TIME'+ '\tDISTANCE')
             for i in range(0, size):
-                if dictobj['Event'][i] == 'Note_on':
-                    event = dictobj['Event'][i]
-                    time = dictobj['Time'][i]
-                    note_num = dictobj['Note'][i]
+                if dictobj['event'][i] == 'Note_on':
+                    event = dictobj['event'][i]
+                    time = dictobj['time'][i]
+                    note_num = dictobj['note'][i]
                     acc.append(list((event,time,note_num)))
                     index.append(i)
-                elif dictobj['Event'][i] == 'Note_off':
+                elif dictobj['event'][i] == 'Note_off':
                     for j in range(0, len(acc)):
-                        if dictobj['Note'][i] == acc[j][2]:
+                        if dictobj['note'][i] == acc[j][2]:
                             s = acc[j][1]
-                            e = dictobj['Time'][i]
+                            e = dictobj['time'][i]
                             n = acc[j][2]
                             dist = e - s
                             # note - start - end 
                             #print('Note On/Off\t' + str(acc[j][2]) + '\t\t' + str(acc[j][1]) + '\t\t' + str(dictobj['Time'][i])+ '\t\t' + str(dist))
-                            note_events.append([1, s, e, 'Note_on', 1, n, dictobj['Velocity'][i], note.Note(n).nameWithOctave])
+                            note_events.append([1, s, e, 'Note_on', 1, n, dictobj['velocity'][i], note.Note(n).nameWithOctave])
                             acc.pop(j)
                             break
             path = "../csv/user/u_" + csvPath
-            print (path)
+            print (note_events)
             with open(path, 'w', encoding='UTF8', newline='') as f:
                 writer = csv.writer(f)
 
@@ -489,9 +489,10 @@ class Data:
 
 if __name__ == '__main__':
     data = Data()
-    data.modifycsv('frj.csv')
-    data.read_csv('frj.csv')
-    data.Data_to_csv('frj.csv')
+    #data.modifycsv('jrd.csv')
+    # data.read_csv('frj.csv')
+    # data.Data_to_csv('frj.csv')
+    data.miditocsv('jrd')
 
 
     

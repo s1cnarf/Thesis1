@@ -18,10 +18,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from pianoSampleTest import Piano
-from prollMatic import pRoll
+import proll21 as pr
 from threading import Thread
 import pygame as pg
+import csv
 import sqlite3
 import pyglet
 import get_data 
@@ -600,56 +600,81 @@ class PlayPage(tk.Frame):
 
         def infos(e):
             app.withdraw()
-
             print("ACCESS INFOS")
+
+
             if __name__ == '__main__':
-                pr = pRoll()
-                pr.launch()
+                p = pr.pRoll()
+                p.launch()
+                # print ('start ', tm.time())
 
+                # print("TIME IN TICKS/S: ", pg.time.get_ticks() / 1000)
                 # Start playing midi File in separate Thread
-                thread = Thread(target=pr.play_notes)
 
+                thread = Thread(target=p.play_notes)
+
+                font = pg.font.SysFont('Calibri', 40)
                 # display = pg.display.set_mode((1248, 500))
-                # pg.mixer.init()
 
                 display = pg.display.set_mode((1540, 800))
 
-                thread.start()
+                wait = True
+                fps = 60
+                p.piano.create_key_surfaces(display)
 
-                # print("TIME IN TICKS/S: ",pg.time.get_ticks()/1000)
-                pr.piano.create_key_surfaces()
-                pg.display.update((0, 0, 1540, 800))
-                while pr.running:
+
+                while p.running:
                     # print("LOOP BACK: ", pr.lp)
-                    pr.lp = pr.lp + 1
+                    p.lp = p.lp + 1
 
-                    pr.clock.tick(90)
+                    # print(pr.clock.get_fps())
+                    # print(f'FPS : {pr.clock.get_fps()}')
+                    # print(f'Ticks: {pg.time.get_ticks()}')
 
                     # Calculate piano roll offset
 
-                    offset = pr.time * 100 + 600
-
+                    offset = p.time * 100 + 600
                     # update keys
-                    pr.display.blit(pr.background, (0, 0))
-                    pr.draw(pr.display, offset)
+                    p.display.blit(p.background, (0, 0))
+                    p.draw(p.display, offset)
+                    pg.display.update(0, 0, 1540, 600)
 
                     # pr.piano.draw_keys(display)
 
-                    # pr.input_main(display)
-                    pg.display.update(0, 0, 1540, 600)
+                    # pg.display.flip()
+                    if wait:
+                        pg.time.delay(5000)
+                        # print("BOOOL",pg.midi.get_init())
+                        wait = False
+                        thread.start()
 
-                    for event in pg.event.get():
-                        if event.type == pg.QUIT:
-                            pr.running = False
-                            pg.display.quit()
-                            pg.quit()
+                    p.input_main(display)
 
-                app.deiconify()
-                controller.show_frame("AfterPerformance")
+                    p.clock.tick(fps)
+
+
+                if p.threadFalse:
+                    print("INFO  DATA: ", "TRACK--TIME--EVENT--NOTE--VELOCITY")
+                    for i in p.list_a:
+                        print("INPUT DATA: ", i)
+
+                    fields = ['track', 'time', 'event', 'note', 'velocity']
+                    csvPath = "jrd" + '.csv'
+                    path = "../csv/" + csvPath
+
+                    with open(path, 'w', encoding='UTF8',newline='') as f:
+                        # using csv.writer method from CSV package
+                        write = csv.writer(f)
+                        write.writerow(fields)
+                        write.writerows(p.list_a)
+                        print("SUCCESFULLY ENCODED TO CSV!")
 
                 # Makes sure thread has stopped before ending program
                 if thread.is_alive():
                     thread.join()
+
+                app.deiconify()
+                controller.show_frame("AfterPerformance")
 
 
 
@@ -705,14 +730,19 @@ class PlayPage(tk.Frame):
             listbox.insert(index_stack, song)
             index_stack + 1
             song_label.configure(text=data)
+            #df = pd.read_csv('Result_jrd.csv', on_bad_lines='skip')
+            #df_dict = df.to_dict('list')
 
+            #fail = df_dict['Data'][15]
+            #total = correct + fail
+            #percent = (correct/total) * 100
             con = sqlite3.connect('userData.db')
             cur = con.cursor()
             cur.execute("INSERT INTO History VALUES (:Username, :DateAndTime, :Title, :Score) ", {
                 'Username': uname,
                 'DateAndTime': dt_string,
                 'Title': song,
-                'Score': '80'
+                'Score': '80'#round(percent)
 
             })
             con.commit()
@@ -1060,7 +1090,7 @@ class PerformanceReport(tk.Frame):
             correctHits_frame = tk.Frame(notesData_frame, bg="#2A2B2C")
             correctHits_frame.pack(side=TOP, anchor=NW, pady=15)
 
-            correctHits_label = tk.Label(correctHits_frame, text="Correct Hits:", fg="#F7BF50", bg="#2A2B2C",
+            correctHits_label = tk.Label(correctHits_frame, text="Perfect Hits:", fg="#F7BF50", bg="#2A2B2C",
                                          font=controller.song_font_after)
             correctHits_label.pack(side=TOP)
 
@@ -1082,7 +1112,7 @@ class PerformanceReport(tk.Frame):
             partialHits_frame = tk.Frame(notesData_frame, bg="#2A2B2C")
             partialHits_frame.pack(side=TOP, pady=15)
 
-            partialHits_label = tk.Label(partialHits_frame, text="Partial Hits:", fg="#F7BF50", bg="#2A2B2C",
+            partialHits_label = tk.Label(partialHits_frame, text="Correct Played Notes:", fg="#F7BF50", bg="#2A2B2C",
                                          font=controller.song_font_after)
             partialHits_label.pack(side=TOP)
 
