@@ -44,6 +44,7 @@ class SampleApp(tk.Tk):
         self.song_font_after = tkfont.Font(family='Montserrat Bold', size=12, weight="bold")
         self.grade_font = tkfont.Font(family='Montserrat Bold', size=18, weight="bold")
         self.Mont_bold20 = tkfont.Font(family='Montserrat Bold', size=16, weight="bold")
+        self.song = tkfont.Font(family='Montserrat Bold', size=13, weight="bold")
 
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
@@ -89,8 +90,8 @@ class SampleApp(tk.Tk):
         
         self.frames = {}
         for F in (
-        LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance, ErrorAnalysis, PerformanceReport, PageTwo,
-        PageThree, PageFour):
+        LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance, ErrorAnalysis, PerformanceReport, Statistics,
+        History):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -154,6 +155,10 @@ class LogIn(tk.Frame):
         self.controller = controller
 
         # self.controller.state("zoomed")
+        global ShowStartPage
+        def ShowStartPage(e):
+            UpdateDeviceStatus()
+            controller.show_frame("StartPage")
 
         def login(e):
             try:
@@ -180,7 +185,7 @@ class LogIn(tk.Frame):
                     if (c.fetchone()):
                         messagebox.showinfo('Login Status', 'Successfuly Login')
 
-                        controller.show_frame("StartPage")
+                        ShowStartPage(e)
                     else:
                         messagebox.showerror('Login Status', 'Invalid Username or Password')
 
@@ -492,17 +497,29 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
         self.controller.title("Chop-In")
+        
+        
 
         # self.controller.state("zoomed")
+        
+        def DisplayStatistics(e):
+            UpdateValues()
+            controller.show_frame("Statistics")
 
         def CombineFunctions(e):
             UpdateHistory()
-            controller.show_frame("PageThree")
+            controller.show_frame("History")
 
         def _create_circle(self, x, y, r, **kwargs):
             return self.create_oval(x - r, y - r, x + r, y + r, **kwargs)
-
+        
         tk.Canvas.create_circle = _create_circle
+
+       
+       
+
+      
+
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((386, 82), Image.ANTIALIAS)
@@ -536,7 +553,7 @@ class StartPage(tk.Frame):
         play_label.image = img
 
         play_label2 = tk.Label(self, image=img2, cursor="hand2", borderwidth=0)
-        play_label2.bind("<Button-1>", lambda e: controller.show_frame("PageTwo"))
+        play_label2.bind("<Button-1>", DisplayStatistics)
         play_label2.image = img2
 
         play_label3 = tk.Label(self, image=img3, cursor="hand2", borderwidth=0)
@@ -549,9 +566,24 @@ class StartPage(tk.Frame):
 
         DetectDevice_label = tk.Label(self, image=img5, borderwidth=0)
         DetectDevice_label.image = img5
+        
+        canvas = tk.Canvas(self, width=20, height=20, bg="#2A2B2C",highlightthickness=0)
+        
+        global UpdateDeviceStatus
+        def UpdateDeviceStatus():
+            
+            pg.midi.init()
+            id=pg.midi.get_default_input_id()
+                
+            if (id == -1):
+                print(id)
+                canvas.create_circle(10, 10, 8, fill="#ED695E", outline="")
+            else:
+                canvas.create_circle(10, 10, 8, fill="#75CE9F", outline="")
+       
 
-        canvas = tk.Canvas(self, width=20, height=20, bg="#2A2B2C")
-        canvas.create_circle(13, 13, 10, fill="#ED695E", outline="")
+        UpdateDeviceStatus()
+
 
         logo_label.place(x=400, y=200)
         play_label.place(x=364, y=375)
@@ -559,7 +591,7 @@ class StartPage(tk.Frame):
         play_label3.place(x=644, y=374)
         play_label4.place(x=792, y=375)
         DetectDevice_label.place(x=919, y=26)
-        canvas.place(x=950, y=45)
+        canvas.place(x=955, y=47)
 
 
 class PlayPage(tk.Frame):
@@ -790,7 +822,7 @@ class PlayPage(tk.Frame):
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
-        logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
+        logo_label.bind("<Button-1>", ShowStartPage)
         logo_label.image = logo_img
 
         img6 = Image.open("Pictures/info.png")
@@ -907,7 +939,7 @@ class AfterPerformance(tk.Frame):
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
-        logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
+        logo_label.bind("<Button-1>", ShowStartPage)
         logo_label.image = logo_img
 
         img = Image.open("Pictures/info.png")
@@ -1620,21 +1652,96 @@ class PerformanceReport(tk.Frame):
         finger_label.pack(anchor=CENTER)
 
 
-class PageTwo(tk.Frame):
+class Statistics(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
-        label = tk.Label(self, text="Library", bg="#F7BF50", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Home",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+
+
+        global UpdateValues
+        def UpdateValues():
+            con = sqlite3.connect('userData.db')
+            cu = con.cursor()
+
+           
+            cu.execute("SELECT avg(Score) FROM History WHERE Username = ? LIMIT 1", (label_entry.get(),))
+
+            AvgScore = cu.fetchone()[0]
+            print(AvgScore)
+            score_label.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
+
+            cu.execute("SELECT Title FROM History WHERE Username = ? AND Score = (SELECT MAX(Score) FROM History) LIMIT 1", (label_entry.get(),))
+            TopSong = cu.fetchone()[0]
+            print(TopSong)
+            topsong.configure(text=str(TopSong),anchor=CENTER)
+
+
+
+            
+            con.commit()
+            con.close()
+
+       
+        logo_pic = Image.open("Pictures/Logo.png")
+        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
+        logo_img = ImageTk.PhotoImage(logo_pic)
+        logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
+        logo_label.bind("<Button-1>", ShowStartPage)
+        logo_label.image = logo_img
+
+        img6 = Image.open("Pictures/info.png")
+        info_img = ImageTk.PhotoImage(img6)
+        info_label = tk.Label(self, image=info_img, borderwidth=0)
+        info_label.image = info_img
+
+        frame_stat = tk.Frame(self, width=979, height=509, bg="#2A2B2C", border=0)
+
+        img = Image.open("Pictures/CurrSkill.png")
+        CurrSkill_img = ImageTk.PhotoImage(img)
+        CurrSkill_label = tk.Label(self, image=CurrSkill_img, borderwidth=0)
+        CurrSkill_label.image = CurrSkill_img
+
+        img = Image.open("Pictures/AvgRating.png")
+        AvgRating_img = ImageTk.PhotoImage(img)
+        AvgRating_label = tk.Label(self, image=AvgRating_img, borderwidth=0)
+        AvgRating_label.image = AvgRating_img
+        
+        img = Image.open("Pictures/AvgScore.png")
+        AvgScore_img = ImageTk.PhotoImage(img)
+        AvgScore_label = tk.Label(self, image=AvgScore_img, borderwidth=0)
+        AvgScore_label.image = AvgScore_img
+
+        score_label = tk.Label(self,width=6,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
+       
+        img = Image.open("Pictures/TopSong.png")
+        TopSong_img = ImageTk.PhotoImage(img)
+        TopSong_label = tk.Label(self, image=TopSong_img, borderwidth=0)
+        TopSong_label.image = TopSong_img
+
+        topsong = tk.Label(self,width=31,height=1, bg="#F8BA43",borderwidth=0,font=controller.song)
+
+
+
+        logo_label.place(x=35, y=34)
+        info_label.place(x=738, y=57)
+        
+        frame_stat.place(x=113,y=143)
+        CurrSkill_label.place(x=619,y=168)
+        AvgRating_label.place(x=813,y=289)
+        AvgScore_label.place(x=619,y=289)
+        
+        TopSong_label.place(x=619,y=410)
+        topsong.place(x=721,y=453)
+
+        score_label.place(x=698,y=332)
+
+
 
 
 # History
 
-class PageThree(tk.Frame):
+class History(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
@@ -1649,7 +1756,7 @@ class PageThree(tk.Frame):
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
-        logo_label.bind("<Button-1>", lambda e: controller.show_frame("StartPage"))
+        logo_label.bind("<Button-1>", ShowStartPage)
         logo_label.image = logo_img
 
         img6 = Image.open("Pictures/info.png")
@@ -1706,7 +1813,7 @@ class PageThree(tk.Frame):
             cu = con.cursor()
 
             #             #cu.execute("Select if (Username = username), history.* from history")
-            cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY DateAndTime DESC", (label_entry.get(),))
+            cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY date(DateAndTime) DESC", (label_entry.get(),))
             # cu.execute("SELECT * FROM history")
             historyData = cu.fetchall()
 
@@ -1752,16 +1859,6 @@ class PageThree(tk.Frame):
         info_label.place(x=738, y=57)
 
 
-class PageFour(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, bg="#F7BF50")
-        self.controller = controller
-        label = tk.Label(self, text="History", bg="#F7BF50", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Home",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
 
 
 if __name__ == "__main__":
