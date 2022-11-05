@@ -635,10 +635,9 @@ class PlayPage(tk.Frame):
             app.withdraw()
             print("ACCESS INFOS")
 
-
             if __name__ == '__main__':
                 p = pr.pRoll()
-                p.launch()
+
                 # print ('start ', tm.time())
 
                 # print("TIME IN TICKS/S: ", pg.time.get_ticks() / 1000)
@@ -652,9 +651,13 @@ class PlayPage(tk.Frame):
                 display = pg.display.set_mode((1540, 800))
 
                 wait = True
-                fps = 60
-                p.piano.create_key_surfaces(display)
+                fps = 120
 
+                p.running = True
+
+                p.launch()
+                # thread.start()
+                p.piano.create_key_surfaces(display)
 
                 while p.running:
                     # print("LOOP BACK: ", pr.lp)
@@ -685,17 +688,17 @@ class PlayPage(tk.Frame):
 
                     p.clock.tick(fps)
 
-
                 if p.threadFalse:
+
                     print("INFO  DATA: ", "TRACK--TIME--EVENT--NOTE--VELOCITY")
                     for i in p.list_a:
                         print("INPUT DATA: ", i)
 
                     fields = ['track', 'time', 'event', 'note', 'velocity']
-                    csvPath = "jrd" + '.csv'
+                    csvPath = p.sMusic + '.csv'
                     path = "../csv/" + csvPath
 
-                    with open(path, 'w', encoding='UTF8',newline='') as f:
+                    with open(path, 'w', encoding='UTF8', newline='') as f:
                         # using csv.writer method from CSV package
                         write = csv.writer(f)
                         write.writerow(fields)
@@ -705,6 +708,21 @@ class PlayPage(tk.Frame):
                 # Makes sure thread has stopped before ending program
                 if thread.is_alive():
                     thread.join()
+
+                if p.running == False:
+                    print("QUIT ACCESS")
+                    pg.midi.quit()
+                    # print("MIDI STATUS: ", pg.midi.get_init(), "CURRENT TIME: ",pg.midi.time())
+                    pg.midi.init()
+                    print("MIDI STATUS: ", pg.midi.get_init())
+                    print("CURRENT TIME: ", pg.midi.time())
+                    p.acc = True
+                    pg.quit()
+                    pg.display.quit()
+                    p.threadFalse = False
+                    p.start = 0
+                    p.midiStart = 0
+                    p.sMusic = ""
 
                 app.deiconify()
                 controller.show_frame("AfterPerformance")
@@ -750,8 +768,10 @@ class PlayPage(tk.Frame):
 
         def PushSongInStack(event):
 
-            # data = label.cget("text")
             data = search_entry.get()
+            pr.getSong = data
+
+            print("MUSIC DATA: ", data)
             dt = datetime.now()
             dt_string = dt.strftime(" %d-%m-%Y %H:%M:%S")
 

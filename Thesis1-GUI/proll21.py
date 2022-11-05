@@ -6,14 +6,17 @@ from kmapSample import midi_number_to_note
 import sys
 import os
 from keySample import * 
-from pianoSampleTest import Piano 
+from pianoSampleTest import Piano
+
 from threading import Thread
 import threading
 import time as tm
+
 import csv
+from test5 import PlayPage
 
 
-
+getSong = ""
 
 class pRoll:
 
@@ -22,6 +25,11 @@ class pRoll:
         
         pg.init()
         pg.fastevent.init()
+
+
+        self.sMusic = self.getData()
+        self.midiStart = 0
+
 
         self.threadFalse = False
         self.acc = True
@@ -40,7 +48,7 @@ class pRoll:
         self.height = None
 
         # Addons not included in original file 
-        self.song_name = "FRJ"
+        self.song_name = self.sMusic
         self.running = True
         self.clock = pg.time.Clock()
         self.customClock = pg.time.Clock()
@@ -48,6 +56,8 @@ class pRoll:
         self.piano = None
         self.display = None
         self.background = None
+
+        self.newVar = None
         
         #Extra
         self.getTicksLastFrame = 0
@@ -55,6 +65,11 @@ class pRoll:
         self.start = 0
 
         self.list_a = []
+
+    def getData(self):
+        sname = getSong
+        return sname
+
 
 
     def launch(self):
@@ -323,7 +338,7 @@ class pRoll:
                     #cnt = cnt + 1
                     #print("Note: ",msg.note ,"Note ON : ", "---- ", pg.time.get_ticks() / 1000)
                     #print(self.clock.get_fps()," NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", elapsed_time, "TIME DIFFERENCE: ", "%.2f" %((self.time)-elapsed_time)," -- ")
-                    print("NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", self.timer, "TIME DIFFERENCE: ", "%.2f" %((self.time)-self.timer)," -- ")
+                    #print("NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", self.timer, "TIME DIFFERENCE: ", "%.2f" %((self.time)-self.timer)," -- ")
                     #rint("NOTE ON DETECTED AT: ", self.time)
                     self.piano.play_key(midi_number_to_note(msg.note),
                     msg.velocity)
@@ -341,7 +356,7 @@ class pRoll:
                     #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
                     #cnt = cnt + 1
                     #print("TIME IN TICKS/S: ", pg.time.get_ticks() / 1000)
-                    #print("NoteOFF: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
+                    print("NoteOFF: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
                     #print("NOTE OFF DETECTED AT: ", self.time)
                     self.piano.stop_key(midi_number_to_note(msg.note))
             
@@ -363,10 +378,16 @@ class pRoll:
 
 
     def load_midi_file(self):
-        #file = sys.argv[1]
-        file = 'jrd.mid'
+        #file = sys.argv[1]z
+        selectedSong = self.sMusic
+        file = "../midi/" + selectedSong +'.mid'
+        print("MIDI FILE Loaded: ", file)
+        getSong = ""
+        print("GETSONG SHOULD BE EMPTY: ", getSong)
         #print("accessed the load")
         return MidiFile(file, clip=True)
+
+
 
     def setup_pygame(self, songName: str):
         pg.init()
@@ -387,18 +408,20 @@ class pRoll:
     def input_main(self,surface,device_id=None):
 
        # pg.init()
-        pg.midi.init()
+
 
         if self.acc:
            print("SELF ACC")
+           pg.midi.init()
+           self.midiStart = tm.time()
            self.input_id = pg.midi.get_default_input_id()
            self.i = pg.midi.Input(self.input_id)
            self.acc = False
+           self.piano.white_pressed_surface.fill((0, 0, 0, 0))  # fill with white
+           self.piano.black_pressed_surface.fill((0, 0, 0, 0))
 
 
 
-        self.piano.white_pressed_surface.fill((0, 0, 0, 0))  # fill with white
-        self.piano.black_pressed_surface.fill((0, 0, 0, 0))
 
 
 
@@ -449,7 +472,9 @@ class pRoll:
 
         events = event_get()
         for e in events:
+
             if e.type in [pg.QUIT]:
+
                 #going = False
                 self.running = False
                 pg.display.quit()
@@ -464,17 +489,26 @@ class pRoll:
                 val = note
                 velocity = e.__dict__['data2']
                 #
-                print("NOTE: ",note," --- TIME: ", time, " VS MIDI TIME", pg.midi.time())
+                #print("NOTE: ",note," --- TIME: ", time, " VS MIDI TIME", pg.midi.time())
                 #print("KEY VAL: ", val)
                 if stat == 144:
                     noteON = True
+                    noteOnTime = tm.time()
+                    newONTime = int(noteOnTime-self.midiStart)
+
+                    print("NOTE ON: ", note, " --- TIME: ", newONTime, " VS MIDI TIME", pg.midi.time())
 
                     # TRACK - TIME(S) -EVENT - NOTE - VELOCITY
-                    self.list_a.append((1,time,"Note_on",note,velocity))
+                    self.list_a.append((1,newONTime,"Note_on",note,velocity))
 
                 if stat == 128:
+                    noteOFFTime = tm.time()
+                    newOFFTime = int(noteOFFTime - self.midiStart)
 
-                    self.list_a.append((1, time, "Note_off", note, velocity))
+                    print("NOTE OFF: ", note, " --- TIME: ", newOFFTime, " VS MIDI TIME", pg.midi.time())
+
+
+                    self.list_a.append((1, newOFFTime, "Note_off", note, velocity))
 
                 if stat!=128:
 
