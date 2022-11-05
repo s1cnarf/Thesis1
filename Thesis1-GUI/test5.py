@@ -367,7 +367,19 @@ class Register(tk.Frame):
             else:
                 counter += 1
 
-            if counter == 5:
+            con = sqlite3.connect("userData.db")
+            c = con.cursor()
+
+            c.execute("SELECT * FROM record WHERE Username = ?",(labelReg_entry.get(),))
+            if c.fetchall():
+                warn = "Username is already taken!"
+            else:
+                counter +=1
+            
+            con.commit()
+            con.close()
+
+            if counter == 6:
                 try:
                     con = sqlite3.connect('userData.db')
                     cur = con.cursor()
@@ -726,6 +738,7 @@ class PlayPage(tk.Frame):
 
                 app.deiconify()
                 controller.show_frame("AfterPerformance")
+                show_csv()
 
 
 
@@ -795,7 +808,7 @@ class PlayPage(tk.Frame):
                 'Username': uname,
                 'DateAndTime': dt_string,
                 'Title': song,
-                'Score': '80'#round(percent)
+                'Score': '0'#round(percent)
 
             })
             con.commit()
@@ -808,12 +821,15 @@ class PlayPage(tk.Frame):
             selectedItem = tree_histo.focus()
             search_entry.delete(0, END)
             try:
-                data2 = tree_histo.item(selectedItem)['values'][1]
+                data2 = tree_histo.item(selectedItem)['values'][1] 
+                score = tree_histo.item(selectedItem)['values'][2] 
                 song_label.config(text=data2)
+                score_label.config(text = score)
                 # search_entry.insert(0,)
                 # item = tree_histo.item(selectedItem)
                 # print(item.get[1])
                 controller.show_frame("AfterPerformance")
+                show_csv()
             except IndexError:
                 print("ayos lang")
 
@@ -966,6 +982,102 @@ class AfterPerformance(tk.Frame):
             controller.show_frame("ErrorAnalysis")
             show_data()
 
+        global DisplayAfterPerf
+        def DisplayAfterPerf(e):
+            show_csv()
+            controller.show_frame("AfterPerformance")
+
+        global show_csv
+        def show_csv():
+            getsong = search_entry.get() + '.csv'
+
+            pathh = r'../csv/Result_' + getsong
+            try:
+                dff = pd.read_csv(pathh, on_bad_lines='skip')
+            except FileNotFoundError:
+                print('File doesnt exist!')
+
+            #Notes
+            correctHits = dff.loc[dff["Element"] == "Correct", "Data"].iloc[0]
+            partialHits = dff.loc[dff["Element"] == "Partial", "Data"].iloc[0]
+            extraHits = dff.loc[dff["Element"] == "Extra", "Data"].iloc[0]
+            missedHits = dff.loc[dff["Element"] == "Missed", "Data"].iloc[0]
+            global total_notes
+            total_notes = correctHits + partialHits + missedHits
+            semiTotal_notes = correctHits + partialHits
+            percent_notes = (semiTotal_notes - extraHits)/total_notes *100
+            global total_percentNotes
+            total_percentNotes = float(percent_notes * 0.25)
+            print(total_percentNotes,"eto ang percentNotes")
+
+            #Rhythm
+            sswitchHits = dff.loc[dff["Element"] == "Success_Switch", "Data"].iloc[0]
+            fswitchHits = dff.loc[dff["Element"] == "Failed_Switch", "Data"].iloc[0]
+            total_rhythm = sswitchHits + fswitchHits
+            percent_rhythm = (sswitchHits/total_rhythm)*100
+            global total_percentRhythm
+            total_percentRhythm = float(percent_rhythm * 0.20)
+            print(total_percentRhythm,"eto ang percentrhythms")
+
+            #Articulation
+            timedHits = dff.loc[dff["Element"] == "Timed_Hit", "Data"].iloc[0]
+            lateHits = dff.loc[dff["Element"] == "Late_Hit", "Data"].iloc[0]
+            earlyHits = dff.loc[dff["Element"] == "Early_Hit", "Data"].iloc[0]
+            percent_articulation = (timedHits/total_notes)*100
+            global total_percentArticulation
+            total_percentArticulation = float(percent_articulation * 0.15)
+            print(total_percentArticulation,"eto ang articulation")
+
+            #Dynamics
+            truthDynamicHits = dff.loc[dff["Element"] == "Truth_Dynamics", "Data"].iloc[0]
+            userDynamicHits = dff.loc[dff["Element"] == "User_Dynamics", "Data"].iloc[0]
+            percent_dynamics = (userDynamicHits/truthDynamicHits)*100
+            global total_percentDynamics
+            total_percentDynamics = float(percent_dynamics * 0.10)
+            print(total_percentDynamics,"eto ang percentdynamics")
+
+            #Melody
+            melodyHits = dff.loc[dff["Element"] == "Melody", "Data"].iloc[0]
+            percent_melody = melodyHits
+            global total_percentMelody
+            total_percentMelody = float(percent_melody*0.30)
+            print(total_percentMelody,"Eto ang melody")
+
+            #LeftHand
+            leftcorrectHits = dff.loc[dff["Element"] == "LH_Correct", "Data"].iloc[0]
+            leftfailtHits = dff.loc[dff["Element"] == "LH_Fail", "Data"].iloc[0]
+            total_left = leftcorrectHits + leftfailtHits
+            percent_left = (leftcorrectHits/total_left)*100
+            global total_percentLeft
+            total_percentLeft = float(percent_left * 0.05)
+            print(total_left,"eto ang percentleft")
+
+            #RightHand
+            rightcorrectHits = dff.loc[dff["Element"] == "RH_Correct", "Data"].iloc[0]
+            rightfailHits = dff.loc[dff["Element"] == "RH_Fail", "Data"].iloc[0]
+            total_right = rightcorrectHits + rightfailHits
+            percent_right = (rightcorrectHits/total_right)*100
+            global total_percentRight
+            total_percentRight = float(percent_right * 0.10)
+            print(total_percentRight,"eto ang perceentright")
+
+
+            
+            global percentScore
+            percentScore = float(total_percentNotes + total_percentRhythm + total_percentArticulation + total_percentDynamics + total_percentMelody)
+            percentScore = round(percentScore)
+            score_label.configure(text=str(percentScore))
+            print(percentScore,"ETO ANG SCORE")
+
+            con = sqlite3.connect('userData.db')
+            cur = con.cursor()
+            cur.execute("UPDATE History Set Score = ? WHERE Score = 0",(str(percentScore),))
+            print("TAENA MO")
+
+            con.commit()
+            con.close()
+
+
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
@@ -1004,7 +1116,8 @@ class AfterPerformance(tk.Frame):
 
         
         global song_label
-        score_label = tk.Label(self, text="80%", borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
+        global score_label
+        score_label = tk.Label(self, text="", borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
 
         song_frame = tk.Frame(self, width=308, height=30, border=0, bg="#2A2B2C")
         song_frame.pack_propagate(False)
@@ -1040,7 +1153,7 @@ class ErrorAnalysis(tk.Frame):
         back_pic = Image.open("Pictures/back.png")
         back_img = ImageTk.PhotoImage(back_pic)
         back_label = tk.Label(self, image=back_img, borderwidth=0, cursor="hand2")
-        back_label.bind("<Button-1>", lambda e: controller.show_frame("AfterPerformance"))
+        back_label.bind("<Button-1>", DisplayAfterPerf)
         back_label.image = back_img
 
         img = Image.open("Pictures/ErrorAnalysis.png")
@@ -1606,7 +1719,7 @@ class PerformanceReport(tk.Frame):
         back_pic = Image.open("Pictures/back.png")
         back_img = ImageTk.PhotoImage(back_pic)
         back_label = tk.Label(self, image=back_img, borderwidth=0, cursor="hand2")
-        back_label.bind("<Button-1>", lambda e: controller.show_frame("AfterPerformance"))
+        back_label.bind("<Button-1>", DisplayAfterPerf)
         back_label.image = back_img
 
         img = Image.open("Pictures/PerfReport.png")
