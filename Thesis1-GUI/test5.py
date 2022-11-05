@@ -576,9 +576,10 @@ class StartPage(tk.Frame):
             id=pg.midi.get_default_input_id()
                 
             if (id == -1):
-                print(id)
+                
                 canvas.create_circle(10, 10, 8, fill="#ED695E", outline="")
             else:
+                print(id)
                 canvas.create_circle(10, 10, 8, fill="#75CE9F", outline="")
        
 
@@ -908,11 +909,21 @@ class PlayPage(tk.Frame):
         play_Button.bind("<Button-1>", combinedFunc)
         # play_Button.bind("<<ListboxSelect>>", CombineFunctions)
 
-        # frame3_play = tk.Frame(self,width=259,height=480,bg="#2A2B2C",border=0)
-        # sframe3_play = tk.Frame(self,width=220,height=100,bg="#F8BA43",border=0)
-        # label3_play = tk.Label(self, text="MOST PLAYED",bg="#F8BA43",fg="#2A2B2C", font=controller.title3_font)
+        img = Image.open("Pictures/practice.png")
+        # image = image.resize((25,28), Image.ANTIALIAS)
+        practice_img = ImageTk.PhotoImage(img)
+        practice_label = tk.Label(self, image=practice_img, borderwidth=0,cursor='hand2')
+        practice_label.image = practice_img
 
+        img = Image.open("Pictures/listen.png")
+        # image = image.resize((25,28), Image.ANTIALIAS)
+        listen_img = ImageTk.PhotoImage(img)
+        listen_label = tk.Label(self, image=listen_img, borderwidth=0,cursor='hand2')
+        listen_label.image = listen_img
+        
         play_Button.place(x=1013, y=635)
+        practice_label.place(x=115,y=635)
+        listen_label.place(x=344,y=635)
 
         logo_label.place(x=35, y=34)
         info_label.place(x=738, y=57)
@@ -1663,8 +1674,7 @@ class Statistics(tk.Frame):
         def UpdateValues():
             con = sqlite3.connect('userData.db')
             cu = con.cursor()
-
-           
+         
             cu.execute("SELECT avg(Score) FROM History WHERE Username = ? LIMIT 1", (label_entry.get(),))
 
             AvgScore = cu.fetchone()[0]
@@ -1677,6 +1687,8 @@ class Statistics(tk.Frame):
             topsong.configure(text=str(TopSong),anchor=CENTER)
 
 
+
+            
 
             
             con.commit()
