@@ -22,19 +22,25 @@ data = c.fetchall()
 #print(data[1])
 
 
-
+'''
 df = pd.DataFrame(data,columns=['DateAndTime','Score'])
 
 #print(df.loc[:,'Score'])
+
+df['DateAndTime'] = pd.to_datetime(df['DateAndTime'])
 print(df['DateAndTime'])
-df.plot(x='DateAndTime',y='Score',kind='line')
+#df.plot(x='DateAndTime',y='Score',kind='line')
+print(df['Score'])
+plt.plot(df['DateAndTime'],df['Score'],'-*')
 plt.show()
 #score = pd.DataFrame
 
 '''
+date=[]
+score=[]
 for row in data:
-    date.append(row[1])
-    score.append(row[3])
+    date.append(row[0])
+    score.append(row[1])
     #print(score)
 sortedna = sorted(score)
 #print(sortedna)
