@@ -1,22 +1,11 @@
 jrd.mid
 frj.mid
-Call me Maybe.mid
-Itsumo.mid
-Sugar.mid
-Payphone.mid
-Chocolates.mid
-It's not living if its not with you.mid
-Girls.mid
-Somebody else.mid
-White horse.mid
-All too well.mid
-Blank space.mid
-Change of hearts.mid
-Gateway car.mid
-Wildest dream.mid
-As it was.mid
-Lego.mid
-Gotta be you.mid
-God gave me you.mid
-Thousand years.mid
-Love story.mid
+1.mid
+2.mid
+3.mid
+4.mid
+5.mid
+6.mid
+7.mid
+8.mid
+9.mid
