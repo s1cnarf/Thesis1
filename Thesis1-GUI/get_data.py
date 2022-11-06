@@ -52,6 +52,7 @@ class Data:
         
         # Get the data in the start index
         start_elements = []
+        keys = list(text['note'].to_list())
         start, end = 0, 0
         for i in range (0, len(text['event'])):
             if text['end'][i] > end:
