@@ -26,6 +26,7 @@ import sqlite3
 import pyglet
 import get_data 
 import visualization
+import GraphTest
 
 
 class SampleApp(tk.Tk):
@@ -321,7 +322,7 @@ class LogIn(tk.Frame):
         label2_entry.place(x=746, y=362)
 
         # logo_label.place(x=35,y=34)
-        # info_label.place(x=738, y=57)
+        # info_label.place(x=728, y=57)
         # names_label.place(x=362, y=677)
 
         logo_label.place(x=123, y=270)
@@ -500,7 +501,7 @@ class Register(tk.Frame):
         label7Reg.place(x=870, y=515)
 
         logo_label.place(x=35, y=34)
-        info_label.place(x=738, y=57)
+        info_label.place(x=728, y=57)
 
 
 class StartPage(tk.Frame):
@@ -576,7 +577,7 @@ class StartPage(tk.Frame):
         play_label4.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
         play_label4.image = img4
 
-        DetectDevice_label = tk.Label(self, image=img5, borderwidth=0)
+        DetectDevice_label = tk.Label(self, image=img5, borderwidth=0,cursor="hand2")
         DetectDevice_label.image = img5
         
         canvas = tk.Canvas(self, width=20, height=20, bg="#2A2B2C",highlightthickness=0)
@@ -585,19 +586,27 @@ class StartPage(tk.Frame):
         def UpdateDeviceStatus():
             canvas.delete('all')
             pg.midi.init()
-            id=pg.midi.get_default_input_id()
+            global device_id
+            device_id=pg.midi.get_default_input_id()
+            
                 
-            if (id == -1):
-                
-                canvas.create_circle(10, 10, 8, fill="#ED695E", outline="")
-            else:
-                print(id)
+            if (device_id == 1):
                 canvas.create_circle(10, 10, 8, fill="#75CE9F", outline="")
-            device_id=-1
+                
+                
+            else:
+                canvas.create_circle(10, 10, 8, fill="#ED695E", outline="")
+                print(id)
+                
+            #device_id=-1
             pg.midi.quit()
 
         UpdateDeviceStatus()
 
+        def ClickUpdate(e):
+            UpdateDeviceStatus()
+        
+        DetectDevice_label.bind("<Button-1>", ClickUpdate)
 
         logo_label.place(x=400, y=200)
         play_label.place(x=364, y=375)
@@ -615,6 +624,7 @@ class PlayPage(tk.Frame):
         self.controller = controller
 
         flag = True
+        
 
         def update(task, flag):
             listbox_songs.delete(0, END)
@@ -697,7 +707,11 @@ class PlayPage(tk.Frame):
                         wait = False
                         thread.start()
 
-                    p.input_main(display)
+                    #p.input_main(display)  temporary
+
+                    for event in pg.event.get():
+                        if event.type == pg.QUIT:
+                            p.running = False
 
                     p.clock.tick(fps)
 
@@ -738,8 +752,8 @@ class PlayPage(tk.Frame):
                     p.sMusic = ""
 
                 app.deiconify()
-                controller.show_frame("AfterPerformance")
-                show_csv()
+                DisplayAfterPerf()
+                
 
 
 
@@ -825,16 +839,7 @@ class PlayPage(tk.Frame):
                 data2 = tree_histo.item(selectedItem)['values'][1] 
                 score = tree_histo.item(selectedItem)['values'][2] 
 
-                if (score >= 0 and score <= 25):
-                    level = "Worst Performance"
-                elif(score >= 26 and score <= 50):
-                    level = "Poor Performance"
-                elif(score >= 51 and score <= 75):
-                    level = "Good Performance"
-                elif(score >= 76 and score <= 100):
-                    level = "Excellent Performance"
-                else:
-                    level = "Cant determine"
+                ScoreToRating(score)
 
                 song_label.config(text=data2)
                 score_label.config(text = score)
@@ -850,8 +855,18 @@ class PlayPage(tk.Frame):
         global combinedFunc
 
         def combinedFunc(e):
+            '''
+            if device_id == 1:
+                PushSongInStack(e)
+                infos(e)
+            else:
+                messagebox.showerror('', "Please Connect a Device!")
+            '''
+
             PushSongInStack(e)
             infos(e)
+            
+
 
         image = Image.open("Pictures/recents.png")
         # image = image.resize((40,49), Image.ANTIALIAS)
@@ -959,24 +974,26 @@ class PlayPage(tk.Frame):
         play_Button.bind("<Button-1>", combinedFunc)
         # play_Button.bind("<<ListboxSelect>>", CombineFunctions)
 
+        '''
         img = Image.open("Pictures/practice.png")
-        # image = image.resize((25,28), Image.ANTIALIAS)
         practice_img = ImageTk.PhotoImage(img)
         practice_label = tk.Label(self, image=practice_img, borderwidth=0,cursor='hand2')
         practice_label.image = practice_img
 
         img = Image.open("Pictures/listen.png")
-        # image = image.resize((25,28), Image.ANTIALIAS)
         listen_img = ImageTk.PhotoImage(img)
         listen_label = tk.Label(self, image=listen_img, borderwidth=0,cursor='hand2')
         listen_label.image = listen_img
         
-        play_Button.place(x=1013, y=635)
+        
         practice_label.place(x=115,y=635)
         listen_label.place(x=344,y=635)
+        '''
+
+        play_Button.place(x=1013, y=635)
 
         logo_label.place(x=35, y=34)
-        info_label.place(x=738, y=57)
+        info_label.place(x=728, y=57)
         label_recent.place(x=831, y=179)
 
         frame2_play.place(x=90, y=148)
@@ -993,13 +1010,33 @@ class AfterPerformance(tk.Frame):
         self.controller.title("Chop-In")
         
         def CombineFunError(event):
-            controller.show_frame("ErrorAnalysis")
             show_data()
+            controller.show_frame("ErrorAnalysis")
+            
 
         global DisplayAfterPerf
         def DisplayAfterPerf(e):
             show_csv()
             controller.show_frame("AfterPerformance")
+
+        global ScoreToRating
+        def ScoreToRating(score):
+            global levelStats
+            if (score >= 0 and score <= 25):
+                levelStats = "Worst Performance"
+
+            elif(score >= 26 and score <= 50):
+                levelStats = "Poor Performance"
+
+            elif(score >= 51 and score <= 75):
+                levelStats = "Good Performance"
+
+            elif(score >= 76 and score <= 100):
+                levelStats = "Excellent Performance"
+
+            else:
+                levelStats = "Cant determine"
+
 
         global show_csv
         def show_csv():
@@ -1091,17 +1128,7 @@ class AfterPerformance(tk.Frame):
             con.commit()
             con.close()
 
-            global levelStats
-            if (percentScore >= 0 and percentScore <= 25):
-                levelStats = "Worst Performance"
-            elif(percentScore >= 26 and percentScore <= 50):
-                levelStats = "Poor Performance"
-            elif(percentScore >= 51 and percentScore <= 75):
-                levelStats = "Good Performance"
-            elif(percentScore >= 76 and percentScore <= 100):
-                levelStats = "Excellent Performance"
-            else:
-                levelStats = "Cant determine"
+            ScoreToRating(percentScore)
             
     
             grade_label.configure(text=str(levelStats))
@@ -1162,7 +1189,7 @@ class AfterPerformance(tk.Frame):
         grade_label.pack(anchor=CENTER)
 
         logo_label.place(x=35, y=34)
-        info_label.place(x=738, y=57)
+        info_label.place(x=728, y=57)
         main_frame.place(x=105, y=124)
 
         ScoreSummary_label.place(x=613, y=209)
@@ -1833,16 +1860,31 @@ class Statistics(tk.Frame):
         self.controller = controller
 
         def GetSongTrack(e):
+            for widget in frame_Graph.winfo_children():
+                widget.destroy()
+
             song_track = listbox_stat.get(ANCHOR)
 
-            con = sqlite3.connect('userData.db')
-            cu = con.cursor()
-         
-            cu.execute("SELECT Score FROM History WHERE Username = ? AND Title = ? ", (label_entry.get(),song_track,))
-            df = cu.fetchall()
-            print(df)
-            
+            GraphTest.chosen_song = song_track
+            GraphTest.user = label_entry.get()
 
+            ax,fig = GraphTest.DisplayGraph()
+
+            graph = FigureCanvasTkAgg(fig, frame_Graph)
+            graph.get_tk_widget().pack(side=LEFT, anchor=W)
+
+            
+            ax.set_facecolor('#2A2B2C')
+            fig.set_facecolor('#2A2B2C')
+
+            ax.tick_params(axis='x', colors='white')
+            ax.tick_params(axis='y', colors='white')
+            ax.xaxis.label.set_color("white")
+            ax.yaxis.label.set_color("white")
+            ax.spines['left'].set_color('white')
+            ax.spines['top'].set_color('white')
+            ax.spines['bottom'].set_color('white')
+            ax.spines['right'].set_color('white')
 
 
         global UpdateValues
@@ -1854,29 +1896,21 @@ class Statistics(tk.Frame):
 
             AvgScore = cu.fetchone()[0]
             print(AvgScore)
-            score_label.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
+            score_label_stat.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
 
-            cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title", (label_entry.get(),))
+            ScoreToRating(AvgScore)
+            rating = levelStats.replace(" ","")
+            rating = rating.replace("Performance","")
+            rating_label_stat.configure(text=rating,anchor=CENTER)
+
+            cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title ORDER BY count(*) DESC", (label_entry.get(),))
             ListSongs = cu.fetchall()
             
             listbox_stat.delete(0, END)
 
             for song in ListSongs:
                 listbox_stat.insert(END, song[0])
-
-
-            
-            '''
-            cu.execute("SELECT Title FROM History WHERE Username = ? AND Score = (SELECT MAX(Score) FROM History) LIMIT 1", (label_entry.get(),))
-            TopSong = cu.fetchone()[0]
-            print(TopSong)
-            topsong.configure(text=str(TopSong),anchor=CENTER)
-            '''
-
-
-            
-
-            
+        
             con.commit()
             con.close()
 
@@ -1904,13 +1938,15 @@ class Statistics(tk.Frame):
         AvgRating_img = ImageTk.PhotoImage(img)
         AvgRating_label = tk.Label(self, image=AvgRating_img, borderwidth=0)
         AvgRating_label.image = AvgRating_img
+
+        rating_label_stat = tk.Label(self,width=11,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
         
         img = Image.open("Pictures/AvgScore.png")
         AvgScore_img = ImageTk.PhotoImage(img)
         AvgScore_label = tk.Label(self, image=AvgScore_img, borderwidth=0)
         AvgScore_label.image = AvgScore_img
 
-        score_label = tk.Label(self,width=6,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
+        score_label_stat = tk.Label(self,width=6,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
        
         img = Image.open("Pictures/TrackTitle.png")
         Track_img = ImageTk.PhotoImage(img)
@@ -1920,7 +1956,7 @@ class Statistics(tk.Frame):
         frame_list = tk.Frame(self, width=226, height=306, border=0, bg="#2A2B2C")
         frame_list.place(x=619, y=471)
 
-        listbox_stat = tk.Listbox(frame_list, width=29, height=8, fg="#FFFFFF", bg="#2A2B2C", borderwidth=0,
+        listbox_stat = tk.Listbox(frame_list, width=37, height=7, fg="#FFFFFF", bg="#2A2B2C", borderwidth=0,
                              font=controller.font_song)
         scrollbar = tk.Scrollbar(frame_list, orient=VERTICAL)
         listbox_stat.config(yscrollcommand=scrollbar.set)
@@ -1931,10 +1967,14 @@ class Statistics(tk.Frame):
 
         listbox_stat.bind("<<ListboxSelect>>", GetSongTrack)
 
+        frame_Graph = tk.Frame(self, width=459, height=459, border=0, bg="#2A2B2C")
+        frame_Graph.place(x=138, y=143)
+        frame_Graph.pack_propagate(0)
+
 
 
         logo_label.place(x=35, y=34)
-        info_label.place(x=738, y=57)
+        info_label.place(x=728, y=57)
         
         frame_stat.place(x=113,y=143)
         CurrSkill_label.place(x=619,y=168)
@@ -1943,7 +1983,8 @@ class Statistics(tk.Frame):
         
         Track_label.place(x=619,y=410)
 
-        score_label.place(x=698,y=332)
+        score_label_stat.place(x=698,y=332)
+        rating_label_stat.place(x=912,y=332)
 
 
 
@@ -2021,51 +2062,29 @@ class History(tk.Frame):
             con = sqlite3.connect('userData.db')
             cu = con.cursor()
 
-            #             #cu.execute("Select if (Username = username), history.* from history")
-            cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY date(DateAndTime) DESC", (label_entry.get(),))
-            # cu.execute("SELECT * FROM history")
+           
+            cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY datetime(DateAndTime) DESC", (label_entry.get(),))
+            
             historyData = cu.fetchall()
 
             for histo in historyData:
-                #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
+            
                 tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
-            #             #print(histo)
-            #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
-
+            
             con.commit()
             con.close()
 
             print("FLAGG")
 
-        # if(cu.fetchall()):
-        #     tree_histo.insert(parent='',index='end', iid='counter', text='', values=(cu[0], cu[1], cu[2], cu[3]))
-        # historyData = cu.fetchall()
-
-        # counter = 0
-
-        # for histo in historyData:
-        #     if counter % 2 == 0:
-        #         tree_histo.insert("", 'end', iid=histo[0], values=(histo[0], histo[1], histo[2], histo[3]))
-        #     else:
-        #         tree_histo.insert(parent='',index='end', iid='counter', text='', values=(histo[0], histo[1], histo[2], histo[3]))
-
-        #     counter += 1
-
         tree_histo.bind('<Motion>', 'break')
-        tree_histo.bind('<<TreeviewSelect>>', infos2)
-
-        # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
-        # tree_histo.config(yscrollcommand=scrollbar2.set)
-        # scrollbar2.config(command=tree_histo.yview)
-
-        # scrollbar2.pack(side=RIGHT,fill=Y)
+    
         tree_histo.pack(side=LEFT)
 
         frame_histo.place(x=105, y=124)
         labelhisto_menu.place(x=120, y=128)
         frame_histoList.place(x=150, y=235)
         logo_label.place(x=35, y=34)
-        info_label.place(x=738, y=57)
+        info_label.place(x=728, y=57)
 
 
 

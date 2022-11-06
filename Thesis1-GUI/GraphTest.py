@@ -9,53 +9,56 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.ticker as mticker
 
 
+chosen_song = ""
+user = ""
 
-sqlite_file = 'userData.db'
-conn = sqlite3.connect(sqlite_file)
-c = conn.cursor()
-style.use('fivethirtyeight')
+#chosen_song = "It's not living if its not with you"
+#user = "ced"
 
-sql_query ="SELECT DateAndTime,Score FROM History WHERE Username = 'ced' ORDER BY date(DateAndTime) ASC"
-
-c.execute("SELECT DateAndTime,Score FROM History WHERE Username = 'ced' ORDER BY date(DateAndTime) ASC")
-data = c.fetchall()
-#print(data[1])
+def DisplayGraph():
 
 
-'''
-df = pd.DataFrame(data,columns=['DateAndTime','Score'])
+    sqlite_file = 'userData.db'
+    conn = sqlite3.connect(sqlite_file)
+    c = conn.cursor()
 
-#print(df.loc[:,'Score'])
+    #c.execute("SELECT DateAndTime,Score FROM History WHERE Username = 'ced' ORDER BY date(DateAndTime) ASC")
+    c.execute("SELECT DateAndTime,Score FROM History WHERE Username = ? AND Title = ? ", (user,chosen_song,))
+    data = c.fetchall()
 
-df['DateAndTime'] = pd.to_datetime(df['DateAndTime'])
-print(df['DateAndTime'])
-#df.plot(x='DateAndTime',y='Score',kind='line')
-print(df['Score'])
-plt.plot(df['DateAndTime'],df['Score'],'-*')
-plt.show()
-#score = pd.DataFrame
-
-'''
-date=[]
-score=[]
-for row in data:
-    date.append(row[0])
-    score.append(row[1])
-    #print(score)
-sortedna = sorted(score)
-#print(sortedna)
-
-fig = plt.figure(figsize=(13,6))
-ax = fig.add_subplot(111)
-ax.xaxis_date()
-#print(len(data))
-
-myLocator = mticker.MultipleLocator(len(date)/10)
-ax.xaxis.set_major_locator(myLocator)
-fig.autofmt_xdate()
-ax.plot(date,score,'-*')
+    x_axis = []
+    score=[]
 
 
-plt.show()
+    print(len(data))
+    count=0
 
-#print(data)   '''
+    for row in data:
+        count=count+1
+        
+        string = "Trial " + str(count)
+        x_axis.append(string)
+        score.append(int(row[1]))
+
+
+    fig = plt.figure(figsize=(5,5),dpi=100)
+    ax = fig.add_subplot(111)
+    
+    
+    #print(len(data))
+
+    #myLocator = mticker.MultipleLocator(len(date)/10)
+    #ax.xaxis.set_major_locator(myLocator)
+    #fig.autofmt_xdate()
+    ax.plot(x_axis,score,'-o',color="#F8BA43")
+    plt.xticks(rotation=45)
+    plt.ylabel("Scores")
+    plt.ylim(0,100)
+    
+    #plt.show()
+    return ax,fig
+    #print(x_axis)    
+
+
+
+
