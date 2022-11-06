@@ -844,18 +844,9 @@ class PlayPage(tk.Frame):
                 song_label.config(text=data2)
                 score_label.config(text = score)
                 grade_label.config(text=str(level))
-<<<<<<< HEAD
-                # search_entry.insert(0,)
-                # item = tree_histo.item(selectedItem)
-                # print(item.get[1])
-
-            
-
-=======
 
                 
                 
->>>>>>> 22c88c2092f19b355f079cd90b346d5ca7dae0a0
                 controller.show_frame("AfterPerformance")
                 show_csv()
             except IndexError:
@@ -1123,10 +1114,6 @@ class AfterPerformance(tk.Frame):
             
     
             grade_label.configure(text=str(levelStats))
-<<<<<<< HEAD
-=======
-
->>>>>>> 22c88c2092f19b355f079cd90b346d5ca7dae0a0
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
@@ -1964,16 +1951,12 @@ class Statistics(tk.Frame):
             TopSong = cu.fetchone()[0]
             print(TopSong)
             topsong.configure(text=str(TopSong),anchor=CENTER)
-<<<<<<< HEAD
-
-=======
             '''
 
 
             
 
             
->>>>>>> 22c88c2092f19b355f079cd90b346d5ca7dae0a0
             con.commit()
             con.close()
 
