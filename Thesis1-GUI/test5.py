@@ -90,7 +90,7 @@ class SampleApp(tk.Tk):
         
         self.frames = {}
         for F in (
-        LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance, ErrorAnalysis, PerformanceReport, Statistics,
+        LoadingPage, LogIn, Register, StartPage, PlayPage, AfterPerformance, ScoreSummary, ErrorAnalysis, PerformanceReport, Statistics,
         History):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
@@ -823,11 +823,27 @@ class PlayPage(tk.Frame):
             try:
                 data2 = tree_histo.item(selectedItem)['values'][1] 
                 score = tree_histo.item(selectedItem)['values'][2] 
+
+                if (score >= 0 and score <= 25):
+                    level = "Worst Performance"
+                elif(score >= 26 and score <= 50):
+                    level = "Poor Performance"
+                elif(score >= 51 and score <= 75):
+                    level = "Good Performance"
+                elif(score >= 76 and score <= 100):
+                    level = "Excellent Performance"
+                else:
+                    level = "Cant determine"
+
                 song_label.config(text=data2)
                 score_label.config(text = score)
+                grade_label.config(text=str(level))
                 # search_entry.insert(0,)
                 # item = tree_histo.item(selectedItem)
                 # print(item.get[1])
+
+            
+
                 controller.show_frame("AfterPerformance")
                 show_csv()
             except IndexError:
@@ -987,6 +1003,10 @@ class AfterPerformance(tk.Frame):
             show_csv()
             controller.show_frame("AfterPerformance")
 
+        def show_scoreSummary(e):
+            controller.show_frame("ScoreSummary")
+            show_summary()
+
         global show_csv
         def show_csv():
             getsong = search_entry.get() + '.csv'
@@ -1005,7 +1025,7 @@ class AfterPerformance(tk.Frame):
             global total_notes
             total_notes = correctHits + partialHits + missedHits
             semiTotal_notes = correctHits + partialHits
-            percent_notes = (semiTotal_notes - extraHits)/total_notes *100
+            percent_notes = semiTotal_notes/total_notes *100
             global total_percentNotes
             total_percentNotes = float(percent_notes * 0.25)
             print(total_percentNotes,"eto ang percentNotes")
@@ -1077,6 +1097,20 @@ class AfterPerformance(tk.Frame):
             con.commit()
             con.close()
 
+            global levelStats
+            if (percentScore >= 0 and percentScore <= 25):
+                levelStats = "Worst Performance"
+            elif(percentScore >= 26 and percentScore <= 50):
+                levelStats = "Poor Performance"
+            elif(percentScore >= 51 and percentScore <= 75):
+                levelStats = "Good Performance"
+            elif(percentScore >= 76 and percentScore <= 100):
+                levelStats = "Excellent Performance"
+            else:
+                levelStats = "Cant determine"
+            
+    
+            grade_label.configure(text=str(levelStats))
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
@@ -1095,6 +1129,7 @@ class AfterPerformance(tk.Frame):
         img = Image.open("Pictures/ScoreSum.png")
         scoreSum_img = ImageTk.PhotoImage(img)
         ScoreSummary_label = tk.Label(self, image=scoreSum_img, cursor="hand2", borderwidth=0)
+        ScoreSummary_label.bind("<Button-1>", show_scoreSummary)
         ScoreSummary_label.image = scoreSum_img
 
         img = Image.open("Pictures/Perf_Report.png")
@@ -1127,7 +1162,8 @@ class AfterPerformance(tk.Frame):
 
         grade_frame = tk.Frame(self, width=308, height=30, bg="#2A2B2C", border=0)
         grade_frame.pack_propagate(False)
-        grade_label = tk.Label(grade_frame, text="GOOD PERFORMANCE!", borderwidth=0, bg="#2A2B2C", fg="#F8BA43",
+        global grade_label
+        grade_label = tk.Label(grade_frame, text="", borderwidth=0, bg="#2A2B2C", fg="#F8BA43",
                                font=controller.grade_font)
         grade_label.pack(anchor=CENTER)
 
@@ -1143,6 +1179,76 @@ class AfterPerformance(tk.Frame):
         score_label.place(x=225, y=265)
         song_frame.place(x=182, y=520)
         grade_frame.place(x=182, y=570)
+
+class ScoreSummary(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="#F7BF50")
+        self.controller = controller
+
+    
+
+
+        back_pic = Image.open("Pictures/back.png")
+        back_img = ImageTk.PhotoImage(back_pic)
+        back_label = tk.Label(self, image=back_img, borderwidth=0, cursor="hand2")
+        back_label.bind("<Button-1>", DisplayAfterPerf)
+        back_label.image = back_img
+
+
+        main_frame = tk.Frame(self, width=988, height=563, bg="#2A2B2C", border=0)
+
+        notes_label = tk.Label(self, text="Played the right note correctly [NOTES - 25%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=38,
+                          height=1, font=controller.title3_font)
+
+        notes_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
+                          height=1, font=controller.title3_font)
+
+        rhythm_label = tk.Label(self, text="Followed the corerct rhythm pattern [RHYTHM - 20%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=43,
+                          height=1, font=controller.title3_font)
+
+        rhythm_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
+                          height=1, font=controller.title3_font)
+
+        articulation_label = tk.Label(self, text="Hold each note to it's corresponding duration [ARTICULATION - 15%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=54,
+                          height=1, font=controller.title3_font)
+
+        articulation_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
+                          height=1, font=controller.title3_font)
+
+        dynamics_label = tk.Label(self, text="Controlled the loudness of each note [DYNAMICS - 10%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=45,
+                          height=1, font=controller.title3_font)
+
+        dynamics_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
+                          height=1, font=controller.title3_font)
+
+        melody_label = tk.Label(self, text="Performed the Melody correctly [MELODY - 30%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=40,
+                          height=1, font=controller.title3_font)
+
+        melody_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
+                          height=1, font=controller.title3_font)
+
+        global show_summary
+        def show_summary():
+            notes_score.configure(text=str(round(total_percentNotes)),anchor=CENTER)
+            rhythm_score.configure(text=str(round(total_percentRhythm)),anchor=CENTER)
+            articulation_score.configure(text=str(round(total_percentArticulation)),anchor=CENTER)
+            dynamics_score.configure(text=str(round(total_percentDynamics)),anchor=CENTER)
+            melody_score.configure(text=str(round(total_percentMelody)),anchor=CENTER)
+
+
+
+        main_frame.place(x=105, y=124)
+        back_label.place(x=57, y=36)
+        notes_label.place(x=110, y=270)
+        notes_score.place(x=595, y=270)
+        rhythm_label.place(x=110, y=340)
+        rhythm_score.place(x=665, y=340)
+        articulation_label.place(x=110, y=410)
+        articulation_score.place(x=815, y=410)
+        dynamics_label.place(x=110, y=480)
+        dynamics_score.place(x=695, y=480)
+        melody_label.place(x=110, y=550)
+        melody_score.place(x=665, y=550)
 
 
 class ErrorAnalysis(tk.Frame):
@@ -1819,14 +1925,34 @@ class Statistics(tk.Frame):
             print(TopSong)
             topsong.configure(text=str(TopSong),anchor=CENTER)
 
-
-
-            
-
-            
             con.commit()
             con.close()
 
+            # if (AvgScore >= 0 and AvgScore <= 25):
+            #     avglevel = "Worst Performance"
+            # elif(AvgScore >= 26 and AvgScore <= 50):
+            #     avglevel = "Poor Performance"
+            # elif(AvgScore >= 51 and AvgScore <= 75):
+            #     avglevel = "Good Performance"
+            # elif(AvgScore >= 76 and AvgScore <= 100):
+            #     avglevel = "Excellent Performance"
+            # else:
+            #     avglevel = "Cant determine"
+
+            # AvgRating_label.configure(text=str(avglevel),anchor=CENTER)
+
+            # if (TopSong >= 0 and TopSong <= 25):
+            #     toplevel = "Worst Performance"
+            # elif(TopSong >= 26 and TopSong <= 50):
+            #     toplevel = "Poor Performance"
+            # elif(TopSong >= 51 and TopSong <= 75):
+            #     toplevel = "Good Performance"
+            # elif(TopSong >= 76 and TopSong <= 100):
+            #     toplevel = "Excellent Performance"
+            # else:
+            #     toplevel = "Cant determine"
+
+            #CurrSkill_label.configure(text=str(levelStats),anchor=CENTER)
        
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
@@ -1958,13 +2084,16 @@ class History(tk.Frame):
             cu = con.cursor()
 
             #             #cu.execute("Select if (Username = username), history.* from history")
-            cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY date(DateAndTime) DESC", (label_entry.get(),))
+            cu.execute("SELECT * FROM History WHERE Username = ?", (label_entry.get(),))
             # cu.execute("SELECT * FROM history")
+            count = []
+            i = len(count)
             historyData = cu.fetchall()
 
             for histo in historyData:
                 #             #tree_histo.insert("", 'end', iid=0, values=(histo[1], histo[2], histo[3]))
-                tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
+                count.append(tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3])))
+                tree_histo.see(count[-1])
             #             #print(histo)
             #    tree_histo.insert("", 'end', iid=histo[0], text=histo[0], values=(histo[1], histo[2], histo[3]))
 
@@ -1988,7 +2117,7 @@ class History(tk.Frame):
         #     counter += 1
 
         tree_histo.bind('<Motion>', 'break')
-        tree_histo.bind('<<TreeviewSelect>>', infos2)
+        #tree_histo.bind('<<TreeviewSelect>>', infos2)
 
         # scrollbar2 = tk.Scrollbar(frame_histoList,orient=VERTICAL)
         # tree_histo.config(yscrollcommand=scrollbar2.set)
