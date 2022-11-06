@@ -14,6 +14,7 @@ import time as tm
 
 import csv
 from test5 import PlayPage
+import get_data
 
 
 getSong = ""
@@ -386,7 +387,7 @@ class pRoll:
             print("INPUT DATA: ", i)
 
         fields = ['track', 'time', 'event', 'note', 'velocity']
-        csvPath = "new_t_" + self.sMusic + '_.csv'
+        csvPath = "new_t_" + self.sMusic + '.csv'
         path = "../csv/truth/" + csvPath
 
         with open(path, 'w', encoding='UTF8', newline='') as f:
@@ -396,6 +397,7 @@ class pRoll:
             write.writerows(self.newTruthList)
             print("SUCCESFULLY ENCODED NEW TRUTH TO CSV!")
 
+        get_data.Data.modifyTruth(self.sMusic + '.csv')
         #pg.time.delay(20000)
         self.running = False
 
