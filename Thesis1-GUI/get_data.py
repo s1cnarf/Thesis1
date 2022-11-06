@@ -127,6 +127,14 @@ class Data:
                 #print (f'1 TABLE TRUTH: {truth}')
                 #truth = Missed(truth, notes_in_truth, user, notes_in_user)
             
+                for i in range (len(user)):
+                    if user[i] == 0: 
+                        if notes_in_user[i][2] not in keys:
+                            extra += 1
+
+                # print('Truth Table: ', truth, ' User Table:', user)
+                # print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
+                # print ('\n')
 
                 notes_in_truth.clear()
                 notes_in_user.clear()
@@ -136,7 +144,6 @@ class Data:
 
                 correct += truth.count(1)
                 partial += truth.count(2)
-                extra += user.count(0)
                 missed += truth.count(0)
                 
 
@@ -180,10 +187,11 @@ class Data:
         text_Right = text[condition].note.tolist()
 
         #track the index of the the mismatch elements
-        
-        mismatch = [i for i, (a, b) in enumerate(zip(pattern_Right, text_Right)) if a != b]
-
-        percentage = (len(mismatch)/len(text_Right))*100
+        print ('pattern: ', len(pattern_Right), ' text: ', len(text_Right))
+        mismatch = [i for i, (a, b) in enumerate(zip(text_Right, pattern_Right)) if a != b]
+        # mismatch = 0   
+        match =  len(pattern_Right) - len(mismatch)
+        percentage = (match/len(text_Right))*100
         return percentage
 
 
@@ -429,7 +437,7 @@ class Data:
 
 
             #Load to CSV  File
-            csvPath = "../csv/truth/t_" + midiPath + '.csv'
+            csvPath = "../csv/truth/new_t_" + midiPath + '.csv'
             with open(csvPath, 'w', encoding='UTF8', newline='') as f:
                 writer = csv.writer(f)
 
@@ -487,12 +495,59 @@ class Data:
         except FileNotFoundError:
             print ('File doesnt exist from modifycsv')
 
+    # MODIFY TRUTH DATA BASED on pROLL TIME
+    def modifyTruth(csvPath):
+        try:
+            print ('TRUTH MODIFIED DONE!!!!')
+            c = '../csv/truth/new_t_' + csvPath
+            print (c)
+            df = pd.read_csv(c , on_bad_lines='skip') 
+            dictobj = df.to_dict('list')
+            note_events  = []
+            header = ['track','start', 'end', 'event','channel','note','velocity','name']
+            acc = []
+            index = []
+            size = len(dictobj['event'])
+
+            print('EVENT' + '\t     NOTE NUMBER' + '\tSTART TIME' + '\tEND TIME'+ '\tDISTANCE')
+            for i in range(0, size):
+                if dictobj['event'][i] == 'Note_on':
+                    event = dictobj['event'][i]
+                    time = dictobj['time'][i]
+                    note_num = dictobj['note'][i]
+                    acc.append(list((event,time,note_num)))
+                    index.append(i)
+                elif dictobj['event'][i] == 'Note_off':
+                    for j in range(0, len(acc)):
+                        if dictobj['note'][i] == acc[j][2]:
+                            s = acc[j][1]
+                            e = dictobj['time'][i]
+                            n = acc[j][2]
+                            dist = e - s
+                            # note - start - end 
+                            #print('Note On/Off\t' + str(acc[j][2]) + '\t\t' + str(acc[j][1]) + '\t\t' + str(dictobj['Time'][i])+ '\t\t' + str(dist))
+                            note_events.append([1, s, e, 'Note_on', 1, n, dictobj['velocity'][i], note.Note(n).nameWithOctave])
+                            acc.pop(j)
+                            break
+            path = "../csv/truth/t_" + csvPath
+            print (note_events)
+            with open(path, 'w', encoding='UTF8', newline='') as f:
+                writer = csv.writer(f)
+
+                # write the header
+                writer.writerow(header)
+
+                # write multiple rows
+                writer.writerows(note_events)
+        except FileNotFoundError:
+            print ('File doesnt exist from modifytruth')
+
 if __name__ == '__main__':
     data = Data()
     #data.modifycsv('jrd.csv')
     # data.read_csv('frj.csv')
     # data.Data_to_csv('frj.csv')
-    data.miditocsv('jrd')
+    Data.modifyTruth('jrd.csv')
 
 
     
