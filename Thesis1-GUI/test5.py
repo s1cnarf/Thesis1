@@ -583,7 +583,7 @@ class StartPage(tk.Frame):
         
         global UpdateDeviceStatus
         def UpdateDeviceStatus():
-            
+            canvas.delete('all')
             pg.midi.init()
             id=pg.midi.get_default_input_id()
                 
@@ -593,7 +593,8 @@ class StartPage(tk.Frame):
             else:
                 print(id)
                 canvas.create_circle(10, 10, 8, fill="#75CE9F", outline="")
-       
+            device_id=-1
+            pg.midi.quit()
 
         UpdateDeviceStatus()
 
@@ -668,6 +669,7 @@ class PlayPage(tk.Frame):
                 p.running = True
 
                 p.launch()
+                #thread.start()
                 # thread.start()
                 p.piano.create_key_surfaces(display)
 
@@ -689,14 +691,18 @@ class PlayPage(tk.Frame):
 
                     # pr.piano.draw_keys(display)
 
-                    # pg.display.flip()
+                    # # pg.display.flip()
                     if wait:
                         pg.time.delay(5000)
                         # print("BOOOL",pg.midi.get_init())
                         wait = False
                         thread.start()
 
-                    p.input_main(display)
+                    # p.input_main(display)
+
+                    for event in pg.event.get():
+                        if event.type == pg.QUIT:
+                            p.running = False
 
                     p.clock.tick(fps)
 
@@ -838,12 +844,18 @@ class PlayPage(tk.Frame):
                 song_label.config(text=data2)
                 score_label.config(text = score)
                 grade_label.config(text=str(level))
+<<<<<<< HEAD
                 # search_entry.insert(0,)
                 # item = tree_histo.item(selectedItem)
                 # print(item.get[1])
 
             
 
+=======
+
+                
+                
+>>>>>>> 22c88c2092f19b355f079cd90b346d5ca7dae0a0
                 controller.show_frame("AfterPerformance")
                 show_csv()
             except IndexError:
@@ -1111,6 +1123,10 @@ class AfterPerformance(tk.Frame):
             
     
             grade_label.configure(text=str(levelStats))
+<<<<<<< HEAD
+=======
+
+>>>>>>> 22c88c2092f19b355f079cd90b346d5ca7dae0a0
 
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
@@ -1152,6 +1168,7 @@ class AfterPerformance(tk.Frame):
         
         global song_label
         global score_label
+        global grade_label
         score_label = tk.Label(self, text="", borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
 
         song_frame = tk.Frame(self, width=308, height=30, border=0, bg="#2A2B2C")
@@ -1908,6 +1925,18 @@ class Statistics(tk.Frame):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
 
+        def GetSongTrack(e):
+            song_track = listbox_stat.get(ANCHOR)
+
+            con = sqlite3.connect('userData.db')
+            cu = con.cursor()
+         
+            cu.execute("SELECT Score FROM History WHERE Username = ? AND Title = ? ", (label_entry.get(),song_track,))
+            df = cu.fetchall()
+            print(df)
+            
+
+
 
         global UpdateValues
         def UpdateValues():
@@ -1920,11 +1949,31 @@ class Statistics(tk.Frame):
             print(AvgScore)
             score_label.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
 
+            cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title", (label_entry.get(),))
+            ListSongs = cu.fetchall()
+            
+            listbox_stat.delete(0, END)
+
+            for song in ListSongs:
+                listbox_stat.insert(END, song[0])
+
+
+            
+            '''
             cu.execute("SELECT Title FROM History WHERE Username = ? AND Score = (SELECT MAX(Score) FROM History) LIMIT 1", (label_entry.get(),))
             TopSong = cu.fetchone()[0]
             print(TopSong)
             topsong.configure(text=str(TopSong),anchor=CENTER)
+<<<<<<< HEAD
 
+=======
+            '''
+
+
+            
+
+            
+>>>>>>> 22c88c2092f19b355f079cd90b346d5ca7dae0a0
             con.commit()
             con.close()
 
@@ -1985,12 +2034,24 @@ class Statistics(tk.Frame):
 
         score_label = tk.Label(self,width=6,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
        
-        img = Image.open("Pictures/TopSong.png")
-        TopSong_img = ImageTk.PhotoImage(img)
-        TopSong_label = tk.Label(self, image=TopSong_img, borderwidth=0)
-        TopSong_label.image = TopSong_img
+        img = Image.open("Pictures/TrackTitle.png")
+        Track_img = ImageTk.PhotoImage(img)
+        Track_label = tk.Label(self, image=Track_img, borderwidth=0)
+        Track_label.image = Track_img
 
-        topsong = tk.Label(self,width=31,height=1, bg="#F8BA43",borderwidth=0,font=controller.song)
+        frame_list = tk.Frame(self, width=226, height=306, border=0, bg="#2A2B2C")
+        frame_list.place(x=619, y=471)
+
+        listbox_stat = tk.Listbox(frame_list, width=37, height=7, fg="#FFFFFF", bg="#2A2B2C", borderwidth=0,
+                             font=controller.font_song)
+        scrollbar = tk.Scrollbar(frame_list, orient=VERTICAL)
+        listbox_stat.config(yscrollcommand=scrollbar.set)
+
+        scrollbar.config(command=listbox_stat.yview)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        listbox_stat.pack(pady=1)
+
+        listbox_stat.bind("<<ListboxSelect>>", GetSongTrack)
 
 
 
@@ -2002,8 +2063,7 @@ class Statistics(tk.Frame):
         AvgRating_label.place(x=813,y=289)
         AvgScore_label.place(x=619,y=289)
         
-        TopSong_label.place(x=619,y=410)
-        topsong.place(x=721,y=453)
+        Track_label.place(x=619,y=410)
 
         score_label.place(x=698,y=332)
 
