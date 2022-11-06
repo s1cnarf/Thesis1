@@ -755,7 +755,7 @@ class PlayPage(tk.Frame):
                     p.sMusic = ""
 
                 app.deiconify()
-                DisplayAfterPerf()
+                DisplayAfterPerf(e)
                 
 
 
@@ -846,7 +846,7 @@ class PlayPage(tk.Frame):
 
                 song_label.config(text=data2)
                 score_label.config(text = score)
-                grade_label.config(text=str(level))
+                #grade_label.config(text=str(level))
 
                 
                 
