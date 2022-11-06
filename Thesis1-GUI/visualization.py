@@ -23,7 +23,7 @@ class Visual:
         #print(t_yplaces)
         u_ylabels = user_data.keys()
 
-        fig = plt.figure(figsize=(9,6),dpi=100)
+        fig = plt.figure(figsize=(13,6),dpi=100)
         ax = fig.add_subplot(111)
         ax.set_yticks(u_yplaces)
         ax.set_yticklabels(u_ylabels)
