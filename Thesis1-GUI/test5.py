@@ -1034,6 +1034,10 @@ class AfterPerformance(tk.Frame):
             
 
             getsong = search_entry.get() + '.csv'
+            d = get_data.Data()
+            d.modifycsv(getsong)
+            d.read_csv(getsong)
+            d.Data_to_csv(getsong)
 
             pathh = r'../csv/Result_' + getsong
             try:
