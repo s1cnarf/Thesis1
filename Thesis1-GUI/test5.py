@@ -1,4 +1,3 @@
-import ast
 from ast import Load
 from cgitb import text
 # from ast import *
@@ -8,13 +7,10 @@ from tkinter import font as tkfont
 from tkinter import *
 from tkinter import messagebox, ttk
 from tkinter.ttk import Progressbar
-from turtle import bgcolor, circle, color, left, title, width
 from typing import Counter
-from unittest import skip
 from PIL import ImageTk, Image
 from datetime import datetime
 from collections import deque
-import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -286,12 +282,12 @@ class LogIn(tk.Frame):
         label2_entry.bind('<FocusOut>', on_leave)
         label2_entry.bind('<Return>', login)
 
-        logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((386, 82), Image.Resampling.LANCZOS)
+        logo_pic = Image.open("Pictures/Logo.png") #ANTIALIAS   1Resampoling.LANCZOS
+        logo_pic = logo_pic.resize((386, 82), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         logo_pic = Image.open("Pictures/info.png")
-        # logo_pic= logo_pic.resize((430,52),Image.Resampling.LANCZOS)
+        # logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
         info_img = ImageTk.PhotoImage(logo_pic)
 
         names_pic = Image.open("Pictures/names.png")
@@ -472,11 +468,11 @@ class Register(tk.Frame):
         # reg_button.bind("<Button-1>",register)
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
+        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         logo_pic = Image.open("Pictures/info.png")
-        # logo_pic= logo_pic.resize((430,52),Image.Resampling.LANCZOS)
+        # logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
         info_img = ImageTk.PhotoImage(logo_pic)
 
         logo_label = tk.Label(self, image=logo_img, borderwidth=0)
@@ -537,27 +533,27 @@ class StartPage(tk.Frame):
 
        
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((386, 82), Image.Resampling.LANCZOS)
+        logo_pic = logo_pic.resize((386, 82), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         image = Image.open("Pictures/menu1.png")
-        # image = image.resize((40,49), Image.Resampling.LANCZOS)
+        # image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu2.png")
-        # image = image.resize((67,53), Image.Resampling.LANCZOS)
+        # image = image.resize((67,53), Image.ANTIALIAS)
         img2 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu3.png")
-        # image = image.resize((88,53), Image.Resampling.LANCZOS)
+        # image = image.resize((88,53), Image.ANTIALIAS)
         img3 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu4.png")
-        # image = image.resize((69,53), Image.Resampling.LANCZOS)
+        # image = image.resize((69,53), Image.ANTIALIAS)
         img4 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/DeviceDetect.png")
-        # image = image.resize((69,53), Image.Resampling.LANCZOS)
+        # image = image.resize((69,53), Image.ANTIALIAS)
         img5 = ImageTk.PhotoImage(image)
 
         logo_label = tk.Label(self, image=logo_img, borderwidth=0)
@@ -710,11 +706,11 @@ class PlayPage(tk.Frame):
                         wait = False
                         thread.start()
 
-                    p.input_main(display)
+                    #p.input_main(display)
 
-                    # for event in pg.event.get():
-                    #     if event.type == pg.QUIT:
-                    #         p.running = False
+                    for event in pg.event.get():
+                        if event.type == pg.QUIT:
+                            p.running = False
 
                     p.clock.tick(fps)
 
@@ -872,23 +868,23 @@ class PlayPage(tk.Frame):
 
 
         image = Image.open("Pictures/recents.png")
-        # image = image.resize((40,49), Image.Resampling.LANCZOS)
+        # image = image.resize((40,49), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/songs.png")
-        # image = image.resize((10,30), Image.Resampling.LANCZOS)
+        # image = image.resize((10,30), Image.ANTIALIAS)
         img2 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/searchIcon.png")
-        # image = image.resize((25,28), Image.Resampling.LANCZOS)
+        # image = image.resize((25,28), Image.ANTIALIAS)
         img4 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/playButton.png")
-        # image = image.resize((25,28), Image.Resampling.LANCZOS)
+        # image = image.resize((25,28), Image.ANTIALIAS)
         img5 = ImageTk.PhotoImage(image)
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
+        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -1025,6 +1021,11 @@ class AfterPerformance(tk.Frame):
         def show_scoreSummary(e):
             controller.show_frame("ScoreSummary")
             show_summary()
+            
+        def DisplayPerfReport(e):
+
+            controller.show_frame("PerformanceReport")
+
 
         global show_csv
         def show_csv():
@@ -1034,10 +1035,11 @@ class AfterPerformance(tk.Frame):
             
 
             getsong = search_entry.get() + '.csv'
+            '''
             d = get_data.Data()
             d.modifycsv(getsong)
             d.read_csv(getsong)
-            d.Data_to_csv(getsong)
+            d.Data_to_csv(getsong)'''
 
             pathh = r'../csv/Result_' + getsong
             try:
@@ -1130,9 +1132,10 @@ class AfterPerformance(tk.Frame):
     
             grade_label.configure(text=str(rating))
             song_label.configure(text=search_entry.get())
+            
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
+        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -1154,7 +1157,7 @@ class AfterPerformance(tk.Frame):
         img = Image.open("Pictures/Perf_Report.png")
         PerfReport_img = ImageTk.PhotoImage(img)
         PerfReport_label = tk.Label(self, image=PerfReport_img, cursor="hand2", borderwidth=0)
-        PerfReport_label.bind("<Button-1>", lambda e: controller.show_frame("PerformanceReport"))
+        PerfReport_label.bind("<Button-1>", DisplayPerfReport)
         PerfReport_label.image = PerfReport_img
           
         img = Image.open("Pictures/ErrAnal.png")
@@ -1168,11 +1171,20 @@ class AfterPerformance(tk.Frame):
         circle_label = tk.Label(self, image=circle_img, borderwidth=0)
         circle_label.image = circle_img
 
+        img = Image.open("Pictures/BackToHome.png")
+        back_img = ImageTk.PhotoImage(img)
+        back_label = tk.Label(self, image=back_img, borderwidth=0,cursor='hand2')
+        back_label.bind("<Button-1>", ShowStartPage)
+        back_label.image = back_img
         
         global song_label
         global score_label
         global grade_label
-        score_label = tk.Label(self, text="",width=3, borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
+
+        score_frame = tk.Frame(self, width=254, height=95, border=0, bg="#2A2B2C")
+        score_frame.pack_propagate(False)
+        score_label = tk.Label(score_frame, text="", borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
+        score_label.pack(anchor=CENTER)
 
         song_frame = tk.Frame(self, width=308, height=30, border=0, bg="#2A2B2C")
         song_frame.pack_propagate(False)
@@ -1191,13 +1203,14 @@ class AfterPerformance(tk.Frame):
         logo_label.place(x=35, y=34)
         info_label.place(x=728, y=57)
         main_frame.place(x=105, y=124)
+        back_label.place(x=752,y=615)
 
         ScoreSummary_label.place(x=613, y=209)
         PerfReport_label.place(x=679, y=354)
         ErrorAnal_label.place(x=613, y=499)
 
         circle_label.place(x=182, y=192)
-        score_label.place(x=225, y=265)
+        score_frame.place(x=208, y=286)
         song_frame.place(x=182, y=520)
         grade_frame.place(x=182, y=570)
 
@@ -1357,6 +1370,8 @@ class PerformanceReport(tk.Frame):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
 
+        
+        
         def ReadCSVtoVariable(category):
             song = search_entry.get() + '.csv'
             d = get_data.Data()
@@ -1387,12 +1402,36 @@ class PerformanceReport(tk.Frame):
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
             try:
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
+                #place_forget
 
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
+                rhythmData_frame.destroy()
+                articulationData_frame.destroy()
+                dynamicsData_frame.destroy()
+                melodyData_frame.destroy()
+                fingerData_frame.destroy()
+
+                '''
+                for widgets in rhythmData_frame.winfo_children():
+                    widgets.destroy()
+                
+                for widgets in articulationData_frame.winfo_children():
+                    widgets.destroy()
+
+                for widgets in dynamicsData_frame.winfo_children():
+                    widgets.destroy()
+
+                for widgets in melodyData_frame.winfo_children():
+                    widgets.destroy()
+
+                for widgets in fingerData_frame.winfo_children():
+                    widgets.destroy()'''
+
+               
+                
+
+                
+
+                
             except NameError:
                 print("okay lang")
                
@@ -1510,16 +1549,17 @@ class PerformanceReport(tk.Frame):
             rhythm_frame.config(height=70, bg="#2A2B2C", cursor="")
 
             try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
-                articulationData_frame.place_forget()
+                notesData_frame.destroy()
+                correctHits_bar2.destroy()
+                partialHits_bar2.destroy()
+                extraHits_bar2.destroy()
+                missedHits_bar2.destroy()
+                articulationData_frame.destroy()
 
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
+                dynamicsData_frame.destroy()
+                melodyData_frame.destroy()
+                fingerData_frame.destroy()
+                
             except NameError:
                 print("okay lang")
 
@@ -1566,16 +1606,16 @@ class PerformanceReport(tk.Frame):
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
             try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
+                notesData_frame.destroy()
+                correctHits_bar2.destroy()
+                partialHits_bar2.destroy()
+                extraHits_bar2.destroy()
+                missedHits_bar2.destroy()
 
-                rhythmData_frame.place_forget()
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
+                rhythmData_frame.destroy()
+                dynamicsData_frame.destroy()
+                melodyData_frame.destroy()
+                fingerData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1627,16 +1667,16 @@ class PerformanceReport(tk.Frame):
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
             try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
+                notesData_frame.destroy()
+                correctHits_bar2.destroy()
+                partialHits_bar2.destroy()
+                extraHits_bar2.destroy()
+                missedHits_bar2.destroy()
 
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
+                rhythmData_frame.destroy()
+                articulationData_frame.destroy()
+                melodyData_frame.destroy()
+                fingerData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1712,16 +1752,16 @@ class PerformanceReport(tk.Frame):
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
             try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
+                notesData_frame.destroy()
+                correctHits_bar2.destroy()
+                partialHits_bar2.destroy()
+                extraHits_bar2.destroy()
+                missedHits_bar2.destroy()
 
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
-                dynamicsData_frame.place_forget()
-                fingerData_frame.place_forget()
+                rhythmData_frame.destroy()
+                articulationData_frame.destroy()
+                dynamicsData_frame.destroy()
+                fingerData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1768,16 +1808,16 @@ class PerformanceReport(tk.Frame):
             melody_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
             try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
+                notesData_frame.destroy()
+                correctHits_bar2.destroy()
+                partialHits_bar2.destroy()
+                extraHits_bar2.destroy()
+                missedHits_bar2.destroy()
 
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
+                rhythmData_frame.destroy()
+                articulationData_frame.destroy()
+                dynamicsData_frame.destroy()
+                melodyData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1860,6 +1900,8 @@ class PerformanceReport(tk.Frame):
 
         # notesData_frame = tk.Frame(self)
         # rhythmData_frame = tk.Frame(self)
+        
+
 
         back_pic = Image.open("Pictures/back.png")
         back_img = ImageTk.PhotoImage(back_pic)
@@ -1873,7 +1915,7 @@ class PerformanceReport(tk.Frame):
         perfTitle_label.image = perfTitle_img
 
         main_frame = tk.Frame(self, width=988, height=563, bg="#2A2B2C", border=0)
-
+        global dash_frame
         dash_frame = tk.Frame(self, width=139, height=563, bg="#3A3A3C", border=0)
         dash_frame.pack_propagate(0)
 
@@ -1939,6 +1981,7 @@ class PerformanceReport(tk.Frame):
 
         finger_frame.pack(anchor=CENTER, pady=0)
         finger_label.pack(anchor=CENTER)
+
 
 
 class Statistics(tk.Frame):
@@ -2041,6 +2084,7 @@ class Statistics(tk.Frame):
                 rating = rating.replace("Performance","")
                 skill_Level = getSkillLevel(AvgScore)
             
+            score_label_stat.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
             rating_label_stat.configure(text=rating,anchor=CENTER)
             skillLevel_label_stat.configure(text=skill_Level,anchor=CENTER)
 
@@ -2077,7 +2121,7 @@ class Statistics(tk.Frame):
             # AvgRating_label.configure(text=str(avglevel),anchor=CENTER)
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
+        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -2103,7 +2147,7 @@ class Statistics(tk.Frame):
         AvgRating_label = tk.Label(self, image=AvgRating_img, borderwidth=0)
         AvgRating_label.image = AvgRating_img
 
-        rating_label_stat = tk.Label(self,width=23,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
+        rating_label_stat = tk.Label(self,width=10,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
         
         img = Image.open("Pictures/AvgScore.png")
         AvgScore_img = ImageTk.PhotoImage(img)
@@ -2168,7 +2212,7 @@ class History(tk.Frame):
         # button.pack()
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
+        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -2184,7 +2228,7 @@ class History(tk.Frame):
         frame_histoList.pack_propagate(0)
 
         image = Image.open("Pictures/menuHisto.png")
-        image = image.resize((950, 100), Image.Resampling.LANCZOS)
+        image = image.resize((950, 100), Image.ANTIALIAS)
         imgMenu = ImageTk.PhotoImage(image)
 
         labelhisto_menu = tk.Label(self, image=imgMenu, border=0)
