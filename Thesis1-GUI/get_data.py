@@ -52,6 +52,7 @@ class Data:
         
         # Get the data in the start index
         start_elements = []
+        elements = []
         keys = list(text['note'].to_list())
         start, end = 0, 0
         for i in range (0, len(text['event'])):
@@ -75,12 +76,13 @@ class Data:
                                             pattern['end'][p],
                                             pattern['note'][p]]
 
-                        if p_data != start_elements:
+                        if p_data not in elements:
                             notes_in_user.append(p_data)
 
                 # value of the start basis index
                 start_elements = notes_in_truth[0]
-
+                for i in notes_in_user:
+                    elements.append(i)
                 
                 #print(f'truth: {notes_in_truth}')
                 #print(f'user: {notes_in_user}')
