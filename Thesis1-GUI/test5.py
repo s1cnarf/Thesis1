@@ -287,11 +287,11 @@ class LogIn(tk.Frame):
         label2_entry.bind('<Return>', login)
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((386, 82), Image.ANTIALIAS)
+        logo_pic = logo_pic.resize((386, 82), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         logo_pic = Image.open("Pictures/info.png")
-        # logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
+        # logo_pic= logo_pic.resize((430,52),Image.Resampling.LANCZOS)
         info_img = ImageTk.PhotoImage(logo_pic)
 
         names_pic = Image.open("Pictures/names.png")
@@ -472,11 +472,11 @@ class Register(tk.Frame):
         # reg_button.bind("<Button-1>",register)
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
+        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         logo_pic = Image.open("Pictures/info.png")
-        # logo_pic= logo_pic.resize((430,52),Image.ANTIALIAS)
+        # logo_pic= logo_pic.resize((430,52),Image.Resampling.LANCZOS)
         info_img = ImageTk.PhotoImage(logo_pic)
 
         logo_label = tk.Label(self, image=logo_img, borderwidth=0)
@@ -537,27 +537,27 @@ class StartPage(tk.Frame):
 
        
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((386, 82), Image.ANTIALIAS)
+        logo_pic = logo_pic.resize((386, 82), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(logo_pic)
 
         image = Image.open("Pictures/menu1.png")
-        # image = image.resize((40,49), Image.ANTIALIAS)
+        # image = image.resize((40,49), Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu2.png")
-        # image = image.resize((67,53), Image.ANTIALIAS)
+        # image = image.resize((67,53), Image.Resampling.LANCZOS)
         img2 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu3.png")
-        # image = image.resize((88,53), Image.ANTIALIAS)
+        # image = image.resize((88,53), Image.Resampling.LANCZOS)
         img3 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/menu4.png")
-        # image = image.resize((69,53), Image.ANTIALIAS)
+        # image = image.resize((69,53), Image.Resampling.LANCZOS)
         img4 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/DeviceDetect.png")
-        # image = image.resize((69,53), Image.ANTIALIAS)
+        # image = image.resize((69,53), Image.Resampling.LANCZOS)
         img5 = ImageTk.PhotoImage(image)
 
         logo_label = tk.Label(self, image=logo_img, borderwidth=0)
@@ -755,7 +755,7 @@ class PlayPage(tk.Frame):
                     p.sMusic = ""
 
                 app.deiconify()
-                DisplayAfterPerf()
+                DisplayAfterPerf(e)
                 
 
 
@@ -872,23 +872,23 @@ class PlayPage(tk.Frame):
 
 
         image = Image.open("Pictures/recents.png")
-        # image = image.resize((40,49), Image.ANTIALIAS)
+        # image = image.resize((40,49), Image.Resampling.LANCZOS)
         img = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/songs.png")
-        # image = image.resize((10,30), Image.ANTIALIAS)
+        # image = image.resize((10,30), Image.Resampling.LANCZOS)
         img2 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/searchIcon.png")
-        # image = image.resize((25,28), Image.ANTIALIAS)
+        # image = image.resize((25,28), Image.Resampling.LANCZOS)
         img4 = ImageTk.PhotoImage(image)
 
         image = Image.open("Pictures/playButton.png")
-        # image = image.resize((25,28), Image.ANTIALIAS)
+        # image = image.resize((25,28), Image.Resampling.LANCZOS)
         img5 = ImageTk.PhotoImage(image)
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
+        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -1028,6 +1028,11 @@ class AfterPerformance(tk.Frame):
 
         global show_csv
         def show_csv():
+            score_label.config(text="")
+            grade_label.configure(text="")
+            song_label.configure(text="")
+            
+
             getsong = search_entry.get() + '.csv'
 
             pathh = r'../csv/Result_' + getsong
@@ -1120,9 +1125,10 @@ class AfterPerformance(tk.Frame):
             
     
             grade_label.configure(text=str(rating))
+            song_label.configure(text=search_entry.get())
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
+        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -1162,7 +1168,7 @@ class AfterPerformance(tk.Frame):
         global song_label
         global score_label
         global grade_label
-        score_label = tk.Label(self, text="", borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
+        score_label = tk.Label(self, text="",width=3, borderwidth=0, bg="#2A2B2C", fg="white", font=controller.score_font)
 
         song_frame = tk.Frame(self, width=308, height=30, border=0, bg="#2A2B2C")
         song_frame.pack_propagate(False)
@@ -2002,32 +2008,46 @@ class Statistics(tk.Frame):
 
         global UpdateValues
         def UpdateValues():
+
+            for widget in frame_Graph.winfo_children():
+                widget.destroy()
+
+            listbox_stat.delete(0, END)
+
+            score_label_stat.configure(text="")
+            rating_label_stat.configure(text="")
+            skillLevel_label_stat.configure(text="")
+
             con = sqlite3.connect('userData.db')
             cu = con.cursor()
          
-            cu.execute("SELECT avg(Score) FROM History WHERE Username = ? LIMIT 1", (label_entry.get(),))
+            cu.execute("SELECT avg(Score) FROM History WHERE Username = ? LIMIT 1", (uname,))
 
             AvgScore = cu.fetchone()[0]
             print(AvgScore)
-            score_label_stat.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
+            if AvgScore == None:
+                AvgScore=int(0)
+                rating = None
+                skill_Level = None
+            else:
 
-            rating = ScoreToRating(AvgScore)
-            rating = rating.replace(" ","")
-            print("Rating: ",rating)
-            rating = rating.replace("Performance","")
+                rating = ScoreToRating(AvgScore)
+                rating = rating.replace(" ","")
+            #print("Rating: ",rating)
+                rating = rating.replace("Performance","")
+                skill_Level = getSkillLevel(AvgScore)
             
             rating_label_stat.configure(text=rating,anchor=CENTER)
-
-            skill_Level = getSkillLevel(AvgScore)
             skillLevel_label_stat.configure(text=skill_Level,anchor=CENTER)
 
-            cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title ORDER BY count(*) DESC", (label_entry.get(),))
+            cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title ORDER BY count(*) DESC", (uname,))
             ListSongs = cu.fetchall()
-            
-            listbox_stat.delete(0, END)
 
-            for song in ListSongs:
-                listbox_stat.insert(END, song[0])
+            if len(ListSongs) > 0:
+                listbox_stat.delete(0, END)
+
+                for song in ListSongs:
+                    listbox_stat.insert(END, song[0])
             
             '''
             cu.execute("SELECT Title FROM History WHERE Username = ? AND Score = (SELECT MAX(Score) FROM History) LIMIT 1", (label_entry.get(),))
@@ -2053,7 +2073,7 @@ class Statistics(tk.Frame):
             # AvgRating_label.configure(text=str(avglevel),anchor=CENTER)
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
+        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -2071,7 +2091,7 @@ class Statistics(tk.Frame):
         CurrSkill_label = tk.Label(self, image=CurrSkill_img, borderwidth=0)
         CurrSkill_label.image = CurrSkill_img
 
-        skillLevel_label_stat = tk.Label(self,width=11,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
+        skillLevel_label_stat = tk.Label(self,width=23,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
         
 
         img = Image.open("Pictures/AvgRating.png")
@@ -2079,7 +2099,7 @@ class Statistics(tk.Frame):
         AvgRating_label = tk.Label(self, image=AvgRating_img, borderwidth=0)
         AvgRating_label.image = AvgRating_img
 
-        rating_label_stat = tk.Label(self,width=11,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
+        rating_label_stat = tk.Label(self,width=23,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
         
         img = Image.open("Pictures/AvgScore.png")
         AvgScore_img = ImageTk.PhotoImage(img)
@@ -2144,7 +2164,7 @@ class History(tk.Frame):
         # button.pack()
 
         logo_pic = Image.open("Pictures/Logo.png")
-        logo_pic = logo_pic.resize((250, 55), Image.ANTIALIAS)
+        logo_pic = logo_pic.resize((250, 55), Image.Resampling.LANCZOS)
         logo_img = ImageTk.PhotoImage(logo_pic)
         logo_label = tk.Label(self, image=logo_img, borderwidth=0, cursor="hand2")
         logo_label.bind("<Button-1>", ShowStartPage)
@@ -2160,7 +2180,7 @@ class History(tk.Frame):
         frame_histoList.pack_propagate(0)
 
         image = Image.open("Pictures/menuHisto.png")
-        image = image.resize((950, 100), Image.ANTIALIAS)
+        image = image.resize((950, 100), Image.Resampling.LANCZOS)
         imgMenu = ImageTk.PhotoImage(image)
 
         labelhisto_menu = tk.Label(self, image=imgMenu, border=0)
