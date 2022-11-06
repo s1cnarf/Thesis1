@@ -297,6 +297,9 @@ class LogIn(tk.Frame):
         names_pic = Image.open("Pictures/names.png")
         names_img = ImageTk.PhotoImage(names_pic)
 
+        img = Image.open("Pictures/LogIn.png")
+        LogIn_img = ImageTk.PhotoImage(img)
+
         logo_label = tk.Label(self, image=logo_img, borderwidth=0)
         logo_label.image = logo_img
 
@@ -306,9 +309,13 @@ class LogIn(tk.Frame):
         names_label = tk.Label(self, image=names_img, borderwidth=0)
         names_label.image = names_img
 
-        log_in = tk.Label(self, text="Login", bg="#F7BF50", fg="#2A2B2C", cursor="hand2", borderwidth=0, width=15,
-                          height=1, font=controller.button_font)
+
+
+
+        log_in = tk.Label(self, image=LogIn_img ,cursor="hand2", borderwidth=0)
+        log_in.image = LogIn_img
         log_in.bind("<Button-1>", login)
+
         register = tk.Label(self, text="Register", fg="#F7BF50", bg="#2A2B2C", cursor="hand2", borderwidth=0,
                             font=controller.button2_font)
         register.bind("<Button-1>", lambda e: controller.show_frame("Register"))
@@ -329,7 +336,7 @@ class LogIn(tk.Frame):
         info_label.place(x=98, y=416)
         names_label.place(x=660, y=660)
 
-        log_in.place(x=793, y=465)
+        log_in.place(x=821, y=471)
         register.place(x=859, y=510)
 
 
@@ -529,11 +536,6 @@ class StartPage(tk.Frame):
         tk.Canvas.create_circle = _create_circle
 
        
-       
-
-      
-
-
         logo_pic = Image.open("Pictures/Logo.png")
         logo_pic = logo_pic.resize((386, 82), Image.ANTIALIAS)
         logo_img = ImageTk.PhotoImage(logo_pic)
@@ -1193,10 +1195,13 @@ class ScoreSummary(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
+        
 
+        img = Image.open("Pictures/ScoreSummary.png")
+        scoreSum_title_img = ImageTk.PhotoImage(img)
+        scoreSum_title_label = tk.Label(self, image=scoreSum_title_img, borderwidth=0)
+        scoreSum_title_label.image = scoreSum_title_img
     
-
-
         back_pic = Image.open("Pictures/back.png")
         back_img = ImageTk.PhotoImage(back_pic)
         back_label = tk.Label(self, image=back_img, borderwidth=0, cursor="hand2")
@@ -1248,6 +1253,7 @@ class ScoreSummary(tk.Frame):
 
         main_frame.place(x=105, y=124)
         back_label.place(x=57, y=36)
+        scoreSum_title_label.place(x=930,y=45)
         notes_label.place(x=110, y=270)
         notes_score.place(x=595, y=270)
         rhythm_label.place(x=110, y=340)
@@ -1281,6 +1287,9 @@ class ErrorAnalysis(tk.Frame):
     
         global show_data
         def show_data():
+            for widget in main_frame.winfo_children():
+                widget.destroy()
+
             v = visualization.Visual()
             song = search_entry.get() + '.csv'
             print ("DATA HAS BEEN SHOWNED")
@@ -1367,6 +1376,16 @@ class PerformanceReport(tk.Frame):
             finger_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
+            try:
+                rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
+
+                dynamicsData_frame.place_forget()
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
+            except NameError:
+                print("okay lang")
+               
             correct_hits = int(ReadCSVtoVariable("Correct"))
             partial_hits = int(ReadCSVtoVariable("Partial"))
             extra_hits = int(ReadCSVtoVariable("Extra"))
@@ -1460,15 +1479,7 @@ class PerformanceReport(tk.Frame):
                                             width=missed_bar2, height=16, labelanchor=E, font=controller.title_font)
             missedHits_bar2.place(x=313, y=487)
 
-            try:
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
-
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
-            except NameError:
-                print("okay lang")
+            
 
         def DisplayRhythm(event):
 
@@ -1487,6 +1498,20 @@ class PerformanceReport(tk.Frame):
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
             rhythm_label.config(height=70, bg="#2A2B2C", cursor="")
             rhythm_frame.config(height=70, bg="#2A2B2C", cursor="")
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+                articulationData_frame.place_forget()
+
+                dynamicsData_frame.place_forget()
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
+            except NameError:
+                print("okay lang")
 
             global rhythmData_frame
             rhythmData_frame = tk.Frame(self, width=655, height=89, bg="#2A2B2C")
@@ -1513,20 +1538,7 @@ class PerformanceReport(tk.Frame):
             failed_bar = tk.LabelFrame(rhythmData_frame, text=failed_switch, bg="#3a3a3c", fg="#EB483F", border=0,
                                        width=655, height=16, labelanchor=E, font=controller.title_font)
             failed_bar.pack(pady=5, side=RIGHT)
-            try:
-
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
-                articulationData_frame.place_forget()
-
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
-            except NameError:
-                print("okay lang")
+            
 
         def DisplayArticulation(event):
 
@@ -1542,6 +1554,20 @@ class PerformanceReport(tk.Frame):
             melody_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+                dynamicsData_frame.place_forget()
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
+            except NameError:
+                print("okay lang")
 
             ontime_hits = int(ReadCSVtoVariable("Timed_Hit"))
             late_hits = int(ReadCSVtoVariable("Late_Hit"))
@@ -1572,19 +1598,7 @@ class PerformanceReport(tk.Frame):
             pie2 = FigureCanvasTkAgg(fig, articulationData_frame)
             pie2.get_tk_widget().pack(side=TOP, anchor=CENTER)
 
-            try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
-
-                rhythmData_frame.place_forget()
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
-            except NameError:
-                print("okay lang")
+            
 
         def DisplayDynamics(event):
 
@@ -1601,6 +1615,20 @@ class PerformanceReport(tk.Frame):
             melody_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
+                melodyData_frame.place_forget()
+                fingerData_frame.place_forget()
+            except NameError:
+                print("okay lang")
 
             loud_hits = int(ReadCSVtoVariable("Truth_Dynamics"))
             expected_loud_hits = 60
@@ -1656,19 +1684,7 @@ class PerformanceReport(tk.Frame):
                                              labelanchor=E, font=controller.title_font)
             expectedSoft_bar.pack(side=TOP, anchor=NW)
 
-            try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
-
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
-                melodyData_frame.place_forget()
-                fingerData_frame.place_forget()
-            except NameError:
-                print("okay lang")
+            
 
         def DisplayMelody(event):
             melody_label.config(height=70, bg="#2A2B2C", cursor="")
@@ -1684,6 +1700,20 @@ class PerformanceReport(tk.Frame):
             dynamics_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
+                dynamicsData_frame.place_forget()
+                fingerData_frame.place_forget()
+            except NameError:
+                print("okay lang")
 
             melodyRate = int(ReadCSVtoVariable("Melody"))
 
@@ -1710,19 +1740,7 @@ class PerformanceReport(tk.Frame):
                                            font=controller.title_font)
             MelodyRate_bar.pack(pady=(10, 0), side=TOP, anchor=NW)
 
-            try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
-
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
-                dynamicsData_frame.place_forget()
-                fingerData_frame.place_forget()
-            except NameError:
-                print("okay lang")
+            
 
         def DisplayFinger(event):
             finger_label.config(height=70, bg="#2A2B2C", cursor="")
@@ -1738,6 +1756,20 @@ class PerformanceReport(tk.Frame):
             dynamics_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
             melody_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             melody_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+
+            try:
+                notesData_frame.place_forget()
+                correctHits_bar2.place_forget()
+                partialHits_bar2.place_forget()
+                extraHits_bar2.place_forget()
+                missedHits_bar2.place_forget()
+
+                rhythmData_frame.place_forget()
+                articulationData_frame.place_forget()
+                dynamicsData_frame.place_forget()
+                melodyData_frame.place_forget()
+            except NameError:
+                print("okay lang")
 
             correct_left = int(ReadCSVtoVariable("LH_Correct"))
             incorrect_left = int(ReadCSVtoVariable("LH_Fail"))
@@ -1814,19 +1846,7 @@ class PerformanceReport(tk.Frame):
             barR = FigureCanvasTkAgg(fig, RightHand_Frame)
             barR.get_tk_widget().pack(side=RIGHT, anchor=E, padx=(150, 0))
 
-            try:
-                notesData_frame.place_forget()
-                correctHits_bar2.place_forget()
-                partialHits_bar2.place_forget()
-                extraHits_bar2.place_forget()
-                missedHits_bar2.place_forget()
-
-                rhythmData_frame.place_forget()
-                articulationData_frame.place_forget()
-                dynamicsData_frame.place_forget()
-                melodyData_frame.place_forget()
-            except NameError:
-                print("okay lang")
+            
 
         # notesData_frame = tk.Frame(self)
         # rhythmData_frame = tk.Frame(self)
@@ -1917,7 +1937,20 @@ class Statistics(tk.Frame):
         tk.Frame.__init__(self, parent, bg="#F7BF50")
         self.controller = controller
 
-        
+        global getSkillLevel
+        def getSkillLevel(Score):
+            if (Score >= 0 and Score <= 25):
+                avglevel = "Beginner"
+            elif(Score >= 26 and Score <= 50):
+                avglevel = "Amateur"
+            elif(Score >= 51 and Score <= 75):
+                avglevel = "Proficient"
+            elif(Score >= 76 and Score <= 100):
+                avglevel = "Expert"
+            else:
+                avglevel = "Cant determine"
+            
+            return avglevel
 
         global ScoreToRating
         def ScoreToRating(score):
@@ -1985,6 +2018,9 @@ class Statistics(tk.Frame):
             
             rating_label_stat.configure(text=rating,anchor=CENTER)
 
+            skill_Level = getSkillLevel(AvgScore)
+            skillLevel_label_stat.configure(text=skill_Level,anchor=CENTER)
+
             cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title ORDER BY count(*) DESC", (label_entry.get(),))
             ListSongs = cu.fetchall()
             
@@ -2034,6 +2070,9 @@ class Statistics(tk.Frame):
         CurrSkill_img = ImageTk.PhotoImage(img)
         CurrSkill_label = tk.Label(self, image=CurrSkill_img, borderwidth=0)
         CurrSkill_label.image = CurrSkill_img
+
+        skillLevel_label_stat = tk.Label(self,width=11,height=1, bg="#F8BA43",borderwidth=0,font=controller.Mont_bold20)
+        
 
         img = Image.open("Pictures/AvgRating.png")
         AvgRating_img = ImageTk.PhotoImage(img)
@@ -2086,6 +2125,7 @@ class Statistics(tk.Frame):
 
         score_label_stat.place(x=698,y=332)
         rating_label_stat.place(x=912,y=332)
+        skillLevel_label_stat.place(x=720,y=214)
 
 
 
