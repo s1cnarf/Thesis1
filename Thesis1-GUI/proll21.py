@@ -65,6 +65,11 @@ class pRoll:
         self.start = 0
 
         self.list_a = []
+        self.newTruthList = []
+
+        # TRACKER FOR MIDI INPUT
+        self.currentOFF = 0
+        self.currentON = 0
 
     def getData(self):
         sname = getSong
@@ -276,7 +281,6 @@ class pRoll:
 
                 return
 
-
             if msg.type == 'set_tempo':
                 #use tempo to sync the running time of the program
                 t_midi = msg.tempo
@@ -329,10 +333,14 @@ class pRoll:
                     if self.time == 0.0:
                         self.start = tm.time() 
                         NoteCheck = False
-                        
+
+
                     self.timer += deltaTime
                     end_time = tm.time()
                     elapsed_time = end_time - self.start
+                   # print("1","NOTE ON: ", msg.note, "TIME: ", int(elapsed_time), "VELOCITY: ", msg.velocity)
+                    print("1,",int(elapsed_time),",","Note_on,",msg.note,",",msg.velocity)
+                    self.newTruthList.append((1, int(elapsed_time), "Note_on", msg.note, msg.velocity))
                     #print("TIME : ", pr.timer)
                     #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
                     #cnt = cnt + 1
@@ -349,14 +357,22 @@ class pRoll:
 
 
                 elif msg.type == "note_off":
+
                     self.timer += deltaTime
                     end_time = tm.time()
                     elapsed_time = end_time - self.start
+                    #print("NOTE OFF: ", msg.note, "TIME: ", int(elapsed_time), "VELOCITY: ", msg.velocity)
+                    print("1,", int(elapsed_time), ",", "Note_off,", msg.note, ",", msg.velocity)
+                    #self.list_a.append((1, newONTime, "Note_on", note, velocity))
+                    self.newTruthList.append((1,int(elapsed_time),"Note_off",msg.note,msg.velocity))
+
+                    #print("NoteOFF: [", msg.note, "] ", self.time, "vs Ticks Val: ", self.timer, "TIME DIFFERENCE: ",
+                          #"%.2f" % ((self.time) - self.timer), " -- ")
                     #print("TIME : ", pr.timer)
                     #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
                     #cnt = cnt + 1
                     #print("TIME IN TICKS/S: ", pg.time.get_ticks() / 1000)
-                    print("NoteOFF: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
+                    #print("NoteOFF: [", msg.note, "] ", self.time, "vs Ticks Val: ", pg.time.get_ticks() / 1000, "TIME DIFFERENCE: ", "%.2f" %((pg.time.get_ticks()/1000)-self.time)," -- ")
                     #print("NOTE OFF DETECTED AT: ", self.time)
                     self.piano.stop_key(midi_number_to_note(msg.note))
             
@@ -364,9 +380,21 @@ class pRoll:
 
         end_time = tm.time()
         elapsed_time = end_time - self.start
-        print('END' , elapsed_time, ' Ticks(s): ', (pg.time.get_ticks()/1000))
+        print("TOTAL ROLL TIME IN S: ",'TIMER MODULE END' , elapsed_time, 'PYGAME TIMER END Ticks(s): ', (pg.time.get_ticks()/1000))
+        print("INFO  DATA: ", "TRACK--TIME--EVENT--NOTE--VELOCITY")
+        for i in self.newTruthList:
+            print("INPUT DATA: ", i)
 
+        fields = ['track', 'time', 'event', 'note', 'velocity']
+        csvPath = "new_t_" + self.sMusic + '_.csv'
+        path = "../csv/truth/" + csvPath
 
+        with open(path, 'w', encoding='UTF8', newline='') as f:
+            # using csv.writer method from CSV package
+            write = csv.writer(f)
+            write.writerow(fields)
+            write.writerows(self.newTruthList)
+            print("SUCCESFULLY ENCODED NEW TRUTH TO CSV!")
 
         #pg.time.delay(20000)
         self.running = False
@@ -496,7 +524,8 @@ class pRoll:
                     noteOnTime = tm.time()
                     newONTime = int(noteOnTime-self.midiStart)
 
-                    print("NOTE ON: ", note, " --- TIME: ", newONTime, " VS MIDI TIME", pg.midi.time())
+                    print("SELF TIME: ", self.time)
+                    print("NOTE ON: ", note, " --- TIME: ", newONTime, " VS MIDI TIME", pg.midi.time(), "VS SELF TIME ", self.time)
 
                     # TRACK - TIME(S) -EVENT - NOTE - VELOCITY
                     self.list_a.append((1,newONTime,"Note_on",note,velocity))
@@ -505,7 +534,7 @@ class pRoll:
                     noteOFFTime = tm.time()
                     newOFFTime = int(noteOFFTime - self.midiStart)
 
-                    print("NOTE OFF: ", note, " --- TIME: ", newOFFTime, " VS MIDI TIME", pg.midi.time())
+                    print("NOTE OFF: ", note, " --- TIME: ", newOFFTime, " VS MIDI TIME", pg.midi.time(), "VS SELF TIME ", self.time)
 
 
                     self.list_a.append((1, newOFFTime, "Note_off", note, velocity))

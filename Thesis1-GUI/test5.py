@@ -669,6 +669,7 @@ class PlayPage(tk.Frame):
                 p.running = True
 
                 p.launch()
+                #thread.start()
                 # thread.start()
                 p.piano.create_key_surfaces(display)
 
@@ -690,14 +691,18 @@ class PlayPage(tk.Frame):
 
                     # pr.piano.draw_keys(display)
 
-                    # pg.display.flip()
+                    # # pg.display.flip()
                     if wait:
                         pg.time.delay(5000)
                         # print("BOOOL",pg.midi.get_init())
                         wait = False
                         thread.start()
 
-                    p.input_main(display)
+                    # p.input_main(display)
+
+                    for event in pg.event.get():
+                        if event.type == pg.QUIT:
+                            p.running = False
 
                     p.clock.tick(fps)
 
@@ -1019,7 +1024,7 @@ class AfterPerformance(tk.Frame):
             global total_notes
             total_notes = correctHits + partialHits + missedHits
             semiTotal_notes = correctHits + partialHits
-            percent_notes = (semiTotal_notes - extraHits)/total_notes *100
+            percent_notes = semiTotal_notes/total_notes *100
             global total_percentNotes
             total_percentNotes = float(percent_notes * 0.25)
             print(total_percentNotes,"eto ang percentNotes")
@@ -1920,7 +1925,7 @@ class Statistics(tk.Frame):
         frame_list = tk.Frame(self, width=226, height=306, border=0, bg="#2A2B2C")
         frame_list.place(x=619, y=471)
 
-        listbox_stat = tk.Listbox(frame_list, width=29, height=8, fg="#FFFFFF", bg="#2A2B2C", borderwidth=0,
+        listbox_stat = tk.Listbox(frame_list, width=37, height=7, fg="#FFFFFF", bg="#2A2B2C", borderwidth=0,
                              font=controller.font_song)
         scrollbar = tk.Scrollbar(frame_list, orient=VERTICAL)
         listbox_stat.config(yscrollcommand=scrollbar.set)
