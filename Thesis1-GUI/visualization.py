@@ -25,7 +25,7 @@ class Visual:
         #print(t_yplaces)
         u_ylabels = key_range
 
-        fig = plt.figure()
+        fig = plt.figure(figsize=(13,6),dpi=100)
         ax = fig.add_subplot(111)
         ax.set_yticks(u_yplaces)
         ax.set_yticklabels(u_ylabels)
