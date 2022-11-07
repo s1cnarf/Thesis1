@@ -45,6 +45,7 @@ class SampleApp(tk.Tk):
 
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
+        self.title4_font = tkfont.Font(family='Lemon Milk', size=15, weight="bold")
         self.button_font = tkfont.Font(family='Montserrat Bold', size=16)
         self.button2_font = tkfont.Font(family='Montserrat Italic', size=16)
         self.body_font = tkfont.Font(family='Lemon Milk Light', size=14)
@@ -1240,34 +1241,34 @@ class ScoreSummary(tk.Frame):
         main_frame = tk.Frame(self, width=988, height=563, bg="#2A2B2C", border=0)
 
         notes_label = tk.Label(self, text="Played the right note correctly [NOTES - 25%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=38,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         notes_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         rhythm_label = tk.Label(self, text="Followed the corerct rhythm pattern [RHYTHM - 20%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=43,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         rhythm_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
-        articulation_label = tk.Label(self, text="Hold each note to it's corresponding duration [ARTICULATION - 15%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=54,
-                          height=1, font=controller.title3_font)
+        articulation_label = tk.Label(self, text="Hold each note to it's corresponding duration [ARTICULATION - 15%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=58,
+                          height=1, font=controller.title4_font)
 
         articulation_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         dynamics_label = tk.Label(self, text="Controlled the loudness of each note [DYNAMICS - 10%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=45,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         dynamics_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         melody_label = tk.Label(self, text="Performed the Melody correctly [MELODY - 30%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=40,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         melody_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title3_font)
+                          height=1, font=controller.title4_font)
 
         global show_summary
         def show_summary():
@@ -1279,14 +1280,14 @@ class ScoreSummary(tk.Frame):
 
 
 
-        main_frame.place(x=105, y=124)
+        main_frame.place(x=90, y=124)
         back_label.place(x=57, y=36)
         scoreSum_title_label.place(x=930,y=45)
         notes_label.place(x=110, y=270)
         notes_score.place(x=595, y=270)
         rhythm_label.place(x=110, y=340)
         rhythm_score.place(x=665, y=340)
-        articulation_label.place(x=110, y=410)
+        articulation_label.place(x=100, y=410)
         articulation_score.place(x=815, y=410)
         dynamics_label.place(x=110, y=480)
         dynamics_score.place(x=695, y=480)
@@ -1379,10 +1380,7 @@ class PerformanceReport(tk.Frame):
         
         def ReadCSVtoVariable(category):
             song = search_entry.get() + '.csv'
-            d = get_data.Data()
-            d.modifycsv(song)
-            d.read_csv(song)
-            d.Data_to_csv(song)
+            
             path = r'../csv/Result_' + song
             try:
                 df = pd.read_csv(path, on_bad_lines='skip')
@@ -2054,12 +2052,16 @@ class Statistics(tk.Frame):
         def getSkillLevel(Score):
             if (Score >= 0 and Score <= 25):
                 avglevel = "Beginner"
+
             elif(Score >= 26 and Score <= 50):
                 avglevel = "Amateur"
+
             elif(Score >= 51 and Score <= 75):
                 avglevel = "Proficient"
+
             elif(Score >= 76 and Score <= 100):
                 avglevel = "Expert"
+
             else:
                 avglevel = "Cant determine"
             
@@ -2147,6 +2149,9 @@ class Statistics(tk.Frame):
             score_label_stat.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
             rating_label_stat.configure(text=rating,anchor=CENTER)
             skillLevel_label_stat.configure(text=skill_Level,anchor=CENTER)
+
+            print(rating)
+            print(skill_Level)
 
             cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title ORDER BY count(*) DESC", (uname,))
             ListSongs = cu.fetchall()
@@ -2331,6 +2336,8 @@ class History(tk.Frame):
             con = sqlite3.connect('userData.db')
             cu = con.cursor()
 
+            """
+
             cu.execute("SELECT * FROM History WHERE Username = ? ORDER BY datetime(DateAndTime) DESC", (label_entry.get(),))
             
             historyData = cu.fetchall()
@@ -2338,7 +2345,7 @@ class History(tk.Frame):
             for histo in historyData:
             
                 tree_histo.insert("", 'end', values=(histo[1], histo[2], histo[3]))
-            
+            """
 
             cu.execute("SELECT * FROM History WHERE Username = ?", (label_entry.get(),))
             

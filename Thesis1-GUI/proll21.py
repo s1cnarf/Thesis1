@@ -341,7 +341,10 @@ class pRoll:
                     elapsed_time = end_time - self.start
                    # print("1","NOTE ON: ", msg.note, "TIME: ", int(elapsed_time), "VELOCITY: ", msg.velocity)
                     print("1,",int(elapsed_time),",","Note_on,",msg.note,",",msg.velocity)
-                    self.newTruthList.append((1, int(elapsed_time), "Note_on", msg.note, 112))
+                    if msg.velocity > 0:
+                        self.newTruthList.append((1, int(elapsed_time), "Note_on", msg.note, 112))
+                    else:
+                        self.newTruthList.append((1, int(elapsed_time), "Note_off", msg.note, 63))
                     #print("TIME : ", pr.timer)
                     #print("---------------- META EVENT DETECTED ---------------- ", "META#", cnt)
                     #cnt = cnt + 1

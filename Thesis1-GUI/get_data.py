@@ -550,7 +550,7 @@ if __name__ == '__main__':
     #data.modifycsv('jrd.csv')
     # data.read_csv('frj.csv')
     # data.Data_to_csv('frj.csv')
-    Data.modifyTruth('jrd.csv')
+    Data.modifyTruth('twinkle_twinkle.csv')
 
 
     
