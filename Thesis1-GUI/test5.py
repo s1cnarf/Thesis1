@@ -1908,7 +1908,8 @@ class PerformanceReport(tk.Frame):
         global lastna
         def lastna():
             #Initialize()
-            ClearData()
+            #ClearData()
+            print("eme")
 
         back_pic = Image.open("Pictures/back.png")
         back_img = ImageTk.PhotoImage(back_pic)
@@ -1925,78 +1926,80 @@ class PerformanceReport(tk.Frame):
         main_frame.place(x=105, y=124)
         back_label.place(x=57, y=36)
         perfTitle_label.place(x=840, y=49)
-        
-        
-        
-        
-        
 
-        def Initialize():
-            
-            global dash_frame
-            dash_frame = tk.Frame(self, width=139, height=563, bg="#3A3A3C", border=0)
-            dash_frame.pack_propagate(0)
+        global dash_frame
+        dash_frame = tk.Frame(self, width=139, height=563, bg="#3A3A3C", border=0)
+        dash_frame.pack_propagate(0)
 
-            notes_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0)
-            notes_label = tk.Label(notes_frame, width=139, height=51, text="Notes", fg="#F7BF50", bg="#3A3A3C",
+        notes_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0)
+        notes_label = tk.Label(notes_frame, width=139, height=51, text="Notes", fg="#F7BF50", bg="#3A3A3C",
                                 cursor="hand2", font=controller.Mont_bold20)
-            notes_frame.pack_propagate(0)
-            notes_label.bind("<Button-1>", DisplayNote)
+        notes_frame.pack_propagate(0)
+        notes_label.bind("<Button-1>", DisplayNote)
             # notes_label.pack_propagate(0)
 
-            rhythm_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor="hand2")
-            rhythm_label = tk.Label(rhythm_frame, width=139, height=51, text="Rhythm", fg="#F7BF50", bg="#3a3a3c",
+        rhythm_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor="hand2")
+        rhythm_label = tk.Label(rhythm_frame, width=139, height=51, text="Rhythm", fg="#F7BF50", bg="#3a3a3c",
                                     font=controller.Mont_bold20)
-            rhythm_frame.pack_propagate(0)
-            rhythm_label.bind("<Button-1>", DisplayRhythm)
+        rhythm_frame.pack_propagate(0)
+        rhythm_label.bind("<Button-1>", DisplayRhythm)
 
-            artic_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor="hand2")
-            artic_label = tk.Label(artic_frame, width=139, height=51, text="Articulation", fg="#F7BF50", bg="#3a3a3c",
+        artic_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor="hand2")
+        artic_label = tk.Label(artic_frame, width=139, height=51, text="Articulation", fg="#F7BF50", bg="#3a3a3c",
                                 font=controller.Mont_bold20)
-            artic_frame.pack_propagate(0)
-            artic_label.bind("<Button-1>", DisplayArticulation)
+        artic_frame.pack_propagate(0)
+        artic_label.bind("<Button-1>", DisplayArticulation)
 
-            dynamics_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor='hand2')
-            dynamics_label = tk.Label(dynamics_frame, width=139, height=51, text="Dynamics", fg="#F7BF50", bg="#3a3a3c",
+        dynamics_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor='hand2')
+        dynamics_label = tk.Label(dynamics_frame, width=139, height=51, text="Dynamics", fg="#F7BF50", bg="#3a3a3c",
                                     font=controller.Mont_bold20)
-            dynamics_frame.pack_propagate(0)
-            dynamics_label.bind("<Button-1>", DisplayDynamics)
+        dynamics_frame.pack_propagate(0)
+        dynamics_label.bind("<Button-1>", DisplayDynamics)
 
-            melody_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor='hand2')
-            melody_label = tk.Label(melody_frame, width=139, height=51, text="Melody", fg="#F7BF50", bg="#3a3a3c",
+        melody_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor='hand2')
+        melody_label = tk.Label(melody_frame, width=139, height=51, text="Melody", fg="#F7BF50", bg="#3a3a3c",
+                            font=controller.Mont_bold20)
+        melody_frame.pack_propagate(0)
+        melody_label.bind("<Button-1>", DisplayMelody)
+
+        finger_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor="hand2")
+        finger_label = tk.Label(finger_frame, width=139, height=51, text="Finger\nPattern", fg="#F7BF50", bg="#3a3a3c",
                                     font=controller.Mont_bold20)
-            melody_frame.pack_propagate(0)
-            melody_label.bind("<Button-1>", DisplayMelody)
+        finger_frame.pack_propagate(0)
+        finger_label.bind("<Button-1>", DisplayFinger)
 
-            finger_frame = tk.Frame(dash_frame, width=139, height=51, bg="#3A3A3C", border=0, cursor="hand2")
-            finger_label = tk.Label(finger_frame, width=139, height=51, text="Finger\nPattern", fg="#F7BF50", bg="#3a3a3c",
-                                    font=controller.Mont_bold20)
-            finger_frame.pack_propagate(0)
-            finger_label.bind("<Button-1>", DisplayFinger)
-
-            #####################################
+        #####################################
 
             
 
-            dash_frame.place(x=105, y=124)
+        dash_frame.place(x=105, y=124)
 
-            notes_frame.pack(anchor=CENTER, pady=35)
-            notes_label.pack(anchor=CENTER)
+        notes_frame.pack(anchor=CENTER, pady=35)
+        notes_label.pack(anchor=CENTER)
 
-            rhythm_frame.pack(anchor=CENTER, pady=0)
-            rhythm_label.pack(anchor=CENTER)
+        rhythm_frame.pack(anchor=CENTER, pady=0)
+        rhythm_label.pack(anchor=CENTER)
 
-            artic_frame.pack(anchor=CENTER, pady=35)
-            artic_label.pack(anchor=CENTER)
+        artic_frame.pack(anchor=CENTER, pady=35)
+        artic_label.pack(anchor=CENTER)
 
-            dynamics_frame.pack(anchor=CENTER, pady=0)
-            dynamics_label.pack(anchor=CENTER)
+        dynamics_frame.pack(anchor=CENTER, pady=0)
+        dynamics_label.pack(anchor=CENTER)
 
-            melody_frame.pack(anchor=CENTER, pady=35)
-            melody_label.pack(anchor=CENTER)
+        melody_frame.pack(anchor=CENTER, pady=35)
+        melody_label.pack(anchor=CENTER)
 
-            finger_frame.pack(anchor=CENTER, pady=0)
-            finger_label.pack(anchor=CENTER)
+        finger_frame.pack(anchor=CENTER, pady=0)
+        finger_label.pack(anchor=CENTER)
+        
+        
+        
+        
+        
+
+        
+            
+            
 
         def ClearData():
 
@@ -2004,9 +2007,7 @@ class PerformanceReport(tk.Frame):
             #        widgets.destroy()
             #dash_frame.destroy()
             dash_frame.destroy()
-            Initialize()
-        
-        Initialize()
+       
 
             
 
