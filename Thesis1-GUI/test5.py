@@ -51,6 +51,9 @@ class SampleApp(tk.Tk):
         self.font_song = tkfont.Font(family='Montserrat', size=12)
         self.body2_font = tkfont.Font(family='Lemon Milk', size=16, weight="bold")
         self.body3_font = tkfont.Font(family='Lemon Milk', size=12)
+        
+        self.Mont_bold26 = tkfont.Font(family='Montserrat Bold', size=26, weight="bold")
+        self.Mont_bold14 = tkfont.Font(family='Montserrat Bold', size=14, weight="bold")
 
         ttk.Style().configure("Treeview", background="black", foreground="white", fieldbackground="black")
 
@@ -710,7 +713,7 @@ class PlayPage(tk.Frame):
                     '''
                     for event in pg.event.get():
                         if event.type == pg.QUIT:
-                            p.running = False   '''
+                            p.running = False  ''' 
 
                     p.clock.tick(fps)
 
@@ -1037,11 +1040,11 @@ class AfterPerformance(tk.Frame):
             
 
             getsong = search_entry.get() + '.csv'
-            '''
+            
             d = get_data.Data()
             d.modifycsv(getsong)
             d.read_csv(getsong)
-            d.Data_to_csv(getsong)'''
+            d.Data_to_csv(getsong)
 
             pathh = r'../csv/Result_' + getsong
             try:
@@ -1908,7 +1911,7 @@ class PerformanceReport(tk.Frame):
         global lastna
         def lastna():
             #Initialize()
-            #ClearData()
+            ClearData()
             print("eme")
 
         back_pic = Image.open("Pictures/back.png")
@@ -2006,7 +2009,35 @@ class PerformanceReport(tk.Frame):
             #for widgets in dash_frame.winfo_children():
             #        widgets.destroy()
             #dash_frame.destroy()
-            dash_frame.destroy()
+            
+            finger_label.config(height=51, bg="#3A3A3C", cursor="hand2")
+            finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+
+            notes_label.config(height=51, bg="#3A3A3C", cursor="hand2")
+            notes_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+            rhythm_label.config(height=51, bg="#3A3A3C", cursor="hand2")
+            rhythm_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+            artic_label.config(height=51, bg="#3A3A3C", cursor="hand2")
+            artic_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+            dynamics_label.config(height=51, bg="#3A3A3C", cursor="hand2")
+            dynamics_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+            melody_label.config(height=51, bg="#3A3A3C", cursor="hand2")
+            melody_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
+            
+            try:
+                notesData_frame.destroy()
+                correctHits_bar2.destroy()
+                partialHits_bar2.destroy()
+                extraHits_bar2.destroy()
+                missedHits_bar2.destroy()
+                
+                fingerData_frame.destroy()
+                rhythmData_frame.destroy()
+                articulationData_frame.destroy()
+                dynamicsData_frame.destroy()
+                melodyData_frame.destroy()
+            except NameError:
+                print("okay lang")
        
 
             
