@@ -103,7 +103,7 @@ class SampleApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         # self.show_frame("StartPage")
-        self.show_frame("LogIn")
+        self.show_frame("LoadingPage")
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
@@ -140,7 +140,7 @@ class LoadingPage(tk.Frame):
 
             if current == 365:
                 self.destroy()
-                # controller.show_frame("LogIn")
+                controller.show_frame("LogIn")
 
             if current < 365:
                 loading.config(width=current + 71)
@@ -185,6 +185,7 @@ class LogIn(tk.Frame):
 
                     if (c.fetchone()):
                         messagebox.showinfo('Login Status', 'Successfuly Login')
+                        listbox.delete(0,END)
 
                         ShowStartPage(e)
                     else:
@@ -811,6 +812,8 @@ class PlayPage(tk.Frame):
 
             song = stack2.pop()
 
+            #listbox.delete(0,END)
+
             listbox.insert(index_stack, song)
             index_stack + 1
             song_label.configure(text=data)
@@ -932,6 +935,7 @@ class PlayPage(tk.Frame):
         frame1 = tk.Frame(self, width=226, height=306, border=0, bg="#2A2B2C")
         frame1.place(x=831, y=256)
 
+        global listbox
         listbox = tk.Listbox(frame1, width=19, height=13, fg="#FFFFFF", bg="#2A2B2C", borderwidth=0,
                              font=controller.font_song)
         scrollbar = tk.Scrollbar(frame1, orient=VERTICAL)
@@ -1407,38 +1411,30 @@ class PerformanceReport(tk.Frame):
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
 
             try:
-                #place_forget
-
-                rhythmData_frame.destroy()
-                articulationData_frame.destroy()
-                dynamicsData_frame.destroy()
-                melodyData_frame.destroy()
                 fingerData_frame.destroy()
-
-                '''
-                for widgets in rhythmData_frame.winfo_children():
-                    widgets.destroy()
-                
-                for widgets in articulationData_frame.winfo_children():
-                    widgets.destroy()
-
-                for widgets in dynamicsData_frame.winfo_children():
-                    widgets.destroy()
-
-                for widgets in melodyData_frame.winfo_children():
-                    widgets.destroy()
-
-                for widgets in fingerData_frame.winfo_children():
-                    widgets.destroy()'''
-
-               
-                
-
-                
-
-                
             except NameError:
                 print("okay lang")
+            
+            try:
+                rhythmData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                articulationData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
+                dynamicsData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                melodyData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
                
             correct_hits = int(ReadCSVtoVariable("Correct"))
             partial_hits = int(ReadCSVtoVariable("Partial"))
@@ -1555,16 +1551,46 @@ class PerformanceReport(tk.Frame):
 
             try:
                 notesData_frame.destroy()
-                correctHits_bar2.destroy()
-                partialHits_bar2.destroy()
-                extraHits_bar2.destroy()
-                missedHits_bar2.destroy()
-                articulationData_frame.destroy()
+            except NameError:
+                print("okay lang")
 
-                dynamicsData_frame.destroy()
-                melodyData_frame.destroy()
+            try:
+                correctHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                partialHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                extraHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 fingerData_frame.destroy()
-                
+            except NameError:
+                print("okay lang")
+
+            try:
+                articulationData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
+                dynamicsData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                melodyData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1612,15 +1638,46 @@ class PerformanceReport(tk.Frame):
 
             try:
                 notesData_frame.destroy()
-                correctHits_bar2.destroy()
-                partialHits_bar2.destroy()
-                extraHits_bar2.destroy()
-                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
 
-                rhythmData_frame.destroy()
-                dynamicsData_frame.destroy()
-                melodyData_frame.destroy()
+            try:
+                correctHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                partialHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                extraHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 fingerData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
+                rhythmData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
+                dynamicsData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                melodyData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1673,15 +1730,46 @@ class PerformanceReport(tk.Frame):
 
             try:
                 notesData_frame.destroy()
-                correctHits_bar2.destroy()
-                partialHits_bar2.destroy()
-                extraHits_bar2.destroy()
-                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
 
-                rhythmData_frame.destroy()
-                articulationData_frame.destroy()
-                melodyData_frame.destroy()
+            try:
+                correctHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                partialHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                extraHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 fingerData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
+                rhythmData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                articulationData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                melodyData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1758,15 +1846,46 @@ class PerformanceReport(tk.Frame):
 
             try:
                 notesData_frame.destroy()
-                correctHits_bar2.destroy()
-                partialHits_bar2.destroy()
-                extraHits_bar2.destroy()
-                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
 
-                rhythmData_frame.destroy()
-                articulationData_frame.destroy()
-                dynamicsData_frame.destroy()
+            try:
+                correctHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                partialHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                extraHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 fingerData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
+                rhythmData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                articulationData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
+                dynamicsData_frame.destroy()
             except NameError:
                 print("okay lang")
 
@@ -1814,14 +1933,45 @@ class PerformanceReport(tk.Frame):
 
             try:
                 notesData_frame.destroy()
-                correctHits_bar2.destroy()
-                partialHits_bar2.destroy()
-                extraHits_bar2.destroy()
-                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
 
+            try:
+                correctHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                partialHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                extraHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
+                missedHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
                 rhythmData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 articulationData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
                 dynamicsData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 melodyData_frame.destroy()
             except NameError:
                 print("okay lang")
@@ -2001,12 +2151,14 @@ class PerformanceReport(tk.Frame):
         
             
             
-
+        
         def ClearData():
 
             #for widgets in dash_frame.winfo_children():
             #        widgets.destroy()
             #dash_frame.destroy()
+
+            print("Flag Clear")
             
             finger_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             finger_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
@@ -2024,18 +2176,56 @@ class PerformanceReport(tk.Frame):
             
             try:
                 notesData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 correctHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 partialHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 extraHits_bar2.destroy()
+            except NameError:
+                print("okay lang")
+
+            try: 
                 missedHits_bar2.destroy()
-                
+            except NameError:
+                print("okay lang")
+
+            try:
                 fingerData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
                 rhythmData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 articulationData_frame.destroy()
+            except NameError:
+                print("okay lang")
+            
+            try:
                 dynamicsData_frame.destroy()
+            except NameError:
+                print("okay lang")
+
+            try:
                 melodyData_frame.destroy()
             except NameError:
                 print("okay lang")
+
+            
+            
        
 
             

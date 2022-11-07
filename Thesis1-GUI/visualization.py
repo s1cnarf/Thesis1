@@ -16,14 +16,16 @@ class Visual:
         truth_data = self.truth_data
         user_data = self.user_data
         yspan = len(truth_data)
-        t_yplaces = [.5+i for i in range(yspan)]
-        t_ylabels = truth_data.keys()
-        yspan = len(user_data)
+        key_range = list(set(list(truth_data.keys()) + list(user_data.keys())))
+        # t_yplaces = [.5+i for i in range(yspan)]
+        # t_ylabels = truth_data.keys()
+        print(key_range)
+        yspan = len(key_range)
         u_yplaces = [.5+i for i in range(yspan)]
         #print(t_yplaces)
-        u_ylabels = user_data.keys()
+        u_ylabels = key_range
 
-        fig = plt.figure(figsize=(13,6),dpi=100)
+        fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.set_yticks(u_yplaces)
         ax.set_yticklabels(u_ylabels)
@@ -33,33 +35,35 @@ class Visual:
         
 
         # later we'll need the min and max in the union of intervals
-        for keys in t_ylabels:
+        for keys in u_ylabels:
             try:
-                if truth_data[keys] != None:
-                    low, hi =  truth_data[keys][0]
+                if user_data[keys] != None:
+                    low, hi =  user_data[keys][0]
                     break
             except:
                 pass
 
         
         for pos, label in zip(u_yplaces,u_ylabels):
-            if truth_data[label] != None:
-                for l in truth_data[label]:
-                    #print (f'pos: {pos} label: {label}')
-                    start, end = l
-                    #print (f'start: {start} end: {end}')
-                    t_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),
-                                            end-start,delta, linewidth=1, 
-                                            edgecolor='r', facecolor='none', label='Truth'))
-                    if start<low : low=start
-                    if end>hi : hi=end
-                
-            if user_data[label] != None:
-                for u in user_data[label]:
-                    start, end = u
-                    #print (f'start: {start} end: {end}')
-                    u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, facecolor='b', edgecolor ='black', linewidth = 1,label='User'))
-
+            try:
+                if truth_data[label] != None:
+                    for l in truth_data[label]:
+                        #print (f'pos: {pos} label: {label}')
+                        start, end = l
+                        #print (f'start: {start} end: {end}')
+                        t_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),
+                                                end-start,delta, linewidth=1, 
+                                                edgecolor='r', facecolor='none', label='Truth'))
+                        if start<low : low=start
+                        if end>hi : hi=end
+                    
+                if user_data[label] != None:
+                    for u in user_data[label]:
+                        start, end = u
+                        #print (f'start: {start} end: {end}')
+                        u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, facecolor='b', edgecolor ='black', linewidth = 1,label='User'))
+            except KeyError:
+                pass
             
         # little small trick, draw an invisible line so that the x axis
         # limits are automatically adjusted...

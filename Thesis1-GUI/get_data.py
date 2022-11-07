@@ -53,6 +53,7 @@ class Data:
         # Get the data in the start index
         start_elements = []
         elements = []
+        t_elements = []
         keys = list(text['note'].to_list())
         start, end = 0, 0
         for i in range (0, len(text['event'])):
@@ -67,7 +68,7 @@ class Data:
                                             text['end'][t],
                                             text['note'][t]]
 
-                        if t_data != start_elements:
+                        if t_data not in t_elements:
                             notes_in_truth.append(t_data)
 
                 for p in range(0,size):
@@ -83,6 +84,9 @@ class Data:
                 start_elements = notes_in_truth[0]
                 for i in notes_in_user:
                     elements.append(i)
+
+                for t in notes_in_truth:
+                    t_elements.append(t)
                 
                 #print(f'truth: {notes_in_truth}')
                 #print(f'user: {notes_in_user}')
@@ -135,9 +139,9 @@ class Data:
                         if notes_in_user[i][2] not in keys:
                             extra += 1
 
-                # print('Truth Table: ', truth, ' User Table:', user)
-                # print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
-                # print ('\n')
+                print('Truth Table: ', truth, ' User Table:', user)
+                print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
+               
 
                 notes_in_truth.clear()
                 notes_in_user.clear()
@@ -148,7 +152,10 @@ class Data:
                 correct += truth.count(1)
                 partial += truth.count(2)
                 missed += truth.count(0)
-                
+                print('Correct: ', correct)
+                print('Partial: ', partial)
+                print('Missed: ', missed)
+                print ('\n')
 
         return [correct, partial, extra, missed] + list(user_articulation.values())
 
@@ -548,9 +555,9 @@ class Data:
 if __name__ == '__main__':
     data = Data()
     #data.modifycsv('jrd.csv')
-    # data.read_csv('frj.csv')
-    # data.Data_to_csv('frj.csv')
-    Data.modifyTruth('twinkle_twinkle.csv')
+    data.read_csv('twinkle_twinkle.csv')
+    data.Data_to_csv('twinkle_twinkle.csv')
+    # Data.modifyTruth('twinkle_twinkle.csv')
 
 
     
