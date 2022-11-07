@@ -2240,17 +2240,17 @@ class Statistics(tk.Frame):
 
         global getSkillLevel
         def getSkillLevel(Score):
-            if (Score >= 0 and Score <= 25):
+            if (Score >= 0 and Score <= 40):
                 avglevel = "Beginner"
 
-            elif(Score >= 26 and Score <= 50):
+            elif(Score >= 41 and Score <= 75):
                 avglevel = "Amateur"
 
-            elif(Score >= 51 and Score <= 75):
+            elif(Score >= 76 and Score <= 90):
                 avglevel = "Proficient"
 
-            elif(Score >= 76 and Score <= 100):
-                avglevel = "Expert"
+            elif(Score >= 91 and Score <= 100):
+                avglevel = "Professional"
 
             else:
                 avglevel = "Cant determine"
@@ -2260,10 +2260,10 @@ class Statistics(tk.Frame):
         global ScoreToRating
         def ScoreToRating(score):
             if (score >= 0 and score <= 25):
-                levelStats = "Worst Performance"
+                levelStats = "Poor Performance"
 
             elif(score >= 26 and score <= 50):
-                levelStats = "Poor Performance"
+                levelStats = "Fair Performance"
 
             elif(score >= 51 and score <= 75):
                 levelStats = "Good Performance"
