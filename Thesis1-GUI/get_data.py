@@ -4,6 +4,7 @@ import csv
 import os
 from music21 import midi, note
 import sys
+from collections import Counter
 
 class Data:
     def __init__(self):
@@ -139,8 +140,8 @@ class Data:
                         if notes_in_user[i][2] not in keys:
                             extra += 1
 
-                print('Truth Table: ', truth, ' User Table:', user)
-                print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
+                # print('Truth Table: ', truth, ' User Table:', user)
+                # print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
                
 
                 notes_in_truth.clear()
@@ -152,10 +153,10 @@ class Data:
                 correct += truth.count(1)
                 partial += truth.count(2)
                 missed += truth.count(0)
-                print('Correct: ', correct)
-                print('Partial: ', partial)
-                print('Missed: ', missed)
-                print ('\n')
+                # print('Correct: ', correct)
+                # print('Partial: ', partial)
+                # print('Missed: ', missed)
+                # print ('\n')
 
         return [correct, partial, extra, missed] + list(user_articulation.values())
 
@@ -195,13 +196,29 @@ class Data:
 
         condition = (text['track'] == 1) & (text['note'] > 0)
         text_Right = text[condition].note.tolist()
+        mismatch = 0 
+        #count all occurences of every notes in the list
+        pattern_count = Counter(pattern_Right)
+        text_count = Counter(text_Right)
+        for key, value in text_count.items():
+            for pk, pv in pattern_count.items():
+                if key == pk:
+                    print ('text: ', key, ' pattern: ', pk)
+                    print ('value: ', value, ' value: ', pv)
+                    if pv > value:
+                        mismatch += pk > value
+                    elif pv < value:
+                        mismatch += value < pk
 
+        print ('PATTERN: ', pattern_Right)
+        print ('TRUTH: ', text_Right)
         #track the index of the the mismatch elements
-        print ('pattern: ', len(pattern_Right), ' text: ', len(text_Right))
-        mismatch = [i for i, (a, b) in enumerate(zip(text_Right, pattern_Right)) if a != b]
-        # mismatch = 0   
-        match =  len(pattern_Right) - len(mismatch)
+        # print ('pattern: ', len(pattern_Right), ' text: ', len(text_Right))
+        # mismatch = [i for i, (a, b) in enumerate(zip(text_Right, pattern_Right)) if a != b]
+        print (mismatch)
+        match =  len(pattern_Right) - mismatch
         percentage = (match/len(text_Right))*100
+        print ('MELODY: ', percentage)
         return percentage
 
 
@@ -373,9 +390,10 @@ class Data:
             self.Pattern = pd.read_csv(pattern, on_bad_lines='skip')
 
             #Sort first the data frame
-            self.Pattern.sort_values(['start', 'end', 'note'], ascending=[True, True, True], inplace=True)
+            self.Pattern.sort_values(['start', 'end'], ascending=[True, True], inplace=True)
             self.Truth.sort_values(['start', 'end', 'note'], ascending=[True, True, True], inplace=True)
-            print (self.Truth)
+            print ('TRUTH: ',self.Truth)
+            print ('PATTERN: ', self.Pattern)
             self.truth_data = self.Truth.to_dict('list')
             self.pattern_data = self.Pattern.to_dict('list')
         except FileNotFoundError:
@@ -417,34 +435,34 @@ class Data:
             µs_per_quarter = mspq
             µs_per_tick = µs_per_quarter / ticks_per_quarter
             seconds_per_tick = µs_per_tick / 1_000_000     
-            
+            idx = 0
             note_events  = []
             header = ['track','start', 'end', 'event','channel','note','velocity','name']
             for i in events:
                 events_list = midi.translate.getTimeForEvents(i)
                 for x, y in events_list:
                     # x - start , y - midi event
-                    
+                    print (idx, x, y)
                     if y.type == midi.ChannelVoiceMessages.NOTE_ON and y.velocity != 0:
                         
                         # Get midi information
                         start = x * seconds_per_tick
-
+                        
                         for l, k in events_list:
                             if k.type == midi.ChannelVoiceMessages.NOTE_OFF:
+                                print (idx, x, y)
                                 if k.pitch == y.pitch and l > x:
                                     end = l * seconds_per_tick
                                     # track - start - end - event - channel - note - velocity
-                                    note_events.append([y.track.index , round(start), round(end), 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave])
+                                    note_events.append([1, round(start), round(end), 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave])
                                     break
                             # note on with 0 velocity considered as note off
                             elif k.type == midi.ChannelVoiceMessages.NOTE_ON and k.velocity == 0:
                                 if k.pitch == y.pitch and l > x:
                                     end = l * seconds_per_tick
                                     # track - start - end - event - channel - note - velocity
-                                    note_events.append([y.track.index , round(start), round(end), 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave])
+                                    note_events.append([1 , round(start), round(end), 'Note_on', y.channel, y.pitch, y.velocity, note.Note(y.pitch).nameWithOctave])
                                     break
-
 
             #Load to CSV  File
             csvPath = "../csv/truth/new_t_" + midiPath + '.csv'
@@ -554,10 +572,11 @@ class Data:
 
 if __name__ == '__main__':
     data = Data()
-    #data.modifycsv('jrd.csv')
+    #data.modifycsv('twinkle_twinkle.csv')
+    # data.miditocsv('twinkle_twinkle')
     data.read_csv('twinkle_twinkle.csv')
     data.Data_to_csv('twinkle_twinkle.csv')
-    # Data.modifyTruth('twinkle_twinkle.csv')
+ #   Data.modifyTruth('twinkle_twinkle.csv')
 
 
     
