@@ -2333,6 +2333,7 @@ class Statistics(tk.Frame):
 
         global UpdateValues
         def UpdateValues():
+            print("clear")
 
             for widget in frame_Graph.winfo_children():
                 widget.destroy()
