@@ -61,7 +61,7 @@ class Visual:
                     for u in user_data[label]:
                         start, end = u
                         #print (f'start: {start} end: {end}')
-                        u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, facecolor='b', edgecolor ='black', linewidth = 1,label='User'))
+                        u_legend = ax.add_patch(patches.Rectangle((start,pos-delta/2.0),end-start,0.25, facecolor='#F8BA43', edgecolor ='black', linewidth = 1,label='User'))
             except KeyError:
                 pass
             
