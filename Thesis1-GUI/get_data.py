@@ -206,9 +206,11 @@ class Data:
                     print ('text: ', key, ' pattern: ', pk)
                     print ('value: ', value, ' value: ', pv)
                     if pv > value:
-                        mismatch += pk > value
+                        mismatch += pv - value
+                        print(mismatch)
                     elif pv < value:
-                        mismatch += value < pk
+                        mismatch += value - pv
+                        print(mismatch)
 
         print ('PATTERN: ', pattern_Right)
         print ('TRUTH: ', text_Right)
@@ -216,7 +218,7 @@ class Data:
         # print ('pattern: ', len(pattern_Right), ' text: ', len(text_Right))
         # mismatch = [i for i, (a, b) in enumerate(zip(text_Right, pattern_Right)) if a != b]
         print (mismatch)
-        match =  len(pattern_Right) - mismatch
+        match =  len(text_Right) - mismatch
         percentage = (match/len(text_Right))*100
         print ('MELODY: ', percentage)
         return percentage

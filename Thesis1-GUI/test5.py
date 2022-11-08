@@ -281,6 +281,7 @@ class LogIn(tk.Frame):
             if name == '':
                 label2_entry.insert(0, 'Password')
 
+        global label2_entry
         label2_entry = tk.Entry(self, width=28, font=controller.title_font, show="*")
         label2_entry.insert(0, "Enter your password")
         label2_entry.bind('<FocusIn>', on_enter)
@@ -441,6 +442,21 @@ class Register(tk.Frame):
         # else:
         #     messagebox.showerror('Invalid',"Both Password Should Match")
 
+
+
+        global ClearRegEntry
+        def ClearRegEntry():
+
+            label_entry.delete(0,'end')
+            label2_entry.delete(0,'end')
+
+            labelReg_entry.delete(0,'end')
+            label2Reg_entry.delete(0, 'end')
+            label3Reg_entry.delete(0, 'end')
+            label4Reg_entry.delete(0, 'end')
+            label5Reg_entry.delete(0, 'end')
+
+
         frame_reg = tk.Frame(self, width=860, height=480, bg="#2A2B2C", border=0)
         label_reg = tk.Label(self, text="CREATE ACCOUNT", fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
 
@@ -531,6 +547,10 @@ class StartPage(tk.Frame):
             UpdateHistory()
             controller.show_frame("History")
 
+        def LogOutClear(e):
+            ClearRegEntry()
+            controller.show_frame("LogIn")
+
         def _create_circle(self, x, y, r, **kwargs):
             return self.create_oval(x - r, y - r, x + r, y + r, **kwargs)
         
@@ -577,7 +597,7 @@ class StartPage(tk.Frame):
         play_label3.image = img3
 
         play_label4 = tk.Label(self, image=img4, cursor="hand2", borderwidth=0)
-        play_label4.bind("<Button-1>", lambda e: controller.show_frame("LogIn"))
+        play_label4.bind("<Button-1>",LogOutClear)
         play_label4.image = img4
 
         DetectDevice_label = tk.Label(self, image=img5, borderwidth=0,cursor="hand2")
@@ -1067,7 +1087,7 @@ class AfterPerformance(tk.Frame):
             semiTotal_notes = correctHits + partialHits
             percent_notes = semiTotal_notes/total_notes *100
             global total_percentNotes
-            total_percentNotes = float(percent_notes * 0.20)
+            total_percentNotes = float(percent_notes * 0.25)
             print(total_percentNotes,"eto ang percentNotes")
 
             #Rhythm
@@ -1076,7 +1096,7 @@ class AfterPerformance(tk.Frame):
             total_rhythm = sswitchHits + fswitchHits
             percent_rhythm = (sswitchHits/total_rhythm)*100
             global total_percentRhythm
-            total_percentRhythm = float(percent_rhythm * 0.15)
+            total_percentRhythm = float(percent_rhythm * 0.20)
             print(total_percentRhythm,"eto ang percentrhythms")
 
             #Articulation
@@ -1100,7 +1120,7 @@ class AfterPerformance(tk.Frame):
             melodyHits = dff.loc[dff["Element"] == "Melody", "Data"].iloc[0]
             percent_melody = melodyHits
             global total_percentMelody
-            total_percentMelody = float(percent_melody*0.40)
+            total_percentMelody = float(percent_melody*0.30)
             print(total_percentMelody,"Eto ang melody")
 
             #LeftHand
