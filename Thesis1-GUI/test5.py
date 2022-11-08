@@ -1067,7 +1067,7 @@ class AfterPerformance(tk.Frame):
             semiTotal_notes = correctHits + partialHits
             percent_notes = semiTotal_notes/total_notes *100
             global total_percentNotes
-            total_percentNotes = float(percent_notes * 0.25)
+            total_percentNotes = float(percent_notes * 0.20)
             print(total_percentNotes,"eto ang percentNotes")
 
             #Rhythm
@@ -1076,7 +1076,7 @@ class AfterPerformance(tk.Frame):
             total_rhythm = sswitchHits + fswitchHits
             percent_rhythm = (sswitchHits/total_rhythm)*100
             global total_percentRhythm
-            total_percentRhythm = float(percent_rhythm * 0.20)
+            total_percentRhythm = float(percent_rhythm * 0.15)
             print(total_percentRhythm,"eto ang percentrhythms")
 
             #Articulation
@@ -1100,7 +1100,7 @@ class AfterPerformance(tk.Frame):
             melodyHits = dff.loc[dff["Element"] == "Melody", "Data"].iloc[0]
             percent_melody = melodyHits
             global total_percentMelody
-            total_percentMelody = float(percent_melody*0.30)
+            total_percentMelody = float(percent_melody*0.40)
             print(total_percentMelody,"Eto ang melody")
 
             #LeftHand
@@ -2240,17 +2240,17 @@ class Statistics(tk.Frame):
 
         global getSkillLevel
         def getSkillLevel(Score):
-            if (Score >= 0 and Score <= 25):
+            if (Score >= 0 and Score <= 40):
                 avglevel = "Beginner"
 
-            elif(Score >= 26 and Score <= 50):
+            elif(Score >= 41 and Score <= 75):
                 avglevel = "Amateur"
 
-            elif(Score >= 51 and Score <= 75):
+            elif(Score >= 76 and Score <= 90):
                 avglevel = "Proficient"
 
-            elif(Score >= 76 and Score <= 100):
-                avglevel = "Expert"
+            elif(Score >= 91 and Score <= 100):
+                avglevel = "Professional"
 
             else:
                 avglevel = "Cant determine"
@@ -2260,10 +2260,10 @@ class Statistics(tk.Frame):
         global ScoreToRating
         def ScoreToRating(score):
             if (score >= 0 and score <= 25):
-                levelStats = "Worst Performance"
+                levelStats = "Poor Performance"
 
             elif(score >= 26 and score <= 50):
-                levelStats = "Poor Performance"
+                levelStats = "Fair Performance"
 
             elif(score >= 51 and score <= 75):
                 levelStats = "Good Performance"
@@ -2278,6 +2278,11 @@ class Statistics(tk.Frame):
             
 
         def GetSongTrack(e):
+
+            score_label_stat.configure(text="")
+            rating_label_stat.configure(text="")
+            skillLevel_label_stat.configure(text="")
+
             for widget in frame_Graph.winfo_children():
                 widget.destroy()
 
@@ -2285,6 +2290,27 @@ class Statistics(tk.Frame):
 
             GraphTest.chosen_song = song_track
             GraphTest.user = label_entry.get()
+
+            con = sqlite3.connect('userData.db')
+            cu = con.cursor()
+
+            cu.execute("SELECT avg(Score) FROM History WHERE Username = ? AND Title = ? LIMIT 1  ", (label_entry.get(),song_track,))
+            AvgScore = cu.fetchone()[0]
+
+            if AvgScore == None:
+                AvgScore=int(0)
+                rating = None
+                skill_Level = None
+            else:
+
+                rating = ScoreToRating(AvgScore)
+                rating = rating.replace(" ","")
+                rating = rating.replace("Performance","")
+                skill_Level = getSkillLevel(AvgScore)
+
+            score_label_stat.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
+            rating_label_stat.configure(text=rating,anchor=CENTER)
+            skillLevel_label_stat.configure(text=skill_Level,anchor=CENTER)
 
             ax,fig = GraphTest.DisplayGraph()
 
@@ -2307,6 +2333,7 @@ class Statistics(tk.Frame):
 
         global UpdateValues
         def UpdateValues():
+            print("clear")
 
             for widget in frame_Graph.winfo_children():
                 widget.destroy()
@@ -2319,29 +2346,6 @@ class Statistics(tk.Frame):
 
             con = sqlite3.connect('userData.db')
             cu = con.cursor()
-         
-            cu.execute("SELECT avg(Score) FROM History WHERE Username = ? LIMIT 1", (uname,))
-
-            AvgScore = cu.fetchone()[0]
-            print(AvgScore)
-            if AvgScore == None:
-                AvgScore=int(0)
-                rating = None
-                skill_Level = None
-            else:
-
-                rating = ScoreToRating(AvgScore)
-                rating = rating.replace(" ","")
-            #print("Rating: ",rating)
-                rating = rating.replace("Performance","")
-                skill_Level = getSkillLevel(AvgScore)
-            
-            score_label_stat.configure(text=str("%.2f" % AvgScore),anchor=CENTER)
-            rating_label_stat.configure(text=rating,anchor=CENTER)
-            skillLevel_label_stat.configure(text=skill_Level,anchor=CENTER)
-
-            print(rating)
-            print(skill_Level)
 
             cu.execute("SELECT Title FROM History WHERE Username = ? GROUP BY Title ORDER BY count(*) DESC", (uname,))
             ListSongs = cu.fetchall()
