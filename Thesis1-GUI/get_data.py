@@ -223,7 +223,7 @@ class Data:
                     print ('text: ', key, ' pattern: ', pk)
                     print ('value: ', value, ' value: ', pv)
                     if pv > value:
-                        mismatch += pv- value
+                        mismatch += pv - value
                         print(mismatch)
                     elif pv < value:
                         mismatch += value - pv

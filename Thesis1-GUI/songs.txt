@@ -9,3 +9,4 @@ make_you_feel_mylove.mid
 fur_elise.mid
 saint_saens.mid
 canon_in_d.mid
+RUSH_E.mid

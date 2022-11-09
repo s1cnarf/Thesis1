@@ -1,4 +1,5 @@
 Element,Data
+<<<<<<< HEAD
 Correct,26
 Partial,15
 Extra,17
@@ -15,3 +16,21 @@ RH_Correct,29
 LH_Fail,0
 RH_Fail,14
 Melody,90.69767441860465
+=======
+Correct,20
+Partial,13
+Extra,1
+Missed,10
+Success_Switch,8
+Failed_Switch,35
+Timed_Hit,22
+Late_Hit,13
+Early_Hit,0
+Truth_Dynamics,63.0
+User_Dynamics,63.0
+LH_Correct,0
+RH_Correct,39
+LH_Fail,0
+RH_Fail,4
+Melody,93.02325581395348
+>>>>>>> 4f1739487047258e31e45b5a85c1d4e871b5065f
