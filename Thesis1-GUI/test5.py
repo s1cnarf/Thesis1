@@ -739,7 +739,7 @@ class PlayPage(tk.Frame):
                         wait = False
                         thread.start()
 
-                    p.input_main(display)
+                    #p.input_main(display)
                     '''
                     for event in pg.event.get():
                         if event.type == pg.QUIT:
