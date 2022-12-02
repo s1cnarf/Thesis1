@@ -55,6 +55,7 @@ class Data:
         start_elements = []
         elements = []
         t_elements = []
+        pnotes = 0
         keys = list(text['note'].to_list())
         start, end = 0, 0
         for i in range (0, len(text['event'])):
@@ -62,7 +63,7 @@ class Data:
                 end = text['end'][i]
                 start = text['start'][i] 
                 # line 14 1,17234,19000,Note_on,1,30,0
-                # print (f'start: {start} end: {end}')
+                print (f'START: {start} END: {end}')
                 for t in range(0,len(text['event'])):
                     if text['start'][t] >= start and text['end'][t] <= end:
                         t_data = [text['start'][t], # 0 , 1 , 2
@@ -100,36 +101,48 @@ class Data:
                 for idx, i in enumerate(notes_in_truth): 
                     
                     if truth[idx] == 0:
+                        print (f'truth : {truth[idx]}')
                         for y in range(0, len(notes_in_user)):
                             #Time -> Notes:
                             # 0 = Start 1 = End 2 = Note
                             # Problem if tama yung time frame and napindot ulet like
                             # double pindot with true note
-                            if user[y] == 0:
-                                if notes_in_user[y][0] == i[0] and notes_in_user[y][1] == i[1]: #start end
-                                    if notes_in_user[y][2] == i[2]: #note number
-                                        #print(f'Correct: {notes_in_user[y][2]} = {i[2]}, {y}')
-                                        truth[idx] = 1
-                                        user[y] = 1
-                                        user_articulation['Timed'] += 1
-                                    # elif notes_in_user[y][2] != i[2]:
-                                    #     #print(f'Extra: {notes_in_user[y][2]} = {i[2]}, {y}')
-                                    #     truth[idx] = 3
-                                    #     user[y] = 3
-                                    #     extra += 1
-                                else:
-                                    if notes_in_user[y][0] >= i[0] and notes_in_user[y][1] <= i[1]:
-                                        if notes_in_user[y][2] == i[2]:
-                                            #print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}')
-                                            truth[idx] = 2
-                                            user[y] = 2
-                                            user_articulation['Late'] += 1
-                                    elif notes_in_user[y][0] <= i[0] and notes_in_user[y][1] >= i[1]:
-                                        if notes_in_user[y][2] == i[2]:
-                                            #print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}')
-                                            truth[idx] = 2
-                                            user[y] = 2 
-                                            user_articulation['Early'] += 1
+                            # if user[y] == 0:
+                            if notes_in_user[y][0] == i[0] and notes_in_user[y][1] == i[1]: #start end
+                                if notes_in_user[y][2] == i[2]: #note number
+                                    print(f'Correct: {notes_in_user[y][2]} = {i[2]}, {y} value of idx: {idx}')
+                                    truth[idx] = 1
+                                    user[y] = 1
+                                    user_articulation['Timed'] += 1
+                                    break
+                                # elif notes_in_user[y][2] != i[2]:
+                                #     #print(f'Extra: {notes_in_user[y][2]} = {i[2]}, {y}')
+                                #     truth[idx] = 3
+                                #     user[y] = 3
+                                #     extra += 1
+                            else:
+                                if notes_in_user[y][0] >= i[0] and notes_in_user[y][1] <= i[1]:
+                                    if notes_in_user[y][2] == i[2]:
+                                        print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y}  value of idx:  {idx}')
+                                        truth[idx] = 2
+                                        user[y] = 2
+                                        user_articulation['Late'] += 1
+                                elif notes_in_user[y][0] <= i[0] and notes_in_user[y][1] >= i[1]:
+                                    if notes_in_user[y][2] == i[2]:
+                                        print(f'Partial: {notes_in_user[y][2]} = {i[2]}, {y} value of idx: {idx}')
+                                        truth[idx] = 2
+                                        user[y] = 2 
+                                        user_articulation['Early'] += 1
+                
+                print('Truth Table: ', truth, ' User Table:', user)
+                print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
+                        
+                # Solve the same notes within the block
+                for p in range(len(user)):
+                    if user[p] == 0:
+                       print(f'REMOVED: {notes_in_user[p]} ', elements.remove(notes_in_user[p]))
+
+               
                                     
                                         
                 #print (f'1 TABLE TRUTH: {truth}')
@@ -143,9 +156,11 @@ class Data:
                 # print('Truth Table: ', truth, ' User Table:', user)
                 # print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
                
-
+                pnotes += len(notes_in_user)
                 notes_in_truth.clear()
                 notes_in_user.clear()
+
+                # check if all notes in pattern are covered
                 
                 #print (f'TABLE TRUTH: {truth}')
                 #print (f'TABLE USER: {user}')
@@ -153,10 +168,12 @@ class Data:
                 correct += truth.count(1)
                 partial += truth.count(2)
                 missed += truth.count(0)
-                # print('Correct: ', correct)
-                # print('Partial: ', partial)
-                # print('Missed: ', missed)
-                # print ('\n')
+                print('Correct: ', correct)
+                print('Partial: ', partial)
+                print('Missed: ', missed)
+                print('Pattern NOTES: ', pnotes)
+                print ('\n')
+                # break
 
         return [correct, partial, extra, missed] + list(user_articulation.values())
 
@@ -206,9 +223,11 @@ class Data:
                     print ('text: ', key, ' pattern: ', pk)
                     print ('value: ', value, ' value: ', pv)
                     if pv > value:
-                        mismatch += pk > value
+                        mismatch += pv - value
+                        print(mismatch)
                     elif pv < value:
-                        mismatch += value < pk
+                        mismatch += value - pv
+                        print(mismatch)
 
         print ('PATTERN: ', pattern_Right)
         print ('TRUTH: ', text_Right)
@@ -216,7 +235,7 @@ class Data:
         # print ('pattern: ', len(pattern_Right), ' text: ', len(text_Right))
         # mismatch = [i for i, (a, b) in enumerate(zip(text_Right, pattern_Right)) if a != b]
         print (mismatch)
-        match =  len(pattern_Right) - mismatch
+        match =  len(text_Right) - mismatch
         percentage = (match/len(text_Right))*100
         print ('MELODY: ', percentage)
         return percentage

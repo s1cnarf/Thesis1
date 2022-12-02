@@ -1,0 +1,17 @@
+Element,Data
+Correct,78
+Partial,9
+Extra,0
+Missed,1633
+Success_Switch,6
+Failed_Switch,1716
+Timed_Hit,78
+Late_Hit,27
+Early_Hit,7
+Truth_Dynamics,63.0
+User_Dynamics,63.0
+LH_Correct,0
+RH_Correct,81
+LH_Fail,0
+RH_Fail,1641
+Melody,48.31591173054588

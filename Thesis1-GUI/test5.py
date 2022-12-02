@@ -455,6 +455,21 @@ class Register(tk.Frame):
             label5Reg_entry.delete(0,'end')
 
 
+
+
+        global ClearRegEntry
+        def ClearRegEntry():
+
+            label_entry.delete(0,'end')
+            label2_entry.delete(0,'end')
+
+            labelReg_entry.delete(0,'end')
+            label2Reg_entry.delete(0, 'end')
+            label3Reg_entry.delete(0, 'end')
+            label4Reg_entry.delete(0, 'end')
+            label5Reg_entry.delete(0, 'end')
+
+
         frame_reg = tk.Frame(self, width=860, height=480, bg="#2A2B2C", border=0)
         label_reg = tk.Label(self, text="CREATE ACCOUNT", fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
 
@@ -551,6 +566,10 @@ class StartPage(tk.Frame):
             controller.show_frame("LogIn")
             
 
+
+        def LogOutClear(e):
+            ClearRegEntry()
+            controller.show_frame("LogIn")
 
         def _create_circle(self, x, y, r, **kwargs):
             return self.create_oval(x - r, y - r, x + r, y + r, **kwargs)
@@ -1090,7 +1109,7 @@ class AfterPerformance(tk.Frame):
             semiTotal_notes = correctHits + partialHits
             percent_notes = semiTotal_notes/total_notes *100
             global total_percentNotes
-            total_percentNotes = float(percent_notes * 0.20)
+            total_percentNotes = float(percent_notes * 0.25)
             print(total_percentNotes,"eto ang percentNotes")
 
             #Rhythm
@@ -1099,7 +1118,7 @@ class AfterPerformance(tk.Frame):
             total_rhythm = sswitchHits + fswitchHits
             percent_rhythm = (sswitchHits/total_rhythm)*100
             global total_percentRhythm
-            total_percentRhythm = float(percent_rhythm * 0.15)
+            total_percentRhythm = float(percent_rhythm * 0.20)
             print(total_percentRhythm,"eto ang percentrhythms")
 
             #Articulation
@@ -1123,7 +1142,7 @@ class AfterPerformance(tk.Frame):
             melodyHits = dff.loc[dff["Element"] == "Melody", "Data"].iloc[0]
             percent_melody = melodyHits
             global total_percentMelody
-            total_percentMelody = float(percent_melody*0.40)
+            total_percentMelody = float(percent_melody*0.30)
             print(total_percentMelody,"Eto ang melody")
 
             #LeftHand
