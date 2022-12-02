@@ -456,20 +456,6 @@ class Register(tk.Frame):
 
 
 
-
-        global ClearRegEntry
-        def ClearRegEntry():
-
-            label_entry.delete(0,'end')
-            label2_entry.delete(0,'end')
-
-            labelReg_entry.delete(0,'end')
-            label2Reg_entry.delete(0, 'end')
-            label3Reg_entry.delete(0, 'end')
-            label4Reg_entry.delete(0, 'end')
-            label5Reg_entry.delete(0, 'end')
-
-
         frame_reg = tk.Frame(self, width=860, height=480, bg="#2A2B2C", border=0)
         label_reg = tk.Label(self, text="CREATE ACCOUNT", fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
 
