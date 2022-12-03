@@ -441,9 +441,7 @@ class Register(tk.Frame):
 
         # else:
         #     messagebox.showerror('Invalid',"Both Password Should Match")
-
-
-
+        
         global ClearRegEntry
         def ClearRegEntry():
 
@@ -451,16 +449,18 @@ class Register(tk.Frame):
             label2_entry.delete(0,'end')
 
             labelReg_entry.delete(0,'end')
-            label2Reg_entry.delete(0, 'end')
-            label3Reg_entry.delete(0, 'end')
-            label4Reg_entry.delete(0, 'end')
-            label5Reg_entry.delete(0, 'end')
+            label2Reg_entry.delete(0,'end')
+            label3Reg_entry.delete(0,'end')
+            label4Reg_entry.delete(0,'end')
+            label5Reg_entry.delete(0,'end')
+
 
 
         frame_reg = tk.Frame(self, width=860, height=480, bg="#2A2B2C", border=0)
         label_reg = tk.Label(self, text="CREATE ACCOUNT", fg="#F7BF50", bg="#2A2B2C", font=controller.body2_font)
 
         labelReg = tk.Label(self, text="USERNAME", fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
+        
         labelReg_entry = tk.Entry(self, width=29, font=controller.title_font)
 
         label2Reg = tk.Label(self, text="PASSWORD", fg="#F7BF50", bg="#2A2B2C", font=controller.body_font)
@@ -546,6 +546,12 @@ class StartPage(tk.Frame):
         def CombineFunctions(e):
             UpdateHistory()
             controller.show_frame("History")
+        
+        def LogOutClear(e):
+            ClearRegEntry()
+            controller.show_frame("LogIn")
+            
+
 
         def LogOutClear(e):
             ClearRegEntry()
@@ -597,7 +603,7 @@ class StartPage(tk.Frame):
         play_label3.image = img3
 
         play_label4 = tk.Label(self, image=img4, cursor="hand2", borderwidth=0)
-        play_label4.bind("<Button-1>",LogOutClear)
+        play_label4.bind("<Button-1>", LogOutClear)
         play_label4.image = img4
 
         DetectDevice_label = tk.Label(self, image=img5, borderwidth=0,cursor="hand2")
@@ -661,7 +667,9 @@ class PlayPage(tk.Frame):
             flag = False
 
         def GetSongList(e):
-            song = listbox_songs.get(ANCHOR)
+            song = str(listbox_songs.get(ANCHOR))
+            song= song.replace(' ','')
+            song = song.rstrip("★")
             search_entry.delete(0, END)
 
             search_entry.insert(0, song)
@@ -731,7 +739,7 @@ class PlayPage(tk.Frame):
                         wait = False
                         thread.start()
 
-                    p.input_main(display)
+                    #p.input_main(display)
                     '''
                     for event in pg.event.get():
                         if event.type == pg.QUIT:
@@ -985,7 +993,7 @@ class PlayPage(tk.Frame):
 
         # POPULAR
 
-        with open('songs.txt', 'r') as f:
+        with open('songs.txt', 'r',encoding="UTF-8") as f:
             songs = [line.strip() for line in f]
 
         update(songs, flag)

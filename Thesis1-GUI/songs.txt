@@ -1,12 +1,11 @@
-jrd.mid
-frj.mid
-twinkle_twinkle.mid
-happy_birthday.mid
-rock_a_bye_baby.mid
-night_changes.mid
-happy_pharrell.mid
-make_you_feel_mylove.mid
-fur_elise.mid
-saint_saens.mid
-canon_in_d.mid
-RUSH_E.mid
+jrd   ★.mid
+frj   ★.mid
+twinkle_twinkle   ★.mid
+happy_birthday   ★.mid
+rock_a_bye_baby   ★.mid
+night_changes   ★★.mid
+happy_pharrell   ★★.mid
+make_you_feel_mylove   ★★.mid
+fur_elise   ★★★.mid
+saint_saens   ★★★.mid
+canon_in_d   ★★★.mid

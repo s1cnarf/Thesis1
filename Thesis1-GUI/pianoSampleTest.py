@@ -160,98 +160,122 @@ class Piano:
             (1540,200), pg.SRCALPHA, 32).convert_alpha()
 
         newVal = 0
-        counter = 0
+        localcounter = 0
+        font = pg.font.SysFont('Arial', 20)
+        posVal = 10
 
-        for i in range (38): # Number of white Keys???
+        keyset1 = ['C1', 'D1', 'E1', 'F1', 'G1', 'A1', 'B1',
+                   'C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2',
+                   'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3',
+                   'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4',
+                   'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5',
+                   'C6']
+        for i in range(38):  # Number of white Keys???
 
-                if i < 10:
-                    # Shadow Animation
-                    pg.draw.rect(white_keys, (200, 200, 200), # Resolution, Fill Color
-                                (i * 43, 0, 45, 207), # Location
-                                border_radius=5) # Border
+            if i < 10:
+                # Shadow Animation
+                pg.draw.rect(white_keys, (200, 200, 200),  # Resolution, Fill Color
+                             (i * 43, 0, 45, 207),  # Location
+                             border_radius=5)  # Border
 
-                    # White Colored Keys
-                    self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
-                                                      pg.Rect(i * 43, 0, 45, 200),
-                                                      border_radius=5))
-                    self.globalVal = self.globalVal + 1
-                    #print("Val: ", self.globalVal)
-                    '''
-                    smallfont = pg.font.SysFont('Arial',36) 
-                    text = smallfont.render('1' , True , (0,0,0))
-                   # self.iterVal = self.iterVal + 45
-                    white_keys.blit(text , (10 , 130))
-                    white_keys.blit(text , (50 , 130))
-                    white_keys.blit(text , (100 , 130))
-                    '''
-                    #print("Key Value: ", newVal)
-                    newVal = newVal+43
+                # White Colored Keys
+                self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
+                                                  pg.Rect(i * 43, 0, 45, 200),
+                                                  border_radius=5))
 
+                # print("GL CNT: ", self.globalVal)
+                white_keys.blit(font.render(keyset1[localcounter], True, (0, 0, 0)), (posVal, 130))
+                posVal = posVal + 43
 
+                self.globalVal = self.globalVal + 1
+                # print("Val: ", self.globalVal)
+                '''
+                smallfont = pg.font.SysFont('Arial',36) 
+                text = smallfont.render('1' , True , (0,0,0))
+               # self.iterVal = self.iterVal + 45
+                white_keys.blit(text , (10 , 130))
+                white_keys.blit(text , (50 , 130))
+                white_keys.blit(text , (100 , 130))
+                '''
+                # print("Key Value: ", newVal)
+                newVal = newVal + 43
 
+                # "Gap" animation between the keys
+                pg.draw.rect(white_keys, (0, 0, 0),
+                             (i * 43, 0, 45, 207),
+                             width=1, border_radius=5)
 
-                    # "Gap" animation between the keys
-                    pg.draw.rect(white_keys, (0, 0, 0),
-                                (i * 43, 0, 45, 207),
-                                width=1, border_radius=5)
-
-                
-                elif i < 20:
-                    # Shadow Animation
-                    pg.draw.rect(white_keys, (200, 200, 200), # Resolution, Fill Color
-                                (i * 43, 0, 45, 207), # Location
-                                border_radius=5) # Border
-
-                    # White Colored Keys
-                    self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
-                                                      pg.Rect(i * 43, 0, 45, 200),
-                                                      border_radius=5))
-                    self.globalVal = self.globalVal + 1
-                    #print("Val: ", self.globalVal)
-                  #  print("Key Value: ", newVal)
-                    newVal = newVal+43
-
-                    # "Gap" animation between the keys
-                    pg.draw.rect(white_keys, (0, 0, 0),
-                                 (i * 43, 0, 45, 207), # Location
-                                width=1, border_radius=5)
-                
-                elif i < 30:
-                    # Shadow Animation
-                    pg.draw.rect(white_keys, (200, 200, 200), # Resolution, Fill Color
-                                 (i * 43, 0, 45, 207), # Location
-                                border_radius=5) # Border
-
-                    # White Colored Keys
-                    self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
-                                                      pg.Rect(i * 43, 0, 45, 200),
-                                                      border_radius=5))
-                    self.globalVal = self.globalVal + 1
+                localcounter = localcounter + 1
 
 
-                    # "Gap" animation between the keys
-                    pg.draw.rect(white_keys, (0, 0, 0),
-                                 (i * 43, 0, 45, 207), # Location
-                                width=1, border_radius=5)
+            elif i < 20:
+                # Shadow Animation
+                pg.draw.rect(white_keys, (200, 200, 200),  # Resolution, Fill Color
+                             (i * 43, 0, 45, 207),  # Location
+                             border_radius=5)  # Border
 
-                else:
-                    # Shadow Animation
-                    pg.draw.rect(white_keys, (200, 200, 200), # Resolution, Fill Color
-                                 (i * 43, 0, 45, 207), # Location
-                                border_radius=5) # Border
+                # White Colored Keys
+                self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
+                                                  pg.Rect(i * 43, 0, 45, 200),
+                                                  border_radius=5))
+                white_keys.blit(font.render(keyset1[localcounter], True, (0, 0, 0)), (posVal, 130))
+                posVal = posVal + 43
 
-                    # White Colored Keys
-                    self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
-                                pg.Rect(i *43, 0, 45, 200),
-                                border_radius=5))
-                    self.globalVal = self.globalVal + 1
+                self.globalVal = self.globalVal + 1
+                # print("Val: ", self.globalVal)
+                #  print("Key Value: ", newVal)
+                newVal = newVal + 43
 
-                    
+                # "Gap" animation between the keys
+                pg.draw.rect(white_keys, (0, 0, 0),
+                             (i * 43, 0, 45, 207),  # Location
+                             width=1, border_radius=5)
 
-                    # "Gap" animation between the keys
-                    pg.draw.rect(white_keys, (0, 0, 0),
-                                (i * 43, 0, 45, 207), # Location
-                                width=1, border_radius=5)
+                localcounter = localcounter + 1
+
+            elif i < 30:
+                # Shadow Animation
+                pg.draw.rect(white_keys, (200, 200, 200),  # Resolution, Fill Color
+                             (i * 43, 0, 45, 207),  # Location
+                             border_radius=5)  # Border
+
+                # White Colored Keys
+                self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
+                                                  pg.Rect(i * 43, 0, 45, 200),
+                                                  border_radius=5))
+                white_keys.blit(font.render(keyset1[localcounter], True, (0, 0, 0)), (posVal, 130))
+                posVal = posVal + 43
+
+                self.globalVal = self.globalVal + 1
+
+                # "Gap" animation between the keys
+                pg.draw.rect(white_keys, (0, 0, 0),
+                             (i * 43, 0, 45, 207),  # Location
+                             width=1, border_radius=5)
+
+                localcounter = localcounter + 1
+
+            else:
+                # Shadow Animation
+                pg.draw.rect(white_keys, (200, 200, 200),  # Resolution, Fill Color
+                             (i * 43, 0, 45, 207),  # Location
+                             border_radius=5)  # Border
+
+                # White Colored Keys
+                self.rectList.append(pg.draw.rect(white_keys, (255, 255, 255),
+                                                  pg.Rect(i * 43, 0, 45, 200),
+                                                  border_radius=5))
+                white_keys.blit(font.render(keyset1[localcounter], True, (0, 0, 0)), (posVal, 130))
+                posVal = posVal + 43
+                self.globalVal = self.globalVal + 1
+
+                # "Gap" animation between the keys
+                pg.draw.rect(white_keys, (0, 0, 0),
+                             (i * 43, 0, 45, 207),  # Location
+                             width=1, border_radius=5)
+
+                if localcounter < 35:
+                    localcounter = localcounter + 1
 
 
         for i in range(35):
