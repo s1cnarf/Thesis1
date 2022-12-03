@@ -399,6 +399,19 @@ class Piano:
         self.white_pressed_surface.fill((0, 0, 0, 0))  # fill with white
         self.black_pressed_surface.fill((0, 0, 0, 0))
 
+        white_keys = pg.surface.Surface((1540, 200))
+
+        posVal = 0
+        localcounter = 0
+        font = pg.font.SysFont('Arial', 20)
+
+        keyset1 = ['C1', 'D1', 'E1', 'F1', 'G1', 'A1', 'B1',
+               'C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2',
+               'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3',
+               'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4',
+               'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5',
+               'C6']
+
         keyCoordinates = {
         36: 0, 38: 43, 40: 86,
         41: 129, 43: 172, 45: 215,
@@ -470,7 +483,8 @@ class Piano:
                                      (keyCoordinates.get(val), 0, 45, 207),  # Location
                                      width=1, border_radius=5)
 
-                            self.drawNoteName()
+
+
 
                         if val in blackCoordinates.keys():
                             pg.draw.rect(self.black_pressed_surface, (213, 50, 66, 200),
@@ -486,15 +500,13 @@ class Piano:
                                          (keyCoordinates.get(val), 0, 45, 207),  # Location
                                          width=1, border_radius=5)
 
-                            self.drawNoteName()
+                            white_keys.blit(font.render(keyset1[localcounter], True, (0, 0, 0)), (keyCoordinates.get(val), 130))
 
                         if val in blackCoordinates.keys():
                             pg.draw.rect(self.black_pressed_surface, (0,0,0),
                                              (blackCoordinates.get(val), 0, 30, 110))
 
-
-
-
+                self.white_key_surface = white_keys
 
                 surface.blit(self.white_key_surface, (0, 600))  # Draw the UNPRESSED white key
                 surface.blit(self.white_pressed_surface, (0, 600))  # Draw the PRESSED white Key
