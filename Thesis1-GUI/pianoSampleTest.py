@@ -364,6 +364,35 @@ class Piano:
             k: keySample(k, keymap[k], i) for i, k in enumerate(keymap)
         }
 
+
+    def drawNoteName(self):
+
+        white_keys = pg.surface.Surface(
+            (1540, 200))
+
+        posVal = 0
+        localcounter = 0
+        font = pg.font.SysFont('Arial', 20)
+
+        keyset1 = ['C1', 'D1', 'E1', 'F1', 'G1', 'A1', 'B1',
+                   'C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2',
+                   'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3',
+                   'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4',
+                   'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5',
+                   'C6']
+
+        for i in range(38):
+            white_keys.blit(font.render(keyset1[localcounter], True, (0, 0, 0)), (posVal, 130))
+            posVal = posVal + 43
+
+        if localcounter < 35:
+            localcounter = localcounter + 1
+
+
+
+
+
+
     def input_main(self,surface,device_id=None):
 
        # pg.init()
@@ -441,6 +470,8 @@ class Piano:
                                      (keyCoordinates.get(val), 0, 45, 207),  # Location
                                      width=1, border_radius=5)
 
+                            self.drawNoteName()
+
                         if val in blackCoordinates.keys():
                             pg.draw.rect(self.black_pressed_surface, (213, 50, 66, 200),
                                          (blackCoordinates.get(val), 0, 30, 110))
@@ -455,9 +486,12 @@ class Piano:
                                          (keyCoordinates.get(val), 0, 45, 207),  # Location
                                          width=1, border_radius=5)
 
+                            self.drawNoteName()
+
                         if val in blackCoordinates.keys():
                             pg.draw.rect(self.black_pressed_surface, (0,0,0),
                                              (blackCoordinates.get(val), 0, 30, 110))
+
 
 
 
