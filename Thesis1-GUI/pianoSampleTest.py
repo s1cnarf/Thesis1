@@ -500,7 +500,7 @@ class Piano:
                                          (keyCoordinates.get(val), 0, 45, 207),  # Location
                                          width=1, border_radius=5)
 
-                            white_keys.blit(font.render(keyset1[localcounter], True, (0, 0, 0)), (keyCoordinates.get(val), 130))
+                            white_keys.blit(font.render("TS", True, (0, 0, 0)), (keyCoordinates.get(val), 130))
 
                         if val in blackCoordinates.keys():
                             pg.draw.rect(self.black_pressed_surface, (0,0,0),

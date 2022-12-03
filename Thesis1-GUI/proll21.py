@@ -456,6 +456,18 @@ class pRoll:
 
 
 
+        #white_keys = pg.surface.Surface((1540, 200))
+
+        posVal = 0
+        localcounter = 0
+        font = pg.font.SysFont('Arial', 20)
+
+        keyset1 = {36:'C1', 38:'D1', 40:'E1', 41:'F1', 43:'G1', 45:'A1', 47:'B1',
+               48:'C2', 50:'D2', 52:'E2', 53:'F2', 55:'G2', 57:'A2', 59:'B2',
+               60:'C3', 62:'D3', 64:'E3', 65:'F3', 67:'G3', 69:'A3', 71:'B3',
+               72:'C4', 74:'D4', 76:'E4', 77:'F4', 79:'G4', 81:'A4', 83:'B4',
+               84:'C5', 86:'D5', 88:'E5', 89:'F5', 91:'G5', 93:'A5', 95:'B5',
+               96:'C6'}
 
 
         keyCoordinates = {
@@ -555,6 +567,8 @@ class pRoll:
                                 (keyCoordinates.get(val), 0, 45, 207),  # Location
                                 width=1, border_radius=5)
 
+
+
                     if val in blackCoordinates.keys():
                         pg.draw.rect(self.piano.black_pressed_surface, (213, 50, 66, 200),
                                     (blackCoordinates.get(val), 0, 30, 110))
@@ -569,6 +583,8 @@ class pRoll:
                         pg.draw.rect(self.piano.white_pressed_surface, (0, 0, 0),
                                     (keyCoordinates.get(val), 0, 45, 207),  # Location
                                     width=1, border_radius=5)
+
+                        self.piano.white_pressed_surface.blit(font.render(keyset1.get(val), True, (0, 0, 0)), (keyCoordinates.get(val), 130))
 
                     if val in blackCoordinates.keys():
                         pg.draw.rect(self.piano.black_pressed_surface, (0,0,0),
