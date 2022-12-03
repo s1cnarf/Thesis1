@@ -35,6 +35,9 @@ class Data:
         text = self.Truth
         size = len(pattern['event'])
 
+        truth_notes = []
+        user_notes = []
+
         notes_in_truth = []
         notes_in_user = []
         
@@ -135,7 +138,7 @@ class Data:
                                         user_articulation['Early'] += 1
                 
                 print('Truth Table: ', truth, ' User Table:', user)
-                print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
+                print ('Notes in truth: ', notes_in_truth, ' \nNotes in user: ', notes_in_user, ' Extra: ', extra)
                         
                 # Solve the same notes within the block
                 for p in range(len(user)):
@@ -155,6 +158,9 @@ class Data:
 
                 # print('Truth Table: ', truth, ' User Table:', user)
                 # print ('Notes in truth: ', notes_in_truth, ' Notes in user: ', notes_in_user, ' Extra: ', extra)
+
+                truth_notes += truth
+                user_notes += user
                
                 pnotes += len(notes_in_user)
                 notes_in_truth.clear()
@@ -174,6 +180,15 @@ class Data:
                 print('Pattern NOTES: ', pnotes)
                 print ('\n')
                 # break
+
+        print(f'SIZE of TRUTH notes: {len(truth_notes)}')  
+        print(f'SIZE of USER notes: {len(user_notes)}')   
+
+        print('--------------------------------------------------------')
+        # for x in user_notes:
+        #     print (x)
+        print ('TRUTH TABLE')
+        print (truth_notes)
 
         return [correct, partial, extra, missed] + list(user_articulation.values())
 
