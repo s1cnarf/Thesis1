@@ -1513,7 +1513,7 @@ class PerformanceReport(tk.Frame):
             extraHits_frame = tk.Frame(notesData_frame, bg="#2A2B2C")
             extraHits_frame.pack(side=TOP, pady=15)
 
-            extraHits_label = tk.Label(extraHits_frame, text="Extra Hits:", fg="#F7BF50", bg="#2A2B2C",
+            extraHits_label = tk.Label(extraHits_frame, text="Extra Notes:", fg="#F7BF50", bg="#2A2B2C",
                                        font=controller.song_font_after)
             extraHits_label.pack(side=TOP)
 
