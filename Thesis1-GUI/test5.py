@@ -36,12 +36,16 @@ class SampleApp(tk.Tk):
         pyglet.font.add_file('Fonts/Montserrat Italic.ttf')
         pyglet.font.add_file('Fonts/Montserrat Bold.ttf')
 
+        montbold = pyglet.font.load('Montserrat Bold')
+
         self.title_font = tkfont.Font(family='Montserrat Italic', size=12, slant="italic")
         self.score_font = tkfont.Font(family='Montserrat Bold', size=78, weight="bold")
         self.song_font_after = tkfont.Font(family='Montserrat Bold', size=12, weight="bold")
         self.grade_font = tkfont.Font(family='Montserrat Bold', size=18, weight="bold")
         self.Mont_bold20 = tkfont.Font(family='Montserrat Bold', size=16, weight="bold")
         self.song = tkfont.Font(family='Montserrat Bold', size=13, weight="bold")
+
+        self.montbold = tkfont.Font(family=montbold,size=20,weight="bold")
 
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
@@ -104,6 +108,7 @@ class SampleApp(tk.Tk):
 
         # self.show_frame("StartPage")
         self.show_frame("LoadingPage")
+        
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
@@ -140,7 +145,8 @@ class LoadingPage(tk.Frame):
 
             if current == 365:
                 self.destroy()
-                controller.show_frame("LogIn")
+                controller.show_frame("ScoreSummary")
+                #controller.show_frame("LogIn")
 
             if current < 365:
                 loading.config(width=current + 71)
@@ -710,8 +716,10 @@ class PlayPage(tk.Frame):
                 p.running = True
 
                 p.launch()
+
                 #thread.start()
                 # thread.start()
+
                 p.piano.create_key_surfaces(display)
 
                 while p.running:
@@ -743,7 +751,7 @@ class PlayPage(tk.Frame):
                     '''
                     for event in pg.event.get():
                         if event.type == pg.QUIT:
-                            p.running = False  ''' 
+                            p.running = False  '''
 
                     p.clock.tick(fps)
 
@@ -784,6 +792,7 @@ class PlayPage(tk.Frame):
                     p.sMusic = ""
 
                 app.deiconify()
+                print("FLAG")
                 DisplayAfterPerf(e)
                 
 
@@ -1270,61 +1279,103 @@ class ScoreSummary(tk.Frame):
         back_label.image = back_img
 
 
-        main_frame = tk.Frame(self, width=988, height=563, bg="#2A2B2C", border=0)
+        main_frame = tk.Frame(self, width=1026, height=563, bg="#2A2B2C", border=0)
 
-        notes_label = tk.Label(self, text="Played the right note correctly [NOTES - 25%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=38,
-                          height=1, font=controller.title4_font)
+        img = Image.open("Pictures/NotesScore.png")
+        notes_img = ImageTk.PhotoImage(img)
+        Notes_Title_label = tk.Label(self, image=notes_img, borderwidth=0)
+        Notes_Title_label.image = notes_img
+        notes_frame = tk.Frame(self, bg="#f8ba43", borderwidth=0, width=129, height=55)
+        notes_score = tk.Label(notes_frame, text="18", bg="#f8ba43", fg="#000000", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+        notes_frame.pack_propagate(False)
+        
+        img = Image.open("Pictures/RhythmScore.png")
+        rhythm_img = ImageTk.PhotoImage(img)
+        Rhythm_Title_label = tk.Label(self, image=rhythm_img, borderwidth=0)
+        Rhythm_Title_label.image = rhythm_img
+        rhythm_frame = tk.Frame(self, bg="#f8ba43", borderwidth=0, width=129, height=55)
+        rhythm_score = tk.Label(rhythm_frame, text="15", bg="#f8ba43", fg="#000000", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+        rhythm_frame.pack_propagate(False)
 
-        notes_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title4_font)
+        img = Image.open("Pictures/ArticScore.png")
+        artic_img = ImageTk.PhotoImage(img)
+        Artic_Title_label = tk.Label(self, image=artic_img, borderwidth=0)
+        Artic_Title_label.image = artic_img
+        artic_frame = tk.Frame(self, bg="#f8ba43", borderwidth=0, width=129, height=55)
+        articulation_score = tk.Label(artic_frame, text="12", bg="#f8ba43", fg="#000000", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+        artic_frame.pack_propagate(False)
 
-        rhythm_label = tk.Label(self, text="Followed the corerct rhythm pattern [RHYTHM - 20%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=43,
-                          height=1, font=controller.title4_font)
+        img = Image.open("Pictures/DynamicsScore.png")
+        dynamics_img = ImageTk.PhotoImage(img)
+        Dynamics_Title_label = tk.Label(self, image=dynamics_img, borderwidth=0)
+        Dynamics_Title_label.image = dynamics_img
+        dynamics_frame = tk.Frame(self, bg="#f8ba43", borderwidth=0, width=129, height=55)
+        dynamics_score = tk.Label(dynamics_frame, text="6", bg="#f8ba43", fg="#000000", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+        dynamics_frame.pack_propagate(False)
 
-        rhythm_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title4_font)
+        img = Image.open("Pictures/MelodyScore.png")
+        melody_img = ImageTk.PhotoImage(img)
+        Melody_Title_label = tk.Label(self, image=melody_img, borderwidth=0)
+        Melody_Title_label.image = melody_img
+        melody_frame = tk.Frame(self, bg="#f8ba43", borderwidth=0, width=129, height=55)
+        melody_score = tk.Label(melody_frame, text="25", bg="#f8ba43", fg="#000000", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+        melody_frame.pack_propagate(False)
 
-        articulation_label = tk.Label(self, text="Hold each note to it's corresponding duration [ARTICULATION - 15%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=58,
-                          height=1, font=controller.title4_font)
-
-        articulation_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title4_font)
-
-        dynamics_label = tk.Label(self, text="Controlled the loudness of each note [DYNAMICS - 10%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=45,
-                          height=1, font=controller.title4_font)
-
-        dynamics_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title4_font)
-
-        melody_label = tk.Label(self, text="Performed the Melody correctly [MELODY - 30%]: ", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=40,
-                          height=1, font=controller.title4_font)
-
-        melody_score = tk.Label(self, text="", bg="#2A2B2C", fg="#F7BF50", cursor="hand2", borderwidth=0, width=5,
-                          height=1, font=controller.title4_font)
+        img = Image.open("Pictures/TotalScore.png")
+        total_img = ImageTk.PhotoImage(img)
+        Total_Title_label = tk.Label(self, image=total_img, borderwidth=0)
+        Total_Title_label.image = total_img
+        total_frame = tk.Frame(self, bg="#f8ba43", borderwidth=0, width=129, height=55)
+        total_score = tk.Label(total_frame, text="76", bg="#f8ba43", fg="#000000", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+        total_frame.pack_propagate(False)
 
         global show_summary
         def show_summary():
+            
             notes_score.configure(text=str(round(total_percentNotes)),anchor=CENTER)
             rhythm_score.configure(text=str(round(total_percentRhythm)),anchor=CENTER)
             articulation_score.configure(text=str(round(total_percentArticulation)),anchor=CENTER)
             dynamics_score.configure(text=str(round(total_percentDynamics)),anchor=CENTER)
             melody_score.configure(text=str(round(total_percentMelody)),anchor=CENTER)
+            total_score.configure(text=str(round(percentScore)),anchor=CENTER)
+            
 
 
 
         main_frame.place(x=90, y=124)
         back_label.place(x=57, y=36)
         scoreSum_title_label.place(x=930,y=45)
-        notes_label.place(x=110, y=270)
-        notes_score.place(x=595, y=270)
-        rhythm_label.place(x=110, y=340)
-        rhythm_score.place(x=665, y=340)
-        articulation_label.place(x=100, y=410)
-        articulation_score.place(x=815, y=410)
-        dynamics_label.place(x=110, y=480)
-        dynamics_score.place(x=695, y=480)
-        melody_label.place(x=110, y=550)
-        melody_score.place(x=665, y=550)
+
+        Notes_Title_label.place(x=170, y=176)
+        notes_frame.place(x=907, y=176)
+        notes_score.pack(anchor=CENTER,pady=13)
+        
+        Rhythm_Title_label.place(x=170, y=257)
+        rhythm_frame.place(x=907, y=257)
+        rhythm_score.pack(anchor=CENTER,pady=13)
+
+        Artic_Title_label.place(x=170, y=337)
+        artic_frame.place(x=907, y=337)
+        articulation_score.pack(anchor=CENTER,pady=13)
+
+        Dynamics_Title_label.place(x=170, y=420)
+        dynamics_frame.place(x=907, y=420)
+        dynamics_score.pack(anchor=CENTER,pady=13)
+
+        Melody_Title_label.place(x=170, y=500)
+        melody_frame.place(x=907, y=500)
+        melody_score.pack(anchor=CENTER,pady=13)
+
+        Total_Title_label.place(x=663, y=581)
+        total_frame.place(x=907, y=580)
+        total_score.pack(anchor=CENTER,pady=13)
+
 
 
 class ErrorAnalysis(tk.Frame):
