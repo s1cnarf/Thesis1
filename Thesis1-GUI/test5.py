@@ -1,13 +1,7 @@
-from ast import Load
-from cgitb import text
-# from ast import *
-from logging import root
 import tkinter as tk
 from tkinter import font as tkfont
 from tkinter import *
 from tkinter import messagebox, ttk
-from tkinter.ttk import Progressbar
-from typing import Counter
 from PIL import ImageTk, Image
 from datetime import datetime
 from collections import deque
@@ -34,9 +28,9 @@ class SampleApp(tk.Tk):
         pyglet.font.add_file('Fonts/Lemon Milk Light.otf')
         pyglet.font.add_file('Fonts/Montserrat.ttf')
         pyglet.font.add_file('Fonts/Montserrat Italic.ttf')
-        pyglet.font.add_file('Fonts/Montserrat Bold.ttf')
+        mont=pyglet.font.add_file('Fonts/Montserrat Bold.ttf')
 
-        montbold = pyglet.font.load('Montserrat Bold')
+        montbold = pyglet.font.load(mont)
 
         self.title_font = tkfont.Font(family='Montserrat Italic', size=12, slant="italic")
         self.score_font = tkfont.Font(family='Montserrat Bold', size=78, weight="bold")
@@ -45,7 +39,7 @@ class SampleApp(tk.Tk):
         self.Mont_bold20 = tkfont.Font(family='Montserrat Bold', size=16, weight="bold")
         self.song = tkfont.Font(family='Montserrat Bold', size=13, weight="bold")
 
-        self.montbold = tkfont.Font(family=montbold,size=20,weight="bold")
+        self.montbold = tkfont.Font(family=montbold,size=16,weight="bold")
 
         self.title2_font = tkfont.Font(family='Lemon Milk', size=32, weight="bold")
         self.title3_font = tkfont.Font(family='Lemon Milk', size=20, weight="bold")
@@ -145,7 +139,7 @@ class LoadingPage(tk.Frame):
 
             if current == 365:
                 self.destroy()
-                controller.show_frame("ScoreSummary")
+                controller.show_frame("PerformanceReport")
                 #controller.show_frame("LogIn")
 
             if current < 365:
@@ -1760,9 +1754,25 @@ class PerformanceReport(tk.Frame):
             except NameError:
                 print("okay lang")
 
+            '''
             ontime_hits = int(ReadCSVtoVariable("Timed_Hit"))
             late_hits = int(ReadCSVtoVariable("Late_Hit"))
             early_hits = int(ReadCSVtoVariable("Early_Hit"))
+            total_hits = ontime_hits + late_hits + early_hits
+
+            ontime_hits = round((ontime_hits / total_hits)*100)
+            late_hits = round((late_hits / total_hits)*100)
+            early_hits = round((early_hits / total_hits)*100)
+
+            ontime_hits = str(ontime_hits)
+            late_hits = str(late_hits)
+            early_hits = str(early_hits)
+            
+            '''
+
+            ontime_hits = "74%"
+            late_hits = '16%'
+            early_hits = '10%'
 
             def autopct_format(values):
                 def my_format(pct):
@@ -1777,6 +1787,44 @@ class PerformanceReport(tk.Frame):
             articulationData_frame.place(x=312, y=180)
             articulationData_frame.pack_propagate(False)
 
+            img = Image.open("Pictures/ONTIME.jpeg")
+            img = img.resize((219, 331), Image.Resampling.LANCZOS)
+            ontime_img = ImageTk.PhotoImage(img)
+            ontime_label = tk.Label(articulationData_frame, image=ontime_img, borderwidth=0)
+            ontime_label.image = ontime_img
+
+            img = Image.open("Pictures/LATE.jpeg")
+            img = img.resize((219, 331), Image.Resampling.LANCZOS)
+            late_img = ImageTk.PhotoImage(img)
+            late_label = tk.Label(articulationData_frame, image=late_img, borderwidth=0)
+            late_label.image = late_img
+
+            img = Image.open("Pictures/EARLY.jpeg")
+            img = img.resize((219, 331), Image.Resampling.LANCZOS)
+            early_img = ImageTk.PhotoImage(img)
+            early_label = tk.Label(articulationData_frame, image=early_img, borderwidth=0)
+            early_label.image = early_img
+
+            ontime_score = tk.Label(articulationData_frame, text=ontime_hits, bg="#2A2B2C", fg="#FFFFFF", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+
+            late_score = tk.Label(articulationData_frame, text=late_hits, bg="#2A2B2C", fg="#FFFFFF", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+
+            early_score = tk.Label(articulationData_frame, text=early_hits, bg="#2A2B2C", fg="#FFFFFF", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+
+            ontime_label.pack(side=LEFT,anchor=NW,padx=(0,27.79))
+            late_label.pack(side=LEFT,anchor=N,padx=(0,27.79))
+            early_label.pack(side=RIGHT,anchor=NE)
+
+            ontime_score.place(x=88,y=366.79)
+            late_score.place(x=335,y=366.79)
+            early_score.place(x=582,y=366.79)
+
+
+
+            '''
             hits = [ontime_hits, late_hits, early_hits]
             legend = ['On-Time Hits', 'Late Hits', 'Early Hits']
             colors = ['#4F6272', '#B7C3F3', '#DD7596', '#8EB897']
@@ -1787,7 +1835,7 @@ class PerformanceReport(tk.Frame):
                         textprops={'color': "white"}, wedgeprops={'linewidth': 1, 'edgecolor': 'white'}, colors=colors)
             fig.set_facecolor('#2A2B2C')
             pie2 = FigureCanvasTkAgg(fig, articulationData_frame)
-            pie2.get_tk_widget().pack(side=TOP, anchor=CENTER)
+            pie2.get_tk_widget().pack(side=TOP, anchor=CENTER)'''
 
             
         #global DisplayDynamics
