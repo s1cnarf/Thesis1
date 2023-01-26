@@ -139,8 +139,8 @@ class LoadingPage(tk.Frame):
 
             if current == 365:
                 self.destroy()
-                controller.show_frame("PerformanceReport")
-                #controller.show_frame("LogIn")
+                
+                controller.show_frame("LogIn")
 
             if current < 365:
                 loading.config(width=current + 71)
@@ -1606,7 +1606,7 @@ class PerformanceReport(tk.Frame):
         #global DisplayRhythm
         def DisplayRhythm(event):
 
-            '''
+            
 
             success_switch = int(ReadCSVtoVariable("Success_Switch"))
             failed_switch = int(ReadCSVtoVariable("Failed_Switch"))
@@ -1618,10 +1618,11 @@ class PerformanceReport(tk.Frame):
             success_switch = str(success_switch)
             failed_switch = str(failed_switch)
 
+            
             '''
-
             success_switch = "75%"
             failed_switch = "25%"
+            '''
 
             notes_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             notes_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
@@ -1715,30 +1716,6 @@ class PerformanceReport(tk.Frame):
                           height=1, font=controller.montbold)
             
 
-            '''
-            switches_frame = tk.Frame(rhythmData_frame, bg="#2A2B2C", width=655, height=26)
-            switches_frame.pack(side=TOP)
-            switches_frame.pack_propagate(0)
-
-            succesSwitch_label = tk.Label(switches_frame, text="Successful Switch", fg="#F7BF50", bg="#2A2B2C",
-                                          font=controller.song_font_after)
-            succesSwitch_label.pack(side=LEFT, anchor=NW)
-
-            failedSwitch_label = tk.Label(switches_frame, text="Failed", fg="#EB483F", bg="#2A2B2C",
-                                          font=controller.song_font_after)
-            failedSwitch_label.pack(side=RIGHT, anchor=NE)
-
-            total = success_switch / (success_switch + failed_switch) * 655
-            success_bar = tk.LabelFrame(rhythmData_frame, text=success_switch, bg="#F7BF50", fg="#2A2B2C", border=0,
-                                        width=total, height=16, labelanchor=E, font=controller.title_font)
-            success_bar.pack(pady=5, side=LEFT)
-
-            failed_bar = tk.LabelFrame(rhythmData_frame, text=failed_switch, bg="#3a3a3c", fg="#EB483F", border=0,
-                                       width=655, height=16, labelanchor=E, font=controller.title_font)
-            failed_bar.pack(pady=5, side=RIGHT)
-
-            '''
-
             success_label.place(x=0,y=0)
             line_label.place(x=360,y=1)
             failed_label.place(x=378,y=0)
@@ -1812,7 +1789,7 @@ class PerformanceReport(tk.Frame):
             except NameError:
                 print("okay lang")
 
-            '''
+            
             ontime_hits = int(ReadCSVtoVariable("Timed_Hit"))
             late_hits = int(ReadCSVtoVariable("Late_Hit"))
             early_hits = int(ReadCSVtoVariable("Early_Hit"))
@@ -1825,10 +1802,12 @@ class PerformanceReport(tk.Frame):
             ontime_hits = str(ontime_hits)
             late_hits = str(late_hits)
             early_hits = str(early_hits)
+            
             '''
             ontime_hits = "78%"
             late_hits = "10%"
             early_hits = "12%"
+            '''
             
 
             def autopct_format(values):
