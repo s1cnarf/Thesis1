@@ -1687,7 +1687,7 @@ class PerformanceReport(tk.Frame):
             rhythmData_frame.pack_propagate(False)
 
             img = Image.open("Pictures/SuccessSwitch.png")
-            img = img.resize((335, 335), Image.Resampling.LANCZOS)
+            img = img.resize((360, 360), Image.Resampling.LANCZOS)
             success_img = ImageTk.PhotoImage(img)
             success_label = tk.Label(rhythmData_frame, image=success_img, borderwidth=0,bg="#2A2B2C")
             success_label.image = success_img
@@ -1695,7 +1695,7 @@ class PerformanceReport(tk.Frame):
             line_label = tk.Frame(rhythmData_frame,bg="#F8BA43",width=1,height=423)
 
             img = Image.open("Pictures/FailedSwitch.png")
-            img = img.resize((335, 335), Image.Resampling.LANCZOS)
+            img = img.resize((360, 360), Image.Resampling.LANCZOS)
             failed_img = ImageTk.PhotoImage(img)
             failed_label = tk.Label(rhythmData_frame, image=failed_img, borderwidth=0,bg="#2A2B2C")
             failed_label.image = failed_img
@@ -1743,11 +1743,11 @@ class PerformanceReport(tk.Frame):
             line_label.place(x=360,y=1)
             failed_label.place(x=378,y=0)
 
-            circle_label.place(x=127,y=319.79)
-            circle_label2.place(x=505,y=319.79)
+            circle_label.place(x=139,y=319.79)
+            circle_label2.place(x=496,y=319.79)
 
-            success_score.place(x=146,y=351.79)
-            failed_score.place(x=523,y=351.79)
+            success_score.place(x=163,y=348)
+            failed_score.place(x=520,y=348)
 
 
             
@@ -1887,11 +1887,13 @@ class PerformanceReport(tk.Frame):
             early_label.pack(side=RIGHT,anchor=NE)
 
             circle_label.place(x=69,y=341.79)
-            ontime_score.place(x=88,y=373.79)
+            ontime_score.place(x=91,y=368)
+
             circle_label2.place(x=316,y=341.79)
-            late_score.place(x=335,y=373.79)
+            late_score.place(x=339,y=368)
+
             circle_label3.place(x=563,y=341.79)
-            early_score.place(x=582,y=373.79)
+            early_score.place(x=586,y=368)
 
 
 
