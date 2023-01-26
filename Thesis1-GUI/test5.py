@@ -1606,8 +1606,22 @@ class PerformanceReport(tk.Frame):
         #global DisplayRhythm
         def DisplayRhythm(event):
 
+            '''
+
             success_switch = int(ReadCSVtoVariable("Success_Switch"))
             failed_switch = int(ReadCSVtoVariable("Failed_Switch"))
+            total_switch = success_switch + failed_switch
+
+            success_switch = round((success_switch / total_switch) * 100)
+            failed_switch = round((failed_switch / total_switch) * 100)
+
+            success_switch = str(success_switch)
+            failed_switch = str(failed_switch)
+
+            '''
+
+            success_switch = "75%"
+            failed_switch = "25%"
 
             notes_label.config(height=51, bg="#3A3A3C", cursor="hand2")
             notes_frame.config(height=51, bg="#3A3A3C", cursor="hand2")
@@ -1668,10 +1682,40 @@ class PerformanceReport(tk.Frame):
                 print("okay lang")
 
             global rhythmData_frame
-            rhythmData_frame = tk.Frame(self, width=655, height=89, bg="#2A2B2C")
-            rhythmData_frame.place(x=312, y=280)
+            rhythmData_frame = tk.Frame(self, width=713, height=425, bg="#2A2B2C")
+            rhythmData_frame.place(x=313, y=180.21)
             rhythmData_frame.pack_propagate(False)
 
+            img = Image.open("Pictures/SuccessSwitch.png")
+            img = img.resize((335, 335), Image.Resampling.LANCZOS)
+            success_img = ImageTk.PhotoImage(img)
+            success_label = tk.Label(rhythmData_frame, image=success_img, borderwidth=0,bg="#2A2B2C")
+            success_label.image = success_img
+
+            line_label = tk.Frame(rhythmData_frame,bg="#F8BA43",width=1,height=423)
+
+            img = Image.open("Pictures/FailedSwitch.png")
+            img = img.resize((335, 335), Image.Resampling.LANCZOS)
+            failed_img = ImageTk.PhotoImage(img)
+            failed_label = tk.Label(rhythmData_frame, image=failed_img, borderwidth=0,bg="#2A2B2C")
+            failed_label.image = failed_img
+
+            img = Image.open("Pictures/smallCircle.png")
+            circle_img = ImageTk.PhotoImage(img)
+            circle_label = tk.Label(rhythmData_frame, image=circle_img, borderwidth=0)
+            circle_label.image = circle_img
+
+            circle_label2 = tk.Label(rhythmData_frame, image=circle_img, borderwidth=0)
+            circle_label2.image = circle_img
+
+            success_score = tk.Label(rhythmData_frame, text=success_switch, bg="#2A2B2C", fg="#FFFFFF", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+
+            failed_score = tk.Label(rhythmData_frame, text=failed_switch, bg="#2A2B2C", fg="#FFFFFF", borderwidth=0, width=3,
+                          height=1, font=controller.montbold)
+            
+
+            '''
             switches_frame = tk.Frame(rhythmData_frame, bg="#2A2B2C", width=655, height=26)
             switches_frame.pack(side=TOP)
             switches_frame.pack_propagate(0)
@@ -1692,6 +1736,20 @@ class PerformanceReport(tk.Frame):
             failed_bar = tk.LabelFrame(rhythmData_frame, text=failed_switch, bg="#3a3a3c", fg="#EB483F", border=0,
                                        width=655, height=16, labelanchor=E, font=controller.title_font)
             failed_bar.pack(pady=5, side=RIGHT)
+
+            '''
+
+            success_label.place(x=0,y=0)
+            line_label.place(x=360,y=1)
+            failed_label.place(x=378,y=0)
+
+            circle_label.place(x=127,y=319.79)
+            circle_label2.place(x=505,y=319.79)
+
+            success_score.place(x=146,y=351.79)
+            failed_score.place(x=523,y=351.79)
+
+
             
         #global DisplayArticulation
         def DisplayArticulation(event):
@@ -1767,12 +1825,11 @@ class PerformanceReport(tk.Frame):
             ontime_hits = str(ontime_hits)
             late_hits = str(late_hits)
             early_hits = str(early_hits)
-            
             '''
-
-            ontime_hits = "74%"
-            late_hits = '16%'
-            early_hits = '10%'
+            ontime_hits = "78%"
+            late_hits = "10%"
+            early_hits = "12%"
+            
 
             def autopct_format(values):
                 def my_format(pct):
@@ -1805,6 +1862,17 @@ class PerformanceReport(tk.Frame):
             early_label = tk.Label(articulationData_frame, image=early_img, borderwidth=0)
             early_label.image = early_img
 
+            img = Image.open("Pictures/smallCircle.png")
+            circle_img = ImageTk.PhotoImage(img)
+            circle_label = tk.Label(articulationData_frame, image=circle_img, borderwidth=0)
+            circle_label.image = circle_img
+
+            circle_label2 = tk.Label(articulationData_frame, image=circle_img, borderwidth=0)
+            circle_label2.image = circle_img
+
+            circle_label3 = tk.Label(articulationData_frame, image=circle_img, borderwidth=0)
+            circle_label3.image = circle_img
+
             ontime_score = tk.Label(articulationData_frame, text=ontime_hits, bg="#2A2B2C", fg="#FFFFFF", borderwidth=0, width=3,
                           height=1, font=controller.montbold)
 
@@ -1818,9 +1886,12 @@ class PerformanceReport(tk.Frame):
             late_label.pack(side=LEFT,anchor=N,padx=(0,27.79))
             early_label.pack(side=RIGHT,anchor=NE)
 
-            ontime_score.place(x=88,y=366.79)
-            late_score.place(x=335,y=366.79)
-            early_score.place(x=582,y=366.79)
+            circle_label.place(x=69,y=341.79)
+            ontime_score.place(x=88,y=373.79)
+            circle_label2.place(x=316,y=341.79)
+            late_score.place(x=335,y=373.79)
+            circle_label3.place(x=563,y=341.79)
+            early_score.place(x=582,y=373.79)
 
 
 
