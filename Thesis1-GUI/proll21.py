@@ -157,6 +157,7 @@ class pRoll:
 
     def drawNotesToSurface(self) -> pg.surface.Surface:
 
+        font = pg.font.SysFont('Arial', 20)
 
         # Create dictionary for black keys - 
 
@@ -175,7 +176,9 @@ class pRoll:
         surface = pg.Surface((1540, surface_height)) # x and y 
 
         surface.set_colorkey((255,255,255))
-        surface.fill((42,42,42))
+        #surface.fill((42,42,42))
+        surface.fill((36, 41, 36))
+        #urface.blit("t1.jpg",(1520,800))
 
         # Create a loop to draw a line 
 
@@ -217,6 +220,12 @@ class pRoll:
                     pg.draw.rect(surface, (0, 0, 0, 0), (26 + 43 * black_dict[note[0]] + 43 * 7 * (int(note[1]) - 1), nstart, 30, length),
                                  width=2, border_radius=5)
 
+                                            #string                   #color      # coordinates
+
+
+
+
+
             # Else if normal note 
 
             else:
@@ -250,9 +259,15 @@ class pRoll:
                    # print(43 * white_dict[note[0]],"-> white dict value")
                    # print((int(note[1]) - 1) * 43 * 7, "-> block value")
 
+                    surface.blit(font.render(note, True, (0, 0, 0)),
+                                 (43 * white_dict[note[0]] +
+                                  (int(note[1]) - 1) * 43 * 7, nstart, 45, length))
+
                     pg.draw.rect(surface, (0, 0, 0, 0), (43 * white_dict[note[0]] + 
                     (int(note[1]) - 1) * 43 * 7, nstart, 45, length),
                      width=2, border_radius=5)
+
+
             
             itr = itr + 1
         
@@ -352,8 +367,9 @@ class pRoll:
                     #print(self.clock.get_fps()," NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", elapsed_time, "TIME DIFFERENCE: ", "%.2f" %((self.time)-elapsed_time)," -- ")
                     #print("NoteON: [", msg.note, "] ", self.time, "vs Ticks Val: ", self.timer, "TIME DIFFERENCE: ", "%.2f" %((self.time)-self.timer)," -- ")
                     #rint("NOTE ON DETECTED AT: ", self.time)
-                    self.piano.play_key(midi_number_to_note(msg.note),
-                    msg.velocity)
+
+
+                    #self.piano.play_key(midi_number_to_note(msg.note),msg.velocity)
 
 
                 #cnt = cnt + 1
@@ -426,6 +442,7 @@ class pRoll:
         pg.init()
         #display = pg.display.set_mode((1248, 500))
         display = pg.display.set_mode((1540, 800))
+        #display.blit("t1.jpg",(1540.800))
         pg.display.set_caption(f'Playing: {songName}')
         pg.mixer.set_num_channels(100)
         return display
@@ -462,12 +479,14 @@ class pRoll:
         localcounter = 0
         font = pg.font.SysFont('Arial', 20)
 
-        keyset1 = {36:'C1', 38:'D1', 40:'E1', 41:'F1', 43:'G1', 45:'A1', 47:'B1',
-               48:'C2', 50:'D2', 52:'E2', 53:'F2', 55:'G2', 57:'A2', 59:'B2',
-               60:'C3', 62:'D3', 64:'E3', 65:'F3', 67:'G3', 69:'A3', 71:'B3',
-               72:'C4', 74:'D4', 76:'E4', 77:'F4', 79:'G4', 81:'A4', 83:'B4',
-               84:'C5', 86:'D5', 88:'E5', 89:'F5', 91:'G5', 93:'A5', 95:'B5',
-               96:'C6'}
+        keyset1 = {36:'C2', 38:'D2', 40:'E2', 41:'F2', 43:'G2', 45:'A2', 47:'B2',
+               48:'C3', 50:'D3', 52:'E3', 53:'F3', 55:'G3', 57:'A3', 59:'B3',
+               60:'C4', 62:'D4', 64:'E4', 65:'F4', 67:'G4', 69:'A4', 71:'B4',
+               72:'C5', 74:'D5', 76:'E5', 77:'F5', 79:'G5', 81:'A5', 83:'B5',
+               84:'C6', 86:'D6', 88:'E6', 89:'F6', 91:'G6', 93:'A6', 95:'B6',
+               96:'C7'}
+
+
 
 
         keyCoordinates = {

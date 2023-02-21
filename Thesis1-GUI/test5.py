@@ -736,7 +736,11 @@ class PlayPage(tk.Frame):
 
                     # # pg.display.flip()
                     if wait:
-                        pg.time.delay(5000)
+                        pg.mixer.init()
+                        pg.mixer.music.load("cnt.mp3")
+                        pg.mixer.music.set_volume(3.5)
+                        pg.mixer.music.play()
+                        pg.time.delay(4000)
                         # print("BOOOL",pg.midi.get_init())
                         wait = False
                         thread.start()
