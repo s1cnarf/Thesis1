@@ -2159,56 +2159,24 @@ class PerformanceReport(tk.Frame):
             except NameError:
                 print("okay lang")
 
-            correct_left = int(ReadCSVtoVariable("LH_Correct"))
-            incorrect_left = int(ReadCSVtoVariable("LH_Fail"))
-
             correct_right = int(ReadCSVtoVariable("RH_Correct"))
             incorrect_right = int(ReadCSVtoVariable("RH_Fail"))
+
+            #correct_right = 41
+            #incorrect_right = 2
 
             global fingerData_frame
             fingerData_frame = tk.Frame(self, width=713, height=425, bg="#2A2B2C")
             fingerData_frame.place(x=312, y=180)
             fingerData_frame.pack_propagate(False)
 
-            LeftHand_Frame = tk.Frame(fingerData_frame, bg="#2A2B2C", width=356, height=425)
-            LeftHand_Frame.pack_propagate(False)
-            LeftHand_Frame.pack(side=LEFT)
-
-            LeftHand_label = tk.Label(LeftHand_Frame, text="Left Hand", fg="#F7BF50", bg="#2A2B2C",
-                                      font=controller.song_font_after)
-            LeftHand_label.pack(side=TOP, anchor=NW)
-
             RightHand_Frame = tk.Frame(fingerData_frame, bg="#2A2B2C", width=356, height=425)
             RightHand_Frame.pack_propagate(False)
-            RightHand_Frame.pack(side=RIGHT)
+            RightHand_Frame.pack(side=TOP)
 
-            RightHand_label = tk.Label(RightHand_Frame, text="Right Hand", fg="#F7BF50", bg="#2A2B2C",
+            RightHand_label = tk.Label(RightHand_Frame, text="Hand Pattern", fg="#F7BF50", bg="#2A2B2C",
                                        font=controller.song_font_after)
-            RightHand_label.pack(side=TOP, anchor=NE)
-
-            x = ['Correct\nHits', 'Incorrect\nHits']
-            y = [correct_left, incorrect_left]
-
-            fig = Figure(figsize=(5, 5), dpi=100)
-            subplot = fig.add_subplot(111)
-            subplot.bar(x, y, color=['#F7BF50', '#ED695E'])
-
-            subplot.xaxis.label.set_color("white")
-            subplot.tick_params(axis='x', colors='white')
-            subplot.tick_params(axis='y', colors='#2A2B2C')
-            subplot.spines['left'].set_color('#2A2B2C')
-            subplot.spines['top'].set_color('#2A2B2C')
-            subplot.spines['bottom'].set_color('#2A2B2C')
-            subplot.spines['right'].set_color('#2A2B2C')
-            subplot.set_facecolor('#2A2B2C')
-            fig.set_facecolor('#2A2B2C')
-
-            for i in range(len(y)):
-                subplot.annotate(str(y[i]), xy=(x[i], y[i]), ha='center', va='bottom', color="white")
-
-            # subplot.axis('off')
-            barL = FigureCanvasTkAgg(fig, LeftHand_Frame)
-            barL.get_tk_widget().pack(side=LEFT, anchor=W, padx=(0, 150))
+            RightHand_label.pack(side=TOP, anchor=N)
 
             ######################## RIGHT HAND ##############
             x = ['Incorrect\nHits', 'Correct\nHits']
@@ -2232,7 +2200,8 @@ class PerformanceReport(tk.Frame):
 
             # subplot.axis('off')
             barR = FigureCanvasTkAgg(fig, RightHand_Frame)
-            barR.get_tk_widget().pack(side=RIGHT, anchor=E, padx=(150, 0))
+            barR.get_tk_widget().pack_propagate(False)
+            barR.get_tk_widget().pack(side=BOTTOM, anchor=S,padx=(90,110))
 
             
 
